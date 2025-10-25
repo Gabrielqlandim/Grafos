@@ -1,0 +1,349 @@
+bairro_origem,bairro_destino,Aresta,peso(distancia em km)
+Aflitos,Espinheiro,R. Samuel Câmpelo,1.1
+Aflitos,Derby,R. Quarenta e Oito,3
+Aflitos,Graças,Av. Rui Barbosa,2.3
+Aflitos,Jaqueira,R. Carneiro Viléla,1.3
+Aflitos,Tamarineira,Av. Santos Dumont,1.6
+Afogados,Areias,R. Dom Pedrito,4.8
+Afogados,Bongi,Av. Manoel Gonçalves da Luz,2.9
+Afogados,Cordeiro,Estr. dos Remédios,6.1
+Afogados,Ilha Joana Bezerra,R. Cabo Eutrópio,3
+Afogados,Ilha do Retiro,Av. Abdias de carvalho,4.8
+Afogados,Ipsep,Av. Macarenhas de Moraes,5.2
+Afogados,Mustardinha,R. Joana Francisca de Azevedo,2.4
+Afogados,Prado,R. Vinte e Um de Abril,4.4
+Água Fria,Beberibe,R. da Cutia,2.4
+Água Fria,Linha do Tiro,R. Ladeira de Pedra,1.9
+Água Fria,Porto da Madeira,R. São Sebastião,1.3
+Água Fria,Rosarinho,R. Nazaré,2.9
+Alto José Bonifácio,Alto José do Pinho,R. Alto José Bonifácio,1.5
+Alto José Bonifácio,Brejo de Beberibe,Av. Ver.Otacílio Azevedo,2.3
+Alto José Bonifácio,Bomba do Hemetério,R. Padre Oliveira,2
+Alto José Bonifácio,Fundão,R. São Bento,4.5
+Alto José Bonifácio,Linha do Tiro,R Uriel de Holanda,1.5
+Alto José Bonifácio,Morro da Conceição,R Córrego do Ouro,0.9
+Alto José Bonifácio,Tamarineira,R. Bomba do Hemetério,2.7
+Alto José do Pinho,Alto do Mandu,R. Mandacaru,2.6
+Alto José do Pinho,Morro da Conceição,R. Valeriano Lobo,1
+Alto Santa Teresinha,Bomba do Hemetério,R. Chã de Alegria,1.3
+Alto Santa Teresinha,Cajueiro,R. Eládio Camboim,3.6
+Alto Santa Teresinha,Vasco da Gama,R. Córrego do Euclides,1.6
+Alto do Mandu,Apipucos,R. Cianorte,1.2
+Alto do Mandu,Casa Amarela,Rua Carolina,1.3
+Alto do Mandu,Monteiro,R. Cametá,0.75
+Alto do Mandu,Morro da Conceição,R. Morro da Conceição,1.8
+Alto do Mandu,Tamarineira,R. Guimaraes peixoto,3.4
+Apipucos,Casa Forte,R. Visc. de Ouro Preto,3.1
+Apipucos,Dois Irmãos,R. Dois irmãos,1.5
+Apipucos,Monteiro,R. de Apipucos,1.1
+Apipucos,Sítio dos Pintos,Av. Luiz Antônio de Araújo,3.5
+Areias,Barro,Av. Izabel de Góes,5.3
+Areias,Caçote,Av. Capitão Gregório de Caldas,1.2
+Areias,Estância,R. Cap. Jacinto da Cruz,2.1
+Areias,Imbiribeira,Av. Ten. Felipe Bandeira de Melo,4
+Arruda,Água Fria,R. Joao Uzeda Luna,1.4
+Arruda,Campo Grande,R. Prudente de Moraes,2.1
+Arruda,Peixinhos,R. Marcílio Dias,2.6
+Arruda,Porto da Madeira,R. Carceres,2.4
+Areias,Jiquiá,R. Antônio Carneiro,2.2
+Barro,Caçote,"R. Desembargador Pedro Ribeiro Malta,",6.8
+Barro,Cohab,Av. Doze de junho,1.3
+Barro,Ibura,Av. Rio São Francisco,3.6
+Barro,Sancho,Av. Conde Pereira Carneiro,5
+Beberibe,Dois Unidos,Av. Leopoldino Canuto de Melo,3.4
+Beberibe,Fundão,R. Florestópolis,1.7
+Beberibe,Porto da Madeira,R. do Anil,1
+Boa Viagem,Ibura,R. Hélio Brandão,6.8
+Boa Viagem,Imbiribeira,R. Barão de Souza Leão,4.2
+Boa Viagem,Ipsep,Av. Mascarenhas de Moraes,5.3
+Boa Viagem,Pina,Av. Boa viagem,5.3
+Boa Vista,Cabanga,Av. Governador Carlos de Lima Cavalcanti,3.6
+Boa Vista,Coelhos,R. Dos Coelhos,2
+Boa Vista,Derby,R. Dom Bôsco,0.85
+Boa Vista,Graças,R. Das Graças,1.6
+Boa Vista,Ilha do Leite,R. Joaquim de Brito,1.6
+Boa Vista,Paissandu,Av. Lins Petit,1.7
+Boa Vista,Santo Amaro,R. Frei Cassimiro,3.3
+Boa Vista,Santo Antônio,R. Visconde de Goiana,2.9
+Boa Vista,Soledade,Av. Conde da Boa vista,1.1
+Bomba do Hemetério,Cajueiro,R. Barão de Tracunhaém,2.5
+Bomba do Hemetério,Fundão,R. Dr. Eudes da Costa,1.7
+Bomba do Hemetério,Morro da Conceição,R. Corrego do Bartolomeu,3.6
+Bomba do Hemetério,Vasco da Gama,R. Arlindo Cisneiros,2.5
+Bongi,Engenho do Meio,R.Onze de fevereiro,3.8
+Bongi,Mustardinha,R. Randolfo Pinto Ferreira,1
+Bongi,Prado,R. Santa Edwirges,1.7
+Bongi,San Martin,Av. General San Martin,2
+Bongi,Torrões,Av. Consul Vilares Fragoso,3.2
+Bongi,Zumbi,R. Gomes Taborda,2.9
+Brasília Teimosa,Cabanga,Av. Engenheiro José Estelita,3.5
+Brasília Teimosa,Ilha Joana Bezerra,Av. Antônio de Goes,3.8
+Brasília Teimosa,Pina,Av. Domingos Ferreira,2.7
+Brejo da Guabiraba,Passarinho,Estr. dos Passarinhos,4.2
+Brejo da Guabiraba,Sítio dos Pintos,Córrego José Idalino,6.1
+Brejo de Beberibe,Dois Unidos,Av. Chagas Ferreira,1.5
+Brejo de Beberibe,Fundão,Av. Ver Otacilio Azevedo,5.5
+Brejo de Beberibe,Linha do Tiro,Av. Vereador Otacilio Azevedo,2.5
+Brejo de Beberibe,Macaxeira,R. Nova Descoberta,2.6
+Brejo de Beberibe,Nova Descoberta,R. Corrego da Areia,1
+Brejo de Beberibe,Passarinho,Av. Recuperação,5
+Cabanga,Ilha Joana Bezerra,R. Dom Paulo II,2.4
+Cabanga,Pina,Av. Herculano Bandeira,2.2
+Cabanga,São José,R. Gen. Estilac Leal,2.7
+Cajueiro,Beberibe,R. Luís Clericuzi,1.8
+Cajueiro,Campina do Barreto,Av. Sebastião Salazar,1.2
+Cajueiro,Linha do Tiro,Av. Aníbal Benévolo,3.3
+Caçote,Cohab,R. Serra da Caiada,6.1
+Caçote,Coqueiral,R. Heliópolis,5.4
+Caçote,Estância,Av. Justiça e Paz,2.9
+Caçote,Jardim São Paulo,R. José Natário,3.2
+Caçote,Mangueira,Av. Central,4.2
+Caçote,Mustardinha,Av. Dr José Rufino,4.9
+Caçote,San Martin,Av. João Cabral de Melo Neto,4
+Caçote,Sancho,PE-007,4.8
+Campina do Barreto,Campo Grande,R. Clara,1.9
+Campina do Barreto,Encruzilhada,R. das Moças,3
+Campina do Barreto,Santo Amaro,R. Iguatu,3.8
+Campina do Barreto,Torreão,R. Jeronimo Vilela,2.9
+Campo Grande,Encruzilhada,R. Nogueira Lima,1.4
+Campo Grande,Hipódromo,Estr. de Belém,0.95
+Campo Grande,Santo Amaro,R. Odorico Mendes,2.2
+Campo Grande,Torreão,R. Professor Othon Paraíso,1.3
+Casa Amarela,Casa Forte,Estr. das Ubaias,1.2
+Casa Amarela,Monteiro,Estr. do Arraial,1.7
+Casa Amarela,Poço da Panela,R. Marechal Rondon,1.5
+Casa Amarela,Tamarineira,Av. Professor José dos Anjos,3.7
+Casa Forte,Parnamirim,R. Jerônimo de Albuquerque,1.5
+Casa Forte,Poço da Panela,Estr. Real do Poço,0.9
+Casa Forte,Santana,R. Sant'Anna,1
+Caxangá,Cidade Universitária,Av. Professor Moraes Rego,5.6
+Caxangá,Engenho do Meio,R. Gáspar Pérez,5.9
+Caxangá,Iputinga,Av.Joaquim Ribeiro,5.7
+Caxangá,Jardim São Paulo,R. Dr. Dustan de Carvalho Soares,9.2
+Caxangá,San Martin,R. Francisco Tôrres,10
+Caxangá,Torrões,R. Ambrósio Machado,6.8
+Caxangá,Várzea,Av. Afonso Olindense,4
+Cidade Universitária,Curado,Av. dos Reitores,3.9
+Cidade Universitária,Jardim São Paulo,Av. Recife,4.6
+Cidade Universitária,Várzea,R. Amaro Gomes Poroca,1.8
+Coelhos,Ilha Joana Bezerra,R. Prefeito Jorge Martins,2.2
+Coelhos,Paissandu,R. Estado De Israel,1.9
+Coelhos,Santo Antônio,R. Rêgo Melo,1.4
+Coelhos,São José,Ponte Viaduto Joaquim Cardozo,2.4
+Cohab,Coqueiral,Av. Jornalista Costa Pôrto,5.7
+Cohab,Ibura,Av. Dois Rios,4
+Cohab,Jordão,Av. Doná Carentina,4.6
+Cohab,Sancho,Av. General Manoel Rabelo,5.3
+Coqueiral,Curado,Av. Getúlio Vargas,5.6
+Coqueiral,Ibura,R. do Sancho,7.4
+Coqueiral,Sancho,R. Aprígio Guimarães,1.6
+Coqueiral,Tejipió,R. Alto da Bela Vista,1.2
+Coqueiral,Totó,R. Alto do Paraizo,0.7
+Cordeiro,Bongi,R. Carlos Gomes,3.8
+Cordeiro,Engenho do Meio,R. Dr. Miguel Viêira Ferreira,3.1
+Cordeiro,Iputinga,R. São Mateus,2.6
+Cordeiro,Madalena,Av. Beira Rio,4
+Cordeiro,Torre,R. Souza Bandeira,3.2
+Cordeiro,Torrões,Estr. do Forte do Arraial Novo do Bom Jesus,2.4
+Cordeiro,Zumbi,Av. Caxangá,1.1
+Córrego do Jenipapo,Alto José do Pinho,R. Popular,4.7
+Córrego do Jenipapo,Brejo de Beberibe,R. Anita,2.6
+Córrego do Jenipapo,Casa Amarela,R. Francisco campos,3.6
+Córrego do Jenipapo,Dois Unidos,Av. Ver. Otacílio Azevedo,3.7
+Córrego do Jenipapo,Iputinga,Av. da Recuperação,5.2
+Córrego do Jenipapo,Macaxeira,Av. José Américo de Almeida,0.8
+Córrego do Jenipapo,Mangabeira,R. Maragogi,5.2
+Córrego do Jenipapo,Nova Descoberta,R. dos Coquinhos,1.6
+Curado,Ibura,Rod. Luiz Gonzaga,9.5
+Curado,Jardim São Paulo,R. Lorena,4.2
+Curado,Sancho,Av. Liberdade,6.8
+Curado,Tejipió,R. Papa João XXIII,6.7
+Derby,Coelhos,R. Henrique Dias,2.5
+Derby,Graças,R. das Pernambucanas,1.4
+Derby,Espinheiro,R. do Espinheiro,2.5
+Derby,Ilha do Leite,R. Antônio Gomes de Freitas,2.3
+Derby,Ilha do Retiro,R. João Elísio Ramos,2
+Derby,Madalena,R. Arlíndo Gouvêia,1.7
+Derby,Paissandu,R. Amauri de Medeiros,1.4
+Derby,Santo Amaro,R. das Creoulas,4
+Dois Irmãos,Brejo de Beberibe,R. Sr. do Bonfim,5.9
+Dois Irmãos,Casa Amarela,Praça Dois Irmãos,4.7
+Dois Irmãos,Macaxeira,R. do Monte,2.5
+Dois Irmãos,Monteiro,R. Caetés,2.7
+Dois Irmãos,Morro da Conceição,Largo Dom Luiz,5.9
+Dois Irmãos,Pau-Ferro,Av. Carlos Laet de Lima,10.7
+Dois Irmãos,Sítio dos Pintos,R. Manuel de Medeiros,2
+Dois Unidos,Água Fria,R. Tupiraçaba,3.6
+Dois Unidos,Alto José do Pinho,R. Acaiaca,3.8
+Dois Unidos,Linha do Tiro,R. Divisópolis,2
+Dois Unidos,Passarinho,R. Arquelau Silveira Líra,3.1
+Encruzilhada,Arruda,R. Petronilda Botelho,1.2
+Encruzilhada,Espinheiro,R. Conselheiro Portela,1
+Encruzilhada,Hipódromo,R. Professor Miranda Curió,0.7
+Encruzilhada,Ponto de Parada,R. Dona Julieta,1
+Encruzilhada,Rosarinho,R. André Rebouças,1.7
+Encruzilhada,Santo Amaro,Av. Norte Miguel Arraes de Alencar,2.3
+Encruzilhada,Soledade,R. Gervásio Pires,3.9
+Encruzilhada,Tamarineira,R. Amaro Coutinho,1.7
+Encruzilhada,Torreão,R. Antônio Rangel,1.7
+Engenho do Meio,Iputinga,R. Manoel Côrte Real,3.4
+Engenho do Meio,Prado,R. Lindolfo Color,4.4
+Engenho do Meio,San Martin,R. Arsênio Calaça,3
+Engenho do Meio,Torre,R. Cláudio Brotherhood,5.7
+Engenho do Meio,Várzea,Av. dos Economistas,3.1
+Engenho do Meio,Zumbi,R. Gov. Lopo Garro,4.1
+Espinheiro,Graças,R. Bruno Maia,1.8
+Espinheiro,Rosarinho,R. Barão de Itamaracá,2.9
+Espinheiro,Soledade,Av. João de Barros,2.8
+Espinheiro,Torreão,R. Djalma Farias,3.1
+Estância,Barro,R. S D 5519,7.6
+Estância,Imbiribeira,R. Peroba,5.6
+Estância,Jardim São Paulo,R. Aníbal Portela,3.2
+Estância,Sancho,Estr. do Curado,5.1
+Estância,Tejipió,Av. Dr. José Rufino,5.1
+Fundão,Água Fria,R. Belo Jardim,1.2
+Fundão,Brejo da Guabiraba,R. Pres. Costa e Silva,6.8
+Fundão,Linha do Tiro,R. Maj. Davino,2.4
+Fundão,Porto da Madeira,R.Conselheiro Barros Barreto,1.1
+Graças,Ilha do Leite,R. Sen. José Henrique,3.1
+Graças,Jaqueira,R. Confederação do Equador,2.1
+Graças,Madalena,R. Joaquim Nabuco,2.1
+Graças,Parnamirim,R. Desembargador Góis Cavalcante,3.3
+Graças,Poço da Panela,R. Aberlardo Carneiro Leão,5.3
+Graças,Rosarinho,Av. Conselheiro Rosa e Silva,2.8
+Graças,Soledade,R. João Fernandes Viêira,2.5
+Graças,Tamarineira,R. Senador Alberto Paiva,2.8
+Graças,Torreão,R. Engenho Megaípe,3.6
+Guabiraba,Dois Irmãos,Rod. Governardor Mário Covas,11.8
+Guabiraba,Brejo da Guabiraba,PE-016,9.1
+Guabiraba,Passarinho,Estr. da Muribeca,10.9
+Guabiraba,Pau-Ferro,Rod. Conselheiro João Campos,17.3
+Guabiraba,Sítio dos Pintos,Estrada dos Pintos,13.8
+Hipódromo,Arruda,R. Me. Rosa Gatorno,1.4
+Hipódromo,Parnamirim,R. Gomes Coutinho,3.8
+Hipódromo,Peixinhos,R. Marquês de Baipendi,2.3
+Hipódromo,Ponto de Parada,R. Mem de Sá,1
+Hipódromo,Porto da Madeira,R. do Machado,3.4
+Hipódromo,Santana,R. Samuel de Farias,4.9
+Hipódromo,Tamarineira,R. Fonseca Oliveira,1.9
+Ibura,Areias,Av. Dom Hélder Câmara,2.8
+Ibura,Imbiribeira,R. Pontegy,3.3
+Ibura,Ipsep,R. Pintor Antônio de Albuquerque,1.6
+Ibura,Jordão,R. Rio Xingu,3.7
+Ibura,Sancho,R. Dracena,5.4
+Ilha Joana Bezerra,Ilha do Retiro,Av. Sport Clube do Recife,2.7
+Ilha Joana Bezerra,Ipsep,PE-008,7.2
+Ilha Joana Bezerra,Paissandu,R. Dr. João Asfora,2.2
+Ilha Joana Bezerra,São José,Praça Frei Caneca,3.1
+Ilha do Leite,Cabanga,R. Cmte. Antônio Manhães de Matos,2.5
+Ilha do Leite,Ilha Joana Bezerra,R. Francisco Alves,1.8
+Ilha do Leite,Paissandu,R. Gen. Joaquim Inácio,1
+Ilha do Leite,São José,Av. Sul Gov. Cid Sampaio,2.8
+Ilha do Retiro,Bongi,Estr. do Bongi,3.6
+Ilha do Retiro,Cordeiro,R. Rodrigues de Mendonça,5.4
+Ilha do Retiro,Madalena,R. do Paissandú,3
+Ilha do Retiro,Paissandu,R. Benfica,2.7
+Ilha do Retiro,Prado,R. Pandiá Calógeras,2.7
+Imbiribeira,Ipsep,R. Itacari,1.6
+Imbiribeira,Jordão,Av. Maria Irene,6.3
+Imbiribeira,Pina,R. Joaquim Bandeira,5.6
+Ipsep,Areias,R. Aldemar de Oliveira,2.2
+Iputinga,Cidade Universitária,Estr. do Barbalho,3.3
+Iputinga,Macaxeira,R. do Palanque,4.7
+Iputinga,Nova Descoberta,Av. Maurício de Nassau,6.3
+Iputinga,Torre,R. 10 de Novembro,4.2
+Iputinga,Várzea,R. Acdo. Hélio Ramos,4
+Jaqueira,Encruzilhada,R. Hoel Sette,1.8
+Jaqueira,Espinheiro,R. Ricardo Hardman,1.9
+Jaqueira,Monteiro,R. Simão Mendes,4
+Jaqueira,Parnamirim,R. do Futuro,1.2
+Jaqueira,Poço da Panela,R. Muniz Tavares,2.9
+Jaqueira,Rosarinho,R. Gen. Abreu e Lima,1.1
+Jaqueira,Tamarineira,R. Canápolis,1.6
+Jardim São Paulo,Areias,Av. São Paulo,3
+Jardim São Paulo,Barro,R. Leobina Pereira,4.3
+Jardim São Paulo,San Martin,BR-101,3.8
+Jardim São Paulo,Sancho,R. Morena Flôr,3.1
+Jardim São Paulo,Tejipió,R. Leandro Barreto ,3.1
+Jiquiá,Afogados,R. Passo da Santa Cruz,3.4
+Jiquiá,Caçote,R. Cap. Gregório de Caldas,2.6
+Jiquiá,Estância,R. Rocha Pombo,1.7
+Jiquiá,Mangueira,R. Marquês de Sapucaiá,2
+Jiquiá,Mustardinha,R. São Miguel,3
+Jiquiá,Sancho,R. João Teixeira,5.1
+Linha do Tiro,Arruda,R. Sodrelândia,3.5
+Linha do Tiro,Bomba do Hemetério,R. Prof. José Amarino dos Réis,2.4
+Linha do Tiro,Morro da Conceição,R. Itacoatira,3.9
+Linha do Tiro,Porto da Madeira,R. Santa Mercedes,2.5
+Macaxeira,Apipucos,R. Cel. João Batista do Rêgo Barros,1.7
+Macaxeira,Brejo da Guabiraba,R. Dionísio Cerqueira,3.4
+Macaxeira,Casa Amarela,R. Maria Cândida,2.7
+Macaxeira,Nova Descoberta,R. Maria Amália,1.5
+Madalena,Prado,R. Real da Torre,1.3
+Madalena,Torre,R. Ernâni Braga,2
+Madalena,Torreão,Av. Gov. Agamenon Magalhães,5.3
+Madalena,Zumbi,R. José Osório,2
+Mangabeira,Morro da Conceição,R. Dom Maurício,3.1
+Mangabeira,Nova Descoberta,R. Lage de Úna,5.2
+Mangabeira,Vasco da Gama,R. Severino Bernardino Pereira,2.9
+Mangueira,Afogados,R. Aurino Eutíquio da Rocha,1.7
+Mangueira,Bongi,R. Mandari,1.7
+Mangueira,Mustardinha,R. Dr. João Elísio,1.1
+Mangueira,San Martin,R. Benício Dias,1.2
+Monteiro,Casa Forte,Igreja Matriz de Casa Forte,2.1
+Monteiro,Poço da Panela,R. Luiz Guimarães,1.6
+Monteiro,Sítio dos Pintos,R. das Levadas,4.4
+Monteiro,Tamarineira,R. Tito Rosas,4.5
+Monteiro,Zumbi,R. Ilha do Temporal,4.5
+Morro da Conceição,Casa Amarela,Estr. do Morro da Conceição,1.4
+Morro da Conceição,Nova Descoberta,R. Ipanema,5
+Morro da Conceição,Tamarineira,Estr. Velha de Água Fria,2.5
+Morro da Conceição,Vasco da Gama,R. Dois de Fevereiro,2
+Nova Descoberta,Brejo da Guabiraba,R. Alto da Brasileira,2.8
+Nova Descoberta,Casa Amarela,R. Padre Lemos,3.8
+Nova Descoberta,Dois Unidos,Subida Alto do Cap.,2.1
+Nova Descoberta,Passarinho,Estr. do Passarinho,7.6
+Nova Descoberta,Vasco da Gama,R. Vasco da Gama,2.3
+Paissandu,Santo Antônio,R. Dr. José Mariano,2.9
+Paissandu,Santo Amaro,R. da Aurora,5.4
+Parnamirim,Casa Amarela,R. Estrela,1.8
+Parnamirim,Monteiro,R. Ferreira Lopes,3.5
+Parnamirim,Poço da Panela,R. João Tude de Melo,2.6
+Parnamirim,Santana,R. Leonardo Bezerra Cavalcante,1.7
+Parnamirim,Tamarineira,R. Cônego Barata,1.9
+Pau-Ferro,Macaxeira,Estr. dos Macacos,11
+Pau-Ferro,Sítio dos Pintos,Av. Tiradentes,8.6
+Pau-Ferro,Várzea,Estr. de Aldeia,11.7
+Peixinhos,Campo Grande,Av. Antônio da Costa Azevedo,2.8
+Peixinhos,Porto da Madeira,Av. Presidente Kennedy,2.8
+Ponto de Parada,Arruda,Av. Beberibe ,0.55
+Ponto de Parada,Beberibe,R. da Regeneração,3.6
+Ponto de Parada,Fundão ,R. Alegre,1.9
+Ponto de Parada,Peixinhos,R. Passarela,2.4
+Ponto de Parada,Rosarinho,R. Couto Magalhães,1.2
+Ponto de Parada,Tamarineira,R. Treze de Junho,1.2
+Prado,Torre,R. Xavier Sobrinho,4.3
+Prado,Torrões,BR-232,3.3
+Prado,Zumbi,R. Fidélis Moliterno,1.9
+Recife,Cabanga,PE-009,5.1
+Recife,Santo Amaro,PE-001,1.1
+Recife,Santo Antônio,R. Princesa Isabel,1.2
+Recife,São José,Via Cais do Apolo,3.5
+Rosarinho,Aflitos,R. Manuel de Carvalho,1.6
+Rosarinho,Tamarineira,R. Regueira Costa,1.2
+San Martin,Mustardinha,R. Neto Campêlo Júnior,1.7
+San Martin,Torrões,R. Edvaldo Maranhão Ferreira,2.3
+Santo Amaro,Coelhos,R. São Gonçalo,2.9
+Santo Amaro,Espinheiro,R. Tupinambás,2.4
+Santo Amaro,Santo Antônio,R. do Sol,2.6
+Santo Amaro,Soledade,Av. Cruz Cabugá,2.4
+Santo Antônio,Cabanga,R. Imperial,3.6
+Santo Antônio,São José,R. Floriano Peixoto,1.2
+Santana,Monteiro,R. Dom Malam,2.5
+Santana,Poço da Panela,R. Álvaro Macedo,1.4
+Santana,Tamarineira,Av. Dezessete de Agosto,3.1
+Santana,Zumbi,R. José Bonifácio,4.6
+São José,Santo Antônio,R. da Concórdia,2.2
+Tejipió,Totó,R. Paulino de Freitas,1.6
+Torre,Zumbi,R. Marquês de Maricá,2.2
+Torrões,Várzea,R. Manuel Alves Deus Dara,4.1
