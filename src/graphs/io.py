@@ -57,16 +57,18 @@ class Grafo:
 
 #Lógica para ler o arquivo e transformar em um grafo python
 
-#Criando um dataframe com as informações do grafo
-caminho_csv = os.path.join(os.path.dirname(__file__), "../../data/adjacencias-bairros.csv")
-df = pd.read_csv(caminho_csv)
+def criar_grafo():
+    #Criando um dataframe com as informações do grafo
+    caminho_csv = os.path.join(os.path.dirname(__file__), "../../data/adjacencias-bairros.csv")
+    df = pd.read_csv(caminho_csv)
 
-#Criando um objeto do tipo grafo
-g = Grafo()
+    #Criando um objeto do tipo grafo
+    g = Grafo()
 
-#Para cada linha do arquivo, adicionamos uma aresta que liga o vértice de origem ao de destino
-for _, linha in df.iterrows():
-    g.adicionar_aresta(linha['bairro_origem'], linha['bairro_destino'], linha['peso(distancia em km)'])
+    #Para cada linha do arquivo, adicionamos uma aresta que liga o vértice de origem ao de destino
+    for _, linha in df.iterrows():
+        g.adicionar_aresta(linha['bairro_origem'], linha['bairro_destino'], linha['peso(distancia em km)'])
 
-GRAFO = g
-print(g.__str__())
+    print(g.__str__())
+
+    return g.grafo
