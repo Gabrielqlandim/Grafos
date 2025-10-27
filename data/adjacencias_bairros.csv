@@ -1,4 +1,4 @@
-bairro_origem,bairro_destino,Aresta,peso(distancia em km)
+bairro_origem,bairro_destino,logradouro,peso
 Aflitos,Espinheiro,R. Samuel Câmpelo,1.1
 Aflitos,Derby,R. Quarenta e Oito,3
 Aflitos,Graças,Av. Rui Barbosa,2.3
