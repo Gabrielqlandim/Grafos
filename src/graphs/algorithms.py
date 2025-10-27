@@ -1,20 +1,60 @@
+def bfs(grafo, inicio):
+    """
+    Busca em largura a partir de 'inicio'.
 
-def dfs(grafo, inicio, visitados=None):
+    Retorna:
+    - ordem: lista com a ordem de visita dos vértices
+    - camadas: dict nivel(int) -> lista de vértices naquele nível
+    """
+    if inicio not in grafo:
+        return [], {}
 
-    #Cria uma lista para marcar os vértices já visitados
-    if visitados is None:
-        visitados = set()  #Usei o Set ao invés de lista pois ele não permite duplicatas por padrão
-    
-    #Adiciona o vértice analisado
+    visitados = set()
+    ordem = []
+    camadas = {}
+
+    fila = [inicio]
+    niveis = {inicio: 0}
     visitados.add(inicio)
-    print(inicio)
-    
-    #Percorre todos os vértices adjacentes ao analisado
-    for vizinho in grafo[inicio]:
 
-        #Caso o vértice não esteja nos visitados, chama a função recursivamente
+    while fila:
+        atual = fila.pop(0)
+        ordem.append(atual)
+
+        nivel_atual = niveis[atual]
+        if nivel_atual not in camadas:
+            camadas[nivel_atual] = []
+        camadas[nivel_atual].append(atual)
+
+        # Vizinho é a chave do dict interno; o peso é ignorado
+        for vizinho in grafo.get(atual, {}):
+            if vizinho not in visitados:
+                visitados.add(vizinho)
+                niveis[vizinho] = nivel_atual + 1
+                fila.append(vizinho)
+
+    return ordem, camadas
+
+
+def dfs(grafo, inicio, visitados=None, ordem=None):
+    """
+    Busca em profundidade (recursiva) a partir de 'inicio'.
+
+    Retorna a ordem de visita como uma lista.
+    """
+    if inicio not in grafo:
+        return []
+
+    if visitados is None:
+        visitados = set()
+    if ordem is None:
+        ordem = []
+
+    visitados.add(inicio)
+    ordem.append(inicio)
+
+    for vizinho in grafo.get(inicio, {}):
         if vizinho not in visitados:
-            dfs(grafo, vizinho, visitados)
-    
-    #Retorna a lista dos vértices visitados
-    return visitados
+            dfs(grafo, vizinho, visitados, ordem)
+
+    return ordem

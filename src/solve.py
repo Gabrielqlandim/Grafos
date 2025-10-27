@@ -5,9 +5,9 @@ from pathlib import Path
 import json
 import sys
 
-# Opcional: quando graph/io estiverem prontos, importe-os aqui.
-# from src.graphs.io import load_recife_graph
-# from src.graphs.algorithms import bfs, dfs, dijkstra, bellman_ford
+
+from src.graphs.io import criar_grafo
+from src.graphs.algorithms import bfs, dfs
 
 @dataclass
 class Args:
@@ -52,15 +52,28 @@ def run_task(ns) -> int:
         if not args.source:
             print("✖ Necessário --source para BFS/DFS", file=sys.stderr)
             return 2
-        # TODO: chamar bfs/dfs reais quando prontos
-        payload = {
-            "algoritmo": args.alg,
-            "source": args.source,
-            "ordem_visita_stub": ["A", "B", "C", "D"],   # stub
-            "camadas_stub": {"0": [args.source], "1": ["B","C"], "2": ["D"]} if args.alg == "BFS" else None
-        }
+
+        # Carrega grafo (dict de dicts) a partir do dataset
+        grafo = criar_grafo(str(args.dataset))
+
+        if args.alg == "BFS":
+            ordem, camadas = bfs(grafo, args.source)
+            payload = {
+                "algoritmo": "BFS",
+                "source": args.source,
+                "ordem_visita": ordem,
+                "camadas": {str(k): v for k, v in camadas.items()}
+            }
+        else:  # DFS
+            ordem = dfs(grafo, args.source)
+            payload = {
+                "algoritmo": "DFS",
+                "source": args.source,
+                "ordem_visita": ordem
+            }
+
         _write_json(args.out / f"{args.alg.lower()}_{args.source}.json", payload)
-        print(f"✔ {args.alg} (stub) executado. Saída em out/{args.alg.lower()}_{args.source}.json")
+        print(f"✔ {args.alg} executado. Saída em out/{args.alg.lower()}_{args.source}.json")
         return 0
 
     if args.alg == "DIJKSTRA":
