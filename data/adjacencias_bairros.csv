@@ -1,4 +1,4 @@
-bairro_origem,bairro_destino,logradouro,peso
+bairro_origem,bairro_destino,Aresta,peso(distancia em km)
 Aflitos,Espinheiro,R. Samuel Câmpelo,1.1
 Aflitos,Derby,R. Quarenta e Oito,3
 Aflitos,Graças,Av. Rui Barbosa,2.3
@@ -347,3 +347,7 @@ São José,Santo Antônio,R. da Concórdia,2.2
 Tejipió,Totó,R. Paulino de Freitas,1.6
 Torre,Zumbi,R. Marquês de Maricá,2.2
 Torrões,Várzea,R. Manuel Alves Deus Dara,4.1
+Boa Viagem(Setúbal),Ibura,R. São Nicolau,8.1
+Boa Viagem(Setúbal),Imbiribeira,R. Ribeiro de Brito,5.8
+Boa Viagem(Setúbal),Ipsep,R. Dr Tavares Correia,7.6
+Boa Viagem(Setúbal),Boa viagem,Av. Visconde de Jequitinhonha,2.4
