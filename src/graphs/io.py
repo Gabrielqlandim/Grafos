@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from graph import Grafo
+from .graph import Grafo
     
 
 #===================================================================#
@@ -10,7 +10,7 @@ from graph import Grafo
 def criar_grafo(caminho_csv: str | None = None):
     #Criando um dataframe com as informações do grafo
     if caminho_csv is None:
-        caminho_csv = os.path.join(os.path.dirname(__file__), "../../data/adjacencias-bairros.csv")
+        caminho_csv = os.path.join(os.path.dirname(__file__), "../../data/adjacencias_bairros.csv")
     df = pd.read_csv(caminho_csv)
 
     #Criando um objeto do tipo grafo
