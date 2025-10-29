@@ -6,7 +6,7 @@ import sys
 import csv
 import pandas as pd
 
-from src.graphs.io import criar_grafo
+from src.graphs.io import criar_grafo, ler_pares_enderecos
 from src.graphs.algorithms import bfs, dfs, dijkstra
 from src.graphs.metrics import gerar_todas_metricas
 
@@ -230,3 +230,59 @@ def executar_tarefa(ns) -> int:
 
     print(f"Ação desconhecida: {args.alg}", file=sys.stderr)
     return 2
+
+
+# Distância entre endereços X e Y
+def solve_enderecos(
+    adjacencias_csv: Path,
+    pares_enderecos_csv: Path,
+    out_dir: Path,
+) -> None:
+    """
+      - Lê pares (X,Y,bairro_X,bairro_Y) de data/enderecos.csv
+      - Monta grafo via data/adjacencias_bairros.csv
+      - Roda Dijkstra para cada par
+      - Gera:
+          * out/distancias_enderecos.csv
+          * out/percurso_nova_descoberta_setubal.json (se existir o par obrigatório)
+    """
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    G = criar_grafo(adjacencias_csv)
+    pares = ler_pares_enderecos(Path(pares_enderecos_csv))
+
+    dist_csv = out_dir / "distancias_enderecos.csv"
+    with dist_csv.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(["X", "Y", "bairro_X", "bairro_Y", "custo", "caminho"])
+
+        for p in pares:
+            bx = p["bairro_X"]
+            by = p["bairro_Y"]
+
+            try:
+                custo, caminho = dijkstra(G, bx, by)
+                custo_str = f"{float(custo):.4f}"
+                caminho_str = " > ".join(caminho)
+            except Exception:
+                custo_str = "NA"
+                caminho = []
+                caminho_str = ""
+
+            writer.writerow([p["X"], p["Y"], bx, by, custo_str, caminho_str])
+
+            # Par obrigatório: Nova Descoberta -> Boa Viagem(Setúbal)
+            if bx == "Nova Descoberta" and by == "Boa Viagem(Setúbal)" and caminho:
+                payload = {
+                    "origem": p["X"],
+                    "destino": p["Y"],
+                    "bairro_origem": bx,
+                    "bairro_destino": by,
+                    "custo": float(custo),
+                    "caminho_bairros": caminho
+                }
+                (out_dir / "percurso_nova_descoberta_setubal.json").write_text(
+                    json.dumps(payload, ensure_ascii=False, indent=2),
+                    encoding="utf-8"
+                )

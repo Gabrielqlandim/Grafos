@@ -1,9 +1,11 @@
 import pandas as pd
 import os
 from .graph import Grafo
+
+from pathlib import Path
+import csv
     
 
-#===================================================================#
 
 #Lógica para ler o arquivo e transformar em um grafo python
 
@@ -22,3 +24,24 @@ def criar_grafo(caminho_csv: str | None = None):
 
     # Não imprimir para manter o CLI limpo
     return g.grafo
+
+
+
+
+def ler_pares_enderecos(caminho_csv: Path):
+    """
+    Lê data/enderecos.csv com colunas: X,Y,bairro_X,bairro_Y
+    Retorna uma lista de dicts: [{"X":..., "Y":..., "bairro_X":..., "bairro_Y":...}, ...]
+    """
+    pares = []
+    with caminho_csv.open("r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            # normaliza nomes de bairros
+            pares.append({
+                "X": row["X"].strip(),
+                "Y": row["Y"].strip(),
+                "bairro_X": row["bairro_X"].strip(),
+                "bairro_Y": row["bairro_Y"].strip(),
+            })
+    return pares
