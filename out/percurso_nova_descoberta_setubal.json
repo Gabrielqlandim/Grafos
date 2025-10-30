@@ -1,0 +1,19 @@
+{
+  "origem": "R. Corrego da Areia, 820",
+  "destino": "R. Ribeiro de Brito, 800",
+  "bairro_origem": "Nova Descoberta",
+  "bairro_destino": "Boa Viagem(Setúbal)",
+  "custo": 23.9,
+  "caminho_bairros": [
+    "Nova Descoberta",
+    "Brejo de Beberibe",
+    "Alto José Bonifácio",
+    "Tamarineira",
+    "Graças",
+    "Boa Vista",
+    "Cabanga",
+    "Pina",
+    "Boa Viagem",
+    "Boa Viagem(Setúbal)"
+  ]
+}

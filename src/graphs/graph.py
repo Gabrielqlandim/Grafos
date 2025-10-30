@@ -18,8 +18,9 @@ class Grafo:
         self.adicionar_vertice(destino)
         
         #Como o grafo é não direcionado, adiciona a aresta nos dois sentidos
-        self.grafo[origem][destino] = peso
-        self.grafo[destino][origem] = peso
+        w = float(peso)
+        self.grafo[origem][destino] = w
+        self.grafo[destino][origem] = w
     
     def obter_vizinhos(self, vertice):
         #Retorna os vizinhos de um vértice (e seus pesos)
