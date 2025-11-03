@@ -59,13 +59,17 @@ def dfs(grafo, inicio, visitados=None, ordem=None):
 
     return ordem
 
-def dijkstra(grafo, inicio):
+def dijkstra(grafo, inicio, destino = None):
 
-    # Distâncias mínimas acumuladas
+    #Distâncias mínimas acumuladas
+    #Inicia as distâncias como infinito
     dist = {v: float('inf') for v in grafo}
     dist[inicio] = 0
 
-    # Vértices visitados
+    #Dicionário para armazenar o antecessor de cada vértice
+    anterior = {v: None for v in grafo}
+
+    #Vértices visitados
     visitados = set()
 
     while len(visitados) < len(grafo):
@@ -84,6 +88,10 @@ def dijkstra(grafo, inicio):
         #Caso não encontre um vértice atual, encerra o algorítmo
         if atual is None:  
             break
+        
+        #Encerra caso o destino seja encontrado antes do fim do algorítmo
+        if atual == destino:
+            break
 
         #Marca o vértice atual como visitado
         visitados.add(atual)
@@ -91,10 +99,22 @@ def dijkstra(grafo, inicio):
         #Atualiza distâncias dos vizinhos
         for vizinho, peso in grafo[atual].items():
 
-            #Caso o vértice visinho não tenha sido fechado, atualiza a distância dele
+            #Caso o vértice vizinho não tenha sido fechado, atualiza a distância dele
             if vizinho not in visitados:
                 nova_dist = dist[atual] + peso
                 if nova_dist < dist[vizinho]:
                     dist[vizinho] = nova_dist
+                    anterior[vizinho] = atual
 
-    return dist
+    #Caso não seja passado um destino, retorna tudo
+    if destino is None:
+        return dist
+
+    #Reconstrói o caminho do início até o destino
+    caminho = []
+    atual = destino
+    while atual is not None:
+        caminho.insert(0, atual)
+        atual = anterior[atual]
+
+    return {"Distância":dist[destino], "Caminho": caminho}
