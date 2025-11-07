@@ -6,7 +6,7 @@ import sys
 import csv
 import pandas as pd
 
-from src.graphs.io import criar_grafo, ler_pares_enderecos
+from src.graphs.io import criar_grafo, ler_pares_enderecos, desenhar_grafo
 from src.graphs.algorithms import bfs, dfs, dijkstra
 from src.graphs.metrics import gerar_todas_metricas
 
@@ -286,3 +286,5 @@ def solve_enderecos(
                     json.dumps(payload, ensure_ascii=False, indent=2),
                     encoding="utf-8"
                 )
+
+                desenhar_grafo(G, caminho=caminho, titulo="Caminho Nova Descoberta - Setúbal")

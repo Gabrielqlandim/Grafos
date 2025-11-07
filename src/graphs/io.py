@@ -1,9 +1,10 @@
 import pandas as pd
 import os
 from .graph import Grafo
-
+import math
 from pathlib import Path
 import csv
+import matplotlib as plt
     
 
 
@@ -45,3 +46,61 @@ def ler_pares_enderecos(caminho_csv: Path):
                 "bairro_Y": row["bairro_Y"].strip(),
             })
     return pares
+
+def desenhar_grafo(grafo, caminho=None, pos=None, mostrar_pesos=True, titulo="Grafo com Caminho"):
+    
+    #Desenha um grafo não direcionado e destaca um caminho em vermelho.
+
+    #Gera posições em círculo (necessário coordenadas para desenhar no matplotlib)
+    if pos is None:
+        n = len(grafo)
+        angulo = 2 * math.pi / n
+        pos = {v: (math.cos(i * angulo), math.sin(i * angulo)) for i, v in enumerate(grafo)}
+
+    plt.figure(figsize=(8, 8))
+
+    #Lista de arestas desenhadas, para evitar repetição
+    desenhadas = set()
+
+    #DESENHA TODAS AS ARESTAS
+    #Loop duplo percorre todos os vértices e suas conexões
+    for v1 in grafo:
+        for v2, peso in grafo[v1].items():
+
+            #Caso a aresta ainda não tenha sido desenhada, desenha ela
+            if (v2, v1) not in desenhadas:
+                #salva as posições dos dois vértices
+                x1, y1 = pos[v1]
+                x2, y2 = pos[v2]
+
+                #Plota os vértices e salva na lista de arestas desenhadas
+                plt.plot([x1, x2], [y1, y2], 'k-', linewidth=1)
+                desenhadas.add((v1, v2))
+
+                #Desenha também o peso da aresta
+                if mostrar_pesos:
+                    plt.text((x1 + x2)/2, (y1 + y2)/2, str(peso), color='blue', fontsize=9, ha='center', va='center')
+
+    #DESTACA O CAMINHO  EM VERMELHO
+    if caminho and len(caminho) > 1:
+        #Percorre todos os vértices do caminho
+        for i in range(len(caminho) - 1):
+            v1, v2 = caminho[i], caminho[i + 1]
+
+            #Obtém as posições dos vértices e plota uma linha vermelha para destacar
+            if v1 in pos and v2 in pos:
+                x1, y1 = pos[v1]
+                x2, y2 = pos[v2]
+                plt.plot([x1, x2], [y1, y2], 'r-', linewidth=3, zorder=2)
+
+    #DESENHAR VÉRTICES
+    #Percorre a lista de posições e   
+    for vertice, (x, y) in pos.items():
+        cor = 'lightcoral' if caminho and vertice in caminho else 'orange'
+        plt.scatter(x, y, s=400, color=cor, edgecolors='black', zorder=3)
+        plt.text(x, y, vertice, fontsize=12, ha='center', va='center', weight='bold')
+
+    #Exibe o grafo
+    plt.axis('off')
+    plt.title(titulo)
+    plt.show()
