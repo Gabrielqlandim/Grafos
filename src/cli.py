@@ -16,7 +16,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--dataset",
         type=Path,
         required=True,
-        help="Caminho do CSV de arestas (ex.: data/adjacencias_bairros.csv)."
+        help="Caminho do CSV de arestas."
     )
 
     p.add_argument(
@@ -36,14 +36,14 @@ def build_parser() -> argparse.ArgumentParser:
         "--enderecos",
         type=Path,
         default=None,
-        help="Caminho do CSV de pares de endereços (ex.: data/enderecos.csv) — exigido no modo ENDERECOS."
+        help="Caminho do CSV de pares de endereços — exigido no modo ENDERECOS."
     )
 
     p.add_argument(
         "--out",
         type=Path,
         default=Path("./out"),
-        help="Diretório de saída (criado se não existir)."
+        help="Diretório de saída."
     )
 
     p.add_argument("--verbose", action="store_true", help="Mostra logs no stderr.")
