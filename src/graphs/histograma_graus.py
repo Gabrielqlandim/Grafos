@@ -65,21 +65,21 @@ def main():
 
     args = parser.parse_args()
 
-    # 1) Carrega o grafo
+    #carrega o grafo
     grafo = criar_grafo(args.dataset)
 
-    # 2) Calcula graus
+    #calcula graus
     graus = calcular_graus(grafo)
 
-    # 3) Gera o histograma
+    #gera o histograma
     gerar_histograma(
         graus=graus,
         caminho_saida=args.out,
         titulo=args.title,
     )
 
-    #aqui é so pra teste mesmo pra eu saber se ele foi gerado com mais facilidade e onde
-    print(f"Histograma gerado: {args.out}")
+    #aqui é so pra teste mesmo pra eu saber se ele foi gerado com mais facilidade
+    print(f"Histograma gerado")
 
 
 if __name__ == "__main__":

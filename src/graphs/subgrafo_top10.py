@@ -103,7 +103,7 @@ def main():
     topk = pegar_top10(graus_totais, args.k)
     g_sub = subgrafo_induzido(grafo, topk)
 
-    # grau dentro do subgrafo (não o total do grafo inteiro)
+    #grau dentro do subgrafo 
     graus_sub = calcular_graus(g_sub)
     pos = layout_circular(g_sub, raio=1.0)
 
