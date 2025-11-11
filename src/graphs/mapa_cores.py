@@ -121,7 +121,7 @@ def desenhar_mapa_cores(grafo, graus, posicoes, caminho_saida, titulo):
 #mesma situação dos outros
 def main():
     parser = argparse.ArgumentParser(
-        description="Gera um mapa de cores por grau (sem networkx)."
+        description="Gera um mapa de cores por grau."
     )
 
     parser.add_argument(

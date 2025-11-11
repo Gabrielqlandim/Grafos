@@ -87,7 +87,7 @@ def desenhar_subgrafo(grafo, pos, graus, caminho_saida, titulo):
 #nao sei se é so pra codigo de algoritmo
 def main():
     parser = argparse.ArgumentParser(
-        description="Gera o subgrafo dos K bairros com maior grau (sem n."
+        description="Gera o subgrafo dos K bairros com maior grau."
     )
     parser.add_argument("--dataset", type=str, required=True,
                         help="Caminho para data/adjacencias_bairros.csv")
