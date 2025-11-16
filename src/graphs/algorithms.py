@@ -44,12 +44,14 @@ def dfs(grafo, inicio, visitados=None, ordem=None, iteracoes=0):
     if ordem is None:
         ordem = []
 
+    iteracoes + 1
+
     visitados.add(inicio)
     ordem.append(inicio)
 
     for vizinho in grafo.get(inicio, {}):
         if vizinho not in visitados:
-            a, iteracoes = dfs(grafo, vizinho, visitados, ordem)
+            a, iteracoes = dfs(grafo, vizinho, visitados, ordem, iteracoes)
 
     return ordem, iteracoes
 
