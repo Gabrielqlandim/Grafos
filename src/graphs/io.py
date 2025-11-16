@@ -25,7 +25,7 @@ def criar_grafo(caminho_csv: str | None = None):
             g.adicionar_aresta(linha['bairro_origem'], linha['bairro_destino'], linha['peso(distancia em km)'])
 
         #Para a parte 2
-        elif 'airlines_flights_data' in caminho_csv:
+        elif 'airlines' in caminho_csv:
             #Seta os vétices de origem e destino como as cidades e o peso como a duração do voo
             g.adicionar_aresta(linha['source_city'], linha['destination_city'], linha['duration'])
 

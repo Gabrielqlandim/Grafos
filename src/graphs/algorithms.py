@@ -1,11 +1,5 @@
 def bfs(grafo, inicio):
-    """
-    Busca em largura a partir de 'inicio'.
 
-    Retorna:
-    - ordem: lista com a ordem de visita dos vértices
-    - camadas: dict nivel(int) -> lista de vértices naquele nível
-    """
     if inicio not in grafo:
         return [], {}
 
@@ -36,17 +30,17 @@ def bfs(grafo, inicio):
     return ordem, camadas
 
 
-def dfs(grafo, inicio, visitados=None, ordem=None):
-    """
-    Busca em profundidade (recursiva) a partir de 'inicio'.
+def dfs(grafo, inicio, visitados=None, ordem=None, iteracoes=0):
 
-    Retorna a ordem de visita como uma lista.
-    """
+    #Caso o vértice não esteja  no grafo, retorna vazio
     if inicio not in grafo:
         return []
 
+    #Inicia a lista de visitados
     if visitados is None:
         visitados = set()
+    
+    #Cria a lista com a ordem dos vértices visitados
     if ordem is None:
         ordem = []
 
@@ -55,9 +49,9 @@ def dfs(grafo, inicio, visitados=None, ordem=None):
 
     for vizinho in grafo.get(inicio, {}):
         if vizinho not in visitados:
-            dfs(grafo, vizinho, visitados, ordem)
+            a, iteracoes = dfs(grafo, vizinho, visitados, ordem)
 
-    return ordem
+    return ordem, iteracoes
 
 def dijkstra(grafo, inicio, destino = None):
 
