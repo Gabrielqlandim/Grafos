@@ -3,10 +3,6 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 
-from src.graphs.io import criar_grafo
-from src.graphs.mapa_cores import calcular_graus
-
-
 def gerar_histograma(graus, caminho_saida, titulo):
     
     caminho_saida = Path(caminho_saida)
@@ -39,48 +35,3 @@ def gerar_histograma(graus, caminho_saida, titulo):
 
 # mesma coisa do outro eu noa sei pra que serve o cli e nao sei se isso entraria la
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="Gera histograma da distribuição dos graus do grafo."
-    )
-
-    parser.add_argument(
-        "--dataset",
-        type=str,
-        required=True,
-        help="Caminho para data/adjacencias_bairros.csv",
-    )
-    parser.add_argument(
-        "--out",
-        type=str,
-        default="out/histograma_graus.png",
-        help="Arquivo PNG de saída",
-    )
-    parser.add_argument(
-        "--title",
-        type=str,
-        default="Distribuição dos graus",
-        help="Título do gráfico",
-    )
-
-    args = parser.parse_args()
-
-    #carrega o grafo
-    grafo = criar_grafo(args.dataset)
-
-    #calcula graus
-    graus = calcular_graus(grafo)
-
-    #gera o histograma
-    gerar_histograma(
-        graus=graus,
-        caminho_saida=args.out,
-        titulo=args.title,
-    )
-
-    #aqui é so pra teste mesmo pra eu saber se ele foi gerado com mais facilidade
-    print(f"Histograma gerado")
-
-
-if __name__ == "__main__":
-    main()

@@ -3,9 +3,6 @@ from pathlib import Path
 import math
 import matplotlib.pyplot as plt
 
-from src.graphs.io import criar_grafo
-from src.graphs.mapa_cores import calcular_graus
-
 #Nessa função eu listo os maiores vestices por grau
 def pegar_top10(graus, nome):
     #essa linhas de codigo eu primeiro fiz eles se organizarem porordem 
@@ -81,42 +78,3 @@ def desenhar_subgrafo(grafo, pos, graus, caminho_saida, titulo):
     fig.tight_layout()
     fig.savefig(caminho_saida, dpi=300, bbox_inches="tight")
     plt.close(fig)
-
-
-#isso aqui é a logica do cli mas eu nao sei se tem que botar isso la pq eu nao sei nem o que é cli
-#nao sei se é so pra codigo de algoritmo
-def main():
-    parser = argparse.ArgumentParser(
-        description="Gera o subgrafo dos K bairros com maior grau."
-    )
-    parser.add_argument("--dataset", type=str, required=True,
-                        help="Caminho para data/adjacencias_bairros.csv")
-    parser.add_argument("--k", type=int, default=10, help="Quantidade de bairros")
-    parser.add_argument("--out", type=str, default="out/subgrafo_top10.png",
-                        help="Arquivo PNG de saída")
-    parser.add_argument("--title", type=str, default="Subgrafo dos bairros com maior grau",
-                        help="Título do gráfico")
-    args = parser.parse_args()
-
-    grafo = criar_grafo(args.dataset)
-    graus_totais = calcular_graus(grafo)
-    topk = pegar_top10(graus_totais, args.k)
-    g_sub = subgrafo_induzido(grafo, topk)
-
-    #grau dentro do subgrafo 
-    graus_sub = calcular_graus(g_sub)
-    pos = layout_circular(g_sub, raio=1.0)
-
-    desenhar_subgrafo(
-        grafo=g_sub,
-        pos=pos,
-        graus=graus_sub,
-        caminho_saida=args.out,
-        titulo=f"{args.title} (K={args.k})",
-    )
-
-    print(f"Subgrafo gerado")
-
-
-if __name__ == "__main__":
-    main()

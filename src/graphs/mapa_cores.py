@@ -4,9 +4,6 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 
-from src.graphs.io import criar_grafo
-
-
 def calcular_graus(grafo):
     
     graus = {}
@@ -116,55 +113,3 @@ def desenhar_mapa_cores(grafo, graus, posicoes, caminho_saida, titulo):
     fig.tight_layout()
     fig.savefig(caminho_saida, dpi=300, bbox_inches="tight")
     plt.close(fig)
-
-
-#mesma situação dos outros
-def main():
-    parser = argparse.ArgumentParser(
-        description="Gera um mapa de cores por grau."
-    )
-
-    parser.add_argument(
-        "--dataset",
-        type=str,
-        required=True,
-        help="Caminho para data/adjacencias_bairros.csv",
-    )
-    parser.add_argument(
-        "--out",
-        type=str,
-        default="out/mapa_cores_grau.png",
-        help="Arquivo PNG de saída",
-    )
-    parser.add_argument(
-        "--title",
-        type=str,
-        default="Mapa de cores por grau",
-        help="Título do gráfico",
-    )
-
-    args = parser.parse_args()
-
-    #carrega o grafo
-    grafo = criar_grafo(args.dataset)
-
-    #calcula graus
-    graus = calcular_graus(grafo)
-
-    #calcula posições em círculo
-    posicoes = layout_circular(grafo, raio=1.0)
-
-    #desenha e salva a figura
-    desenhar_mapa_cores(
-        grafo=grafo,
-        graus=graus,
-        posicoes=posicoes,
-        caminho_saida=args.out,
-        titulo=args.title,
-    )
-
-    print(f"Figura gerada")
-
-
-if __name__ == "__main__":
-    main()
