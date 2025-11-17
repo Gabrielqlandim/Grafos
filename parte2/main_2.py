@@ -8,3 +8,7 @@ g = criar_grafo('out/airlines_spicejet.csv')
 inicio_dfs = time.time()
 ordem, iteracoes = dfs(g, 'Delhi')
 fim_dfs = time.time()
+
+inicio_bfs = time.time()
+ordem_bfs, iteracoes_bfs = bfs(g, 'Delhi')
+fim_bfs = time.time
