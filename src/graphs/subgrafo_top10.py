@@ -1,4 +1,3 @@
-import argparse
 from pathlib import Path
 import math
 import matplotlib.pyplot as plt

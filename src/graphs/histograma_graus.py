@@ -1,4 +1,3 @@
-import argparse
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -32,6 +31,3 @@ def gerar_histograma(graus, caminho_saida, titulo):
     fig.tight_layout()
     fig.savefig(caminho_saida, dpi=300, bbox_inches="tight")
     plt.close(fig)
-
-# mesma coisa do outro eu noa sei pra que serve o cli e nao sei se isso entraria la
-

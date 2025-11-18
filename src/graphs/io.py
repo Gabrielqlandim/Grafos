@@ -35,10 +35,10 @@ def criar_grafo(caminho_csv: str | None = None):
 
 
 def ler_pares_enderecos(caminho_csv: Path):
-    """
-    Lê data/enderecos.csv com colunas: X,Y,bairro_X,bairro_Y
-    Retorna uma lista de dicts: [{"X":..., "Y":..., "bairro_X":..., "bairro_Y":...}, ...]
-    """
+    
+    #Lê data/enderecos.csv com colunas: X,Y,bairro_X,bairro_Y
+    #Retorna uma lista de dicionario
+    
     pares = []
     with caminho_csv.open("r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
