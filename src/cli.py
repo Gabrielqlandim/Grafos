@@ -78,10 +78,10 @@ def main(argv: list[str] | None = None) -> int:
 
         # grau no grafo completo -> top10
         graus_totais = calcular_graus_map(grafo)
-        topk = pegar_top10(graus_totais, args.k)
+        top10 = pegar_top10(graus_totais, args.k)
 
         # subgrafo induzido e graus dentro do subgrafo
-        g_sub = subgrafo_induzido(grafo, topk)
+        g_sub = subgrafo_induzido(grafo, top10)
         graus_sub = calcular_graus_map(g_sub)
         pos_sub = layout_circular_map(g_sub, raio=1.0)
 
