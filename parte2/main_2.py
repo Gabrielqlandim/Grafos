@@ -11,4 +11,8 @@ fim_dfs = time.time()
 
 inicio_bfs = time.time()
 ordem_bfs, iteracoes_bfs = bfs(g, 'Mumbai')
-fim_bfs = time.time
+fim_bfs = time.time()
+
+inicio_bfs2 = time.time()
+ordem_bfs2, iteracoes_bfs2 = bfs(g, 'Bangalore')
+fim_bfs2 = time.time()
