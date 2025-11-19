@@ -19,3 +19,18 @@ ordem_bfs2, iteracoes_bfs2 = bfs(g, 'Bangalore')
 fim_bfs2 = time.time()
 
 #Parte de Dijskra
+
+pares_origem_destino = [
+    ("Delhi", "Mumbai"),
+    ("Delhi", "Hyderabad"),
+    ("Mumbai", "Kolkata"),
+    ("Bangalore", "Delhi"),
+    ("Chennai", "Mumbai"),
+]
+
+for origem, destino in pares_origem_destino:
+    inicio_dijskra = time.time()
+    resultado = dijkstra(g, origem, destino)
+    fim_dijskra= time.time()
+
+    tempo_exec = fim_dijskra - inicio_dijskra
