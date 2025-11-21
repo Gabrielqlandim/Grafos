@@ -9,14 +9,17 @@ g = criar_grafo('out/airlines_spicejet.csv')
 inicio_dfs = time.time()
 ordem, iteracoes = dfs(g, 'Delhi')
 fim_dfs = time.time()
+tempo_exec_dfs =fim_dfs - inicio_dfs
 
 inicio_bfs = time.time()
 ordem_bfs, iteracoes_bfs = bfs(g, 'Mumbai')
 fim_bfs = time.time()
+tempo_exec_bfs =fim_bfs - inicio_bfs
 
 inicio_bfs2 = time.time()
 ordem_bfs2, iteracoes_bfs2 = bfs(g, 'Bangalore')
 fim_bfs2 = time.time()
+tempo_exec_bfs2 = fim_bfs2 - inicio_bfs2
 
 #Parte de Dijskra
 
