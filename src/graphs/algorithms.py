@@ -44,7 +44,7 @@ def dfs(grafo, inicio, visitados=None, ordem=None, iteracoes=0):
     if ordem is None:
         ordem = []
 
-    iteracoes + 1
+    iteracoes += 1
 
     visitados.add(inicio)
     ordem.append(inicio)
