@@ -92,6 +92,11 @@ resultados_BFS_DFS_Dijskra_BellmanFord = {
             #"camadas": camadas_bfs2
             "ordem": len(ordem),
             "ciclos": iteracoes,
+        },
+    ],
+    "DIJSKRA":[
+            {
+
         }
     ]
 }
