@@ -322,9 +322,22 @@ def solve_enderecos(
             by = p["bairro_Y"]
 
             try:
-                custo, caminho = dijkstra(G, bx, by)
-                custo_str = f"{float(custo):.4f}"
-                caminho_str = " > ".join(caminho)
+                resultado = dijkstra(G, bx, by)
+
+                if isinstance(resultado, dict) and "Distância" in resultado and "Caminho" in resultado:
+                    custo = resultado["Distância"]
+                    caminho = resultado["Caminho"]
+                else:
+                    custo, caminho = resultado
+
+                if isinstance(custo, (int, float)) and custo == float("inf"):
+                    custo_str = "NA"
+                    caminho_str = ""
+                    caminho = []
+                else:
+                    custo_str = f"{float(custo):.4f}"
+                    caminho_str = " > ".join(caminho)
+
             except Exception:
                 custo_str = "NA"
                 caminho = []

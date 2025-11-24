@@ -4,33 +4,32 @@ from .graph import Grafo
 import math
 from pathlib import Path
 import csv
-import matplotlib as plt
-    
+import matplotlib.pyplot as plt
 
 
 #Lógica para ler o arquivo e transformar em um grafo python
 
-def criar_grafo(caminho_csv: str | None = None):
+def criar_grafo(caminho_csv: str | Path | None = None):
     #Criando um dataframe com as informações do grafo
     if caminho_csv is None:
-        caminho_csv = 'data\adjacencias_bairros.csv'
-    df = pd.read_csv(caminho_csv)
+        caminho_csv = r"data\adjacencias_bairros.csv"
+    caminho_str = str(caminho_csv)
+    df = pd.read_csv(caminho_str)
 
     #Criando um objeto do tipo grafo
     g = Grafo()
 
     #Para cada linha do arquivo, adicionamos uma aresta que liga o vértice de origem ao de destino
     for _, linha in df.iterrows():
-        if 'adjacencias_bairros' in caminho_csv:
+        if 'adjacencias_bairros' in caminho_str:
             g.adicionar_aresta(linha['bairro_origem'], linha['bairro_destino'], linha['peso(distancia em km)'])
 
         #Para a parte 2
-        elif 'airlines' in caminho_csv:
+        elif 'airlines' in caminho_str:
             #Seta os vétices de origem e destino como as cidades e o peso como a duração do voo
             g.adicionar_aresta(linha['source_city'], linha['destination_city'], linha['duration'])
 
     return g.grafo 
-
 
 
 
