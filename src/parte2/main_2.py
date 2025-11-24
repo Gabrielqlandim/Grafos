@@ -62,12 +62,27 @@ pares_origem_destino = [
     ("Chennai", "Mumbai"),
 ]
 
-for origem, destino in pares_origem_destino:
-    inicio_dijskra = time.time()
-    resultado = dijkstra(g, origem, destino)
-    fim_dijskra= time.time()
+resultados_dijkstra = []
 
-    tempo_exec = fim_dijskra - inicio_dijskra
+for origem, destino in pares_origem_destino:
+    inicio_dijkstra = time.time()
+    resultado = dijkstra(g, origem, destino)
+    fim_dijkstra = time.time()
+    tempo_exec = fim_dijkstra - inicio_dijkstra
+
+    custo = resultado["Distância"]
+    caminho = resultado["Caminho"]
+
+    resultados_dijkstra.append(
+        {
+            "source": origem,
+            "target": destino,
+            "tempo": tempo_exec,
+            "custo": custo,
+            "tamanho_caminho": len(caminho),
+            "caminho": caminho,
+        }
+    )
 
 #Dicionario que vou usar para armazenar os resultados de cada algoritmo
 resultados_BFS_DFS_Dijskra_BellmanFord = {
@@ -94,11 +109,11 @@ resultados_BFS_DFS_Dijskra_BellmanFord = {
             "ciclos": iteracoes,
         },
     ],
-    "DIJSKRA":[
-            {
+    "DIJKSTRA": resultados_dijkstra,
 
-        }
-    ]
+    "BELLMAN-FORD": [
+
+    ],
 }
 
 #Local de exportação dos resultados para o Json parte2_report
