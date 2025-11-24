@@ -4,7 +4,7 @@ from src.graphs.algorithms import *
 import time
 import json
 
-g = criar_grafo('out/airlines_spicejet.csv')
+g = criar_grafo('data/airlines_spicejet.csv')
 
 #Parte de BFS e DFS
 inicio_dfs = time.time()
