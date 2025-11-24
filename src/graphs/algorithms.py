@@ -114,3 +114,64 @@ def dijkstra(grafo, inicio, destino = None):
         atual = anterior[atual]
 
     return {"Distância":dist[destino], "Caminho": caminho}
+
+
+def bellman_ford(grafo, inicio, destino=None):
+    # Inicializa as distâncias
+    dist = {v: float('inf') for v in grafo}
+    dist[inicio] = 0
+
+    # Dicionário com o antecessor de cada vértice
+    anterior = {v: None for v in grafo}
+
+    # Lista de arestas (origem, destino, peso)
+    arestas = []
+    for u in grafo:
+        for v, peso in grafo[u].items():
+            arestas.append((u, v, peso))
+
+    n = len(grafo)
+
+    # Relaxa todas as arestas |V|-1 vezes
+    for _ in range(n - 1):
+        mudou = False
+
+        # Para cada aresta, tenta relaxar
+        for u, v, peso in arestas:
+            # Só tenta relaxar se a distância de u já não for infinita
+            if dist[u] != float('inf') and dist[u] + peso < dist[v]:
+                dist[v] = dist[u] + peso
+                anterior[v] = u
+                mudou = True
+
+        # Se nenhuma distância mudou, pode parar
+        if not mudou:
+            break
+
+    # Verificação de ciclo negativo
+    ciclo_negativo = False
+    for u, v, peso in arestas:
+        if dist[u] != float('inf') and dist[u] + peso < dist[v]:
+            ciclo_negativo = True
+            break
+
+    # Se não tiver destino definido, retorna apenas distâncias e flags
+    if destino is None:
+        return {
+            "Distâncias": dist,
+            "Anterior": anterior,
+            "CicloNegativo": ciclo_negativo
+        }
+
+    # Reconstrói o caminho do início até o destino
+    caminho = []
+    atual = destino
+    while atual is not None:
+        caminho.insert(0, atual)
+        atual = anterior[atual]
+
+    return {
+        "Distância": dist[destino],
+        "Caminho": caminho,
+        "CicloNegativo": ciclo_negativo
+    }
