@@ -16,7 +16,6 @@ def criar_grafo(caminho_csv: str | Path | None = None):
     caminho_str = str(caminho_csv)
     df = pd.read_csv(caminho_str)
 
-    #Criando um objeto do tipo grafo
     g = Grafo()
 
     #Para cada linha do arquivo, adicionamos uma aresta que liga o vértice de origem ao de destino
@@ -24,7 +23,6 @@ def criar_grafo(caminho_csv: str | Path | None = None):
         if 'adjacencias_bairros' in caminho_str:
             g.adicionar_aresta(linha['bairro_origem'], linha['bairro_destino'], linha['peso(distancia em km)'])
 
-        #Para a parte 2
         elif 'airlines' in caminho_str:
             #Seta os vétices de origem e destino como as cidades e o peso como a duração do voo
             g.adicionar_aresta(linha['source_city'], linha['destination_city'], linha['duration'])
