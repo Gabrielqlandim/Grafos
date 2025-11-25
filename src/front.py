@@ -1,7 +1,6 @@
 import pandas as pd
 import math
 import json
-import colorsys
 
 def ler_csv_bairros(caminho):
     df = pd.read_csv(caminho)
@@ -32,7 +31,7 @@ def calcular_posicoes(df, raio_minimo=200):
     return posicoes, raio
 
 def gerar_svg(posicoes, adjacencias, densidade_df, microrregioes, raio, percurso_nd_setubal):
-    # Cores base para cada microrregião
+
     cores_microrregiao = {
         1: '#E74C3C',
         2: '#3498DB',
@@ -44,7 +43,6 @@ def gerar_svg(posicoes, adjacencias, densidade_df, microrregioes, raio, percurso
 
     dens_dict = pd.Series(densidade_df.densidade_ego.values, index=densidade_df.bairro).to_dict()
 
-    # Calcular min e max da densidade por microrregião
     dens_min_max = {}
     for _, row in densidade_df.iterrows():
         micror = row['microrregiao'] if 'microrregiao' in row else None
@@ -59,16 +57,14 @@ def gerar_svg(posicoes, adjacencias, densidade_df, microrregioes, raio, percurso
         dens = dens_dict.get(bairro, 0.5)
         min_d, max_d = dens_min_max.get(microrregiao, (0,1))
         if max_d - min_d == 0:
-            return 0.8  # caso todos os bairros tenham mesma densidade
-        # Normalizar entre 0.1 e 1, mas invertendo: densidade maior → opacidade menor
-        fator = (dens - min_d) / (max_d - min_d)  # 0 → 1
-        opacidade = 1 - 0.9 * (fator ** 2)  # densidade alta → menor opacidade, densidade baixa → mais opaco
-        return max(0.1, opacidade)  # garante que não fique totalmente transparente
+            return 0.8  
+        fator = (dens - min_d) / (max_d - min_d)  
+        opacidade = 1 - 0.9 * (fator ** 2)  
+        return max(0.1, opacidade)  
 
 
     svg = f'<svg id="meuSVG" width="100%" height="100vh" viewBox="-{raio+50} -{raio+50} {2*(raio+50)} {2*(raio+50)}" style="border:1px solid black">\n'
 
-    # Arestas
     for _, row in adjacencias.iterrows():
         origem = row['bairro_origem']
         destino = row['bairro_destino']
@@ -84,8 +80,7 @@ def gerar_svg(posicoes, adjacencias, densidade_df, microrregioes, raio, percurso
         cor = cores_microrregiao.get(microrregiao, 'lightgray')
         opacidade = calcular_opacidade(bairro, microrregiao)
         
-        densidade = dens_dict.get(bairro, 0)  # pega do CSV de densidade
-        # supondo que 'grau' também esteja no densidade_df
+        densidade = dens_dict.get(bairro, 0)  
         grau = int(densidade_df.loc[densidade_df['bairro'] == bairro, 'grau'].values[0])
         
         svg += f'<circle class="vertice" cx="{x}" cy="{y}" r="30" fill="{cor}" fill-opacity="{opacidade}" data-nome="{bairro}" data-microrregiao="{microrregiao}" data-densidade="{densidade:.3f}" data-grau="{grau}" />\n'
@@ -422,8 +417,6 @@ def gerar_html(svg_content):
         <span style="writing-mode: vertical-lr; transform: rotate(180deg); font-size: 14px;">Baixa</span>
     </div>
 </div>
-
-
 
 </body>
 </html>
