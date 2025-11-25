@@ -86,24 +86,9 @@ for origem, destino in pares_origem_destino:
 
 #Parte bellman-ford
 
-# Grafo pequeno com peso negativo e sem ciclo negativo
-grafo_negativo_sem_ciclo = {
-    "A": {"B": 4, "C": 5},
-    "B": {"C": -2, "D": 3},
-    "C": {"D": 2},
-    "D": {},
-}
-
-# Grafo pequeno com ciclo negativo
-grafo_com_ciclo_negativo = {
-    "X": {"Y": 1},
-    "Y": {"Z": 2},
-    "Z": {"X": -4},
-}
-
 resultados_bellman = []
 
-# 1) Dataset grande (airlines) sem pesos negativos
+# Dataset grande (airlines) com alguns pesos negativos
 inicio_bf_air = time.time()
 res_bf_air = bellman_ford(g, "Delhi", "Mumbai")
 fim_bf_air = time.time()
@@ -114,7 +99,7 @@ caminho_bf_air = res_bf_air["Caminho"]
 
 resultados_bellman.append(
     {
-        "descricao": "Dataset airlines (todos pesos >= 0)",
+        "descricao": "Dataset airlines completo (com algumas durações negativas)",
         "source": "Delhi",
         "target": "Mumbai",
         "tempo": tempo_bf_air,
@@ -125,9 +110,16 @@ resultados_bellman.append(
     }
 )
 
-# 2) Grafo pequeno com peso negativo e sem ciclo negativo
+# Subgrafo com pesos negativos, sem ciclo negativo
+grafo_negativo_sem_ciclo = {
+    "Delhi":   {"Mumbai": -2.17},
+    "Mumbai":  {"Chennai": -15.42},
+    "Chennai": {"Hyderabad": -10.08},
+    "Hyderabad": {},
+}
+
 inicio_bf_neg = time.time()
-res_bf_neg = bellman_ford(grafo_negativo_sem_ciclo, "A", "D")
+res_bf_neg = bellman_ford(grafo_negativo_sem_ciclo, "Delhi", "Hyderabad")
 fim_bf_neg = time.time()
 
 tempo_bf_neg = fim_bf_neg - inicio_bf_neg
@@ -136,9 +128,9 @@ caminho_bf_neg = res_bf_neg["Caminho"]
 
 resultados_bellman.append(
     {
-        "descricao": "Grafo pequeno com peso negativo (sem ciclo negativo)",
-        "source": "A",
-        "target": "D",
+        "descricao": "Subgrafo airlines (pesos negativos, sem ciclo negativo)",
+        "source": "Delhi",
+        "target": "Hyderabad",
         "tempo": tempo_bf_neg,
         "custo": custo_bf_neg,
         "tamanho_caminho": len(caminho_bf_neg),
@@ -147,17 +139,25 @@ resultados_bellman.append(
     }
 )
 
-# 3) Grafo pequeno com ciclo negativo
+# Subgrafo do airlines com ciclo negativo
+grafo_com_ciclo_negativo = {
+    "Delhi":   {"Mumbai": -2.17},
+    "Mumbai":  {"Chennai": -15.42},
+    "Chennai": {"Hyderabad": -10.08},
+    "Hyderabad": {"Bangalore": -1.25},
+    "Bangalore": {"Delhi": -2.83},
+}
+
 inicio_bf_cycle = time.time()
-res_bf_cycle = bellman_ford(grafo_com_ciclo_negativo, "X")
+res_bf_cycle = bellman_ford(grafo_com_ciclo_negativo, "Delhi")
 fim_bf_cycle = time.time()
 
 tempo_bf_cycle = fim_bf_cycle - inicio_bf_cycle
 
 resultados_bellman.append(
     {
-        "descricao": "Grafo pequeno com ciclo negativo",
-        "source": "X",
+        "descricao": "Subgrafo airlines (ciclo negativo)",
+        "source": "Delhi",
         "target": None,
         "tempo": tempo_bf_cycle,
         "custo": None,
@@ -166,6 +166,7 @@ resultados_bellman.append(
         "tem_ciclo_negativo": res_bf_cycle["CicloNegativo"],
     }
 )
+
 
 #Dicionario que vou usar para armazenar os resultados de cada algoritmo
 resultados_BFS_DFS_Dijskra_BellmanFord = {
