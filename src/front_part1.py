@@ -325,6 +325,120 @@ def gerar_svg(posicoes, adjacencias, densidade_df, microrregioes, raio, percurso
             document.getElementById("fundoTextoNome").setAttribute("visibility", "visible");
             document.getElementById("fundoTextoLista").setAttribute("visibility", "visible");
         });
+
+const inputBusca = document.getElementById("busca-bairro");
+const btnBuscar = document.getElementById("btn-buscar-bairro");
+const msgNaoEncontrado = document.getElementById("msg-bairro-nao-encontrado");
+
+function mostrarInfoCentralDoVertice(v) {
+    const nome = v.getAttribute("data-nome");
+    const dens = v.getAttribute("data-densidade");
+    const grau = v.getAttribute("data-grau");
+
+    document.getElementById("textoNome").textContent =
+        `${nome} | Grau: ${grau} | Densidade: ${dens}`;
+    document.getElementById("fundoTextoNome").setAttribute("visibility", "visible");
+
+    const listaArestas = [];
+    arestas.forEach(a => {
+        const origem = a.getAttribute("data-origem");
+        const destino = a.getAttribute("data-destino");
+        const nomeA = a.getAttribute("data-nome");
+
+        if (origem === nome || destino === nome) {
+            listaArestas.push(`${nomeA} - conecta ${origem} e ${destino}`);
+        }
+    });
+
+    const textoLista = document.getElementById("textoLista");
+    textoLista.innerHTML = "";
+    listaArestas.forEach((linha, i) => {
+        const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+        tspan.setAttribute("x", 0);
+        tspan.setAttribute("dy", i === 0 ? 0 : 50);
+        tspan.textContent = linha;
+        textoLista.appendChild(tspan);
+    });
+
+    document.getElementById("fundoTextoLista").setAttribute("visibility", "visible");
+}
+
+btnBuscar.addEventListener("click", () => {
+
+    restaurarTodos();
+    document.getElementById("textoNome").textContent = "";
+    document.getElementById("textoLista").innerHTML = "";
+    document.getElementById("fundoTextoNome").setAttribute("visibility", "hidden");
+    document.getElementById("fundoTextoLista").setAttribute("visibility", "hidden");
+    msgNaoEncontrado.style.display = "none";
+
+    const texto = inputBusca.value.trim().toLowerCase();
+    if (texto === "") return;
+
+    escurecerTodos();
+    let encontrado = false;
+
+    vertices.forEach(v => {
+        const nome = v.getAttribute("data-nome").toLowerCase();
+
+        if (nome === texto) {
+            encontrado = true;
+            v.classList.remove("dim");
+            v.classList.add("destacado");
+
+            mostrarInfoCentralDoVertice(v);
+
+            arestas.forEach(a => {
+                const origem = a.getAttribute("data-origem");
+                const destino = a.getAttribute("data-destino");
+
+                if (origem.toLowerCase() === texto || destino.toLowerCase() === texto) {
+                    a.classList.remove("dim");
+                    a.classList.add("destacado");
+
+                    vertices.forEach(v2 => {
+                        const n2 = v2.getAttribute("data-nome");
+                        if (n2 === origem || n2 === destino) {
+                            v2.classList.remove("dim");
+                            v2.classList.add("destacado");
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+    if (!encontrado) {
+        msgNaoEncontrado.textContent = "Bairro não encontrado";
+        msgNaoEncontrado.style.display = "block";
+    }
+});
+
+const btnLimpar = document.getElementById("btn-limpar-busca");
+
+btnLimpar.addEventListener("click", () => {
+
+    inputBusca.value = "";
+
+    restaurarTodos();
+
+    document.getElementById("textoNome").textContent = "";
+    document.getElementById("textoConecta").textContent = "";
+    document.getElementById("textoLista").innerHTML = "";
+    document.getElementById("textoMicrorregiao").textContent = "";
+
+    document.getElementById("fundoTextoNome").setAttribute("visibility", "hidden");
+    document.getElementById("fundoTextoConecta").setAttribute("visibility", "hidden");
+    document.getElementById("fundoTextoLista").setAttribute("visibility", "hidden");
+    document.getElementById("fundoTextoMicrorregiao").setAttribute("visibility", "hidden");
+
+    msgNaoEncontrado.style.display = "none";
+
+    percursoAtivo = false;
+
+    microrSelecionada = null;
+});
+
     </script>
     '''
     svg += '</svg>'
@@ -383,7 +497,56 @@ def gerar_html(svg_content):
     <div class="item-legenda" data-microrregiao="5"><div class="cor-box" style="background:#9B59B6;"></div><span>Sudoeste</span></div>
     <div class="item-legenda" data-microrregiao="6"><div class="cor-box" style="background:#E67E22;"></div><span>Sul</span></div>
     <div class="item-legenda" id="nova-descoberta-btn"><div class="cor-box" style="background:white; border:2px dashed black;"></div><span>Nova Descoberta → Setúbal</span></div>
+
+    <input id="busca-bairro" 
+       type="text" 
+       placeholder="Buscar bairro..." 
+       style="
+           width: 100%;
+           padding: 8px;
+           margin-top: 10px;
+           border: 1px solid #aaa;
+           border-radius: 6px;
+           font-size: 16px;
+       ">
+
+<button id="btn-buscar-bairro"
+        style="
+            width: 100%;
+            padding: 8px;
+            margin-top: 8px;
+            background: #3498DB;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        ">
+    Pesquisar
+</button>
+
+<button id="btn-limpar-busca"
+        style="
+            width: 100%;
+            padding: 8px;
+            margin-top: 8px;
+            background: #E74C3C;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        ">
+    Limpar
+</button>
+
+
+<div id="msg-bairro-nao-encontrado"
+     style="color:red; margin-top:10px; font-size:14px; display:none;">
 </div>
+
+    
+    </div>
 
 {svg_content}
 
@@ -437,4 +600,4 @@ if __name__ == "__main__":
     svg = gerar_svg(posicoes, adj, dens, micror, raio, percurso_nd_setubal)
     html = gerar_html(svg)
     salvar_html(html, 'out/grafo_interativo.html')
-    print("HTML gerado com sucesso: grafo_interativo.html")
+    print("HTML gerado com sucesso na pasta 'out': grafo_interativo.html")

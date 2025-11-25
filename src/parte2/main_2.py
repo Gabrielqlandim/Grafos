@@ -17,7 +17,7 @@ for posicao,vertice in enumerate(ordem, start=1):
     print(f"A cidade {vertice} foi o {posicao}° da ordem de visita")
 
 print("\n")
-print(f"Houveram {iteracoes} ciclos nesse DFS")
+print(f"Houve {iteracoes} ciclos nesse DFS")
 print("\n")
 print(f"O tempo de execução desse DFS foi de: {tempo_exec_dfs}")
 print("\n")
@@ -32,7 +32,7 @@ for posicao,vertice in enumerate(ordem, start=1):
     print(f"A cidade {vertice} foi o {posicao}° da ordem de visita")
 
 print("\n")
-print(f"Houveram {len(camadas_bfs)} camadas nesse BFS")
+print(f"Houve {len(camadas_bfs)} camadas nesse BFS")
 print("\n")
 print(f"O tempo de execução desse DFS foi de: {tempo_exec_bfs}")
 print("\n")
@@ -47,7 +47,7 @@ for posicao,vertice in enumerate(ordem, start=1):
     print(f"A cidade {vertice} foi o {posicao}° da ordem de visita")
 
 print("\n")
-print(f"Houveram {len(camadas_bfs2)} camadas nesse BFS")
+print(f"Houve {len(camadas_bfs2)} camadas nesse BFS")
 print("\n")
 print(f"O tempo de execução desse DFS foi de: {tempo_exec_bfs2}")
 print("\n")
