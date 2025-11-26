@@ -188,7 +188,7 @@ resultados_BFS_DFS_Dijskra_BellmanFord = {
         {
             "source DFS": "Delhi",
             "tempo": tempo_exec_dfs,
-            #"camadas": camadas_bfs2
+            #"camadas": camadas_dfs
             "ordem": len(ordem),
             "ciclos": iteracoes,
         },

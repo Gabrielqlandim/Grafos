@@ -3,7 +3,7 @@ import json
 import pandas as pd
 from collections import defaultdict
 
-# Leitura dos dados
+#Leitura dos dados
 def carregar_bairros(caminho_bairros="./data/bairros_unique.csv"):
     df = pd.read_csv(caminho_bairros)
     df["bairro"] = df["bairro"].astype(str).str.strip()
@@ -16,7 +16,7 @@ def carregar_arestas(caminho_arestas="./data/adjacencias_bairros.csv"):
     df["bairro_origem"] = df["bairro_origem"].astype(str).str.strip()
     df["bairro_destino"] = df["bairro_destino"].astype(str).str.strip()
 
-    # remove laços e duplicatas (por ser um grafo NÃO-direcionado)
+    #remove laços e duplicatas, pois é um grafo nao direcionado
     pares = set()
     arestas = []
     for _, r in df.iterrows():
@@ -31,25 +31,25 @@ def carregar_arestas(caminho_arestas="./data/adjacencias_bairros.csv"):
     return arestas
 
 
-# transforma a lista de bairros e a lista de arestas em um dicionário de adjacência 
-# para cada bairro, guarda um conjunto com seus vizinhos
+#transforma a lista de bairros e a lista de arestas em um dicionário de adjacência 
+#para cada bairro, guarda um conjunto com seus vizinhos
 def montar_grafo(conjunto_bairros, arestas):
 
-    # dicionário: bairro -> conjunto de vizinhos
+    #um dicionário de bairro que mostra o seu conjunto de vizinhos
     grafo = defaultdict(set)
 
-    # garante todos os bairros (inclusive isolados)
+    #garante todos os bairros
     for b in conjunto_bairros:
         _ = grafo[b]
 
-    # adiciona arestas (não-direcionado)
+    #adiciona arestas
     for u, v in arestas:
         grafo[u].add(v)
         grafo[v].add(u)
     return grafo
 
 
-# Métricas
+#Métricas
 def calcular_ordem_tamanho(grafo):
     ordem = len(grafo) 
     tamanho = sum(len(vizinhos) for vizinhos in grafo.values()) // 2 
@@ -61,7 +61,7 @@ def calcular_densidade(ordem, tamanho):
     return (2 * tamanho) / (ordem * (ordem - 1))
 
 
-# Saídas
+#Saídas
 def salvar_json(dados, caminho):
     os.makedirs(os.path.dirname(caminho), exist_ok=True)
     with open(caminho, "w", encoding="utf-8") as f:
@@ -72,7 +72,7 @@ def salvar_csv(df, caminho):
     df.to_csv(caminho, index=False)
 
 
-# 1) Métrica global
+#Métrica global
 def gerar_global(caminho_bairros="./data/bairros_unique.csv",
                  caminho_arestas="./data/adjacencias_bairros.csv",
                  saida="./out/recife_global.json"):
@@ -84,7 +84,7 @@ def gerar_global(caminho_bairros="./data/bairros_unique.csv",
     salvar_json({"ordem": ordem, "tamanho": tamanho, "densidade": densidade}, saida)
 
 
-# 2) Microrregiões
+#Microrregiões
 def gerar_microrregioes(caminho_bairros="./data/bairros_unique.csv",
                         caminho_arestas="./data/adjacencias_bairros.csv",
                         saida="./out/microrregioes.json"):
@@ -110,7 +110,7 @@ def gerar_microrregioes(caminho_bairros="./data/bairros_unique.csv",
     df_out.to_json(saida, orient="records", indent=4, force_ascii=False)
 
 
-# 3) Ego-subrede por bairro
+#Ego-subrede por bairro
 def gerar_ego(caminho_bairros="./data/bairros_unique.csv",
               caminho_arestas="./data/adjacencias_bairros.csv",
               saida="./out/ego_bairro.csv"):
@@ -137,7 +137,7 @@ def gerar_ego(caminho_bairros="./data/bairros_unique.csv",
     salvar_csv(df_out, saida)
 
 
-# para executar tudo, rodar: python -m src.graphs.metrics
+#para executar tudo, tem que rodar esse comando: python -m src.graphs.metrics
 def gerar_todas_metricas(caminho_bairros="./data/bairros_unique.csv",
                          caminho_arestas="./data/adjacencias_bairros.csv",
                          pasta_saida="./out/"):

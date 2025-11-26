@@ -7,7 +7,7 @@ df = pd.read_csv("data/airlines_flights_data.csv")
 #filtro pegando so a SpiceJet
 df_spiceJet = df[df["airline"] == "SpiceJet"]
 
-#crio outro dataset e envio ele pra a pasta de out
+#crio outro dataset e envio ele pra a pasta de data
 df_spiceJet.to_csv("data/airlines_spicejet.csv", index = False)
 
 #teste para ver se realemnte foi criado
