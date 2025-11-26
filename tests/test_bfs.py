@@ -1,7 +1,6 @@
 import pytest
 from src.graphs.algorithms import bfs
 
-
 @pytest.fixture
 def grafo():
     return {

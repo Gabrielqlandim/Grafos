@@ -10,7 +10,6 @@ def grafo_sem_ciclo():
         "D": {},
     }
 
-
 @pytest.fixture
 def grafo_com_ciclo():
     return {

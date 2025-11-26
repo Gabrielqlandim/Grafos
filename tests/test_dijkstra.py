@@ -13,7 +13,6 @@ def test_dijkstra_caminho_correto():
     resultado = dijkstra(grafo, "A", "D")
 
     assert resultado["Distância"] == 4
-
     assert resultado["Caminho"] == ["A", "B", "C", "D"]
 
 
