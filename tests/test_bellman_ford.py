@@ -22,7 +22,7 @@ def grafo_com_ciclo():
 def test_sem_ciclo(grafo_sem_ciclo):
     resultado = bellman_ford(grafo_sem_ciclo, "A")
 
-    distancia = resultado["Distãncias"]
+    distancia = resultado["Distâncias"]
     assert resultado["CicloNegativo"] is False
     assert distancia["C"] == 2
 

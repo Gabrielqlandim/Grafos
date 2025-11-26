@@ -57,6 +57,12 @@ def dfs(grafo, inicio, visitados=None, ordem=None, iteracoes=0):
 
 def dijkstra(grafo, inicio, destino = None):
 
+    #Verifica se tem alguma aresta com peso negativo 
+    for u, vizinhos in grafo.items():
+        for v, peso in vizinhos.items():
+            if peso < 0:
+                raise ValueError("Dijkstra não aceita arestas com peso negativo")
+
     #Distâncias mínimas acumuladas
     #Inicia as distâncias como infinito
     dist = {v: float('inf') for v in grafo}
