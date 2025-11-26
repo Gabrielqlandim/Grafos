@@ -14,8 +14,8 @@
     {
         "microrregiao":"3",
         "ordem":29,
-        "tamanho":84,
-        "densidade":0.2068965517
+        "tamanho":91,
+        "densidade":0.224137931
     },
     {
         "microrregiao":"4",
@@ -31,8 +31,8 @@
     },
     {
         "microrregiao":"6",
-        "ordem":8,
-        "tamanho":13,
-        "densidade":0.4642857143
+        "ordem":9,
+        "tamanho":17,
+        "densidade":0.4722222222
     }
 ]
