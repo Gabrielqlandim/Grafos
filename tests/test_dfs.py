@@ -1,17 +1,13 @@
-import pytest
 from src.graphs.algorithms import dfs
 
-@pytest.fixture
-def grafo_simples():
-    return {
+def test_dfs_basico():
+    grafo = {
         "A": {"B": 1, "C": 1},
         "B": {"D": 1},
         "C": {"D": 1},
         "D": {}
     }
-
-def test_dfs_basico(grafo_simples):
-    ordem, iteracoes = dfs(grafo_simples, "A")
+    ordem, iteracoes = dfs(grafo, "A")
 
     assert ordem[0] == "A"
     assert set(ordem) == {"A", "B", "C", "D"}
