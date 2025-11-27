@@ -59,6 +59,44 @@ class Grafo:
             conexoes = ", ".join([f"{v2}({p})" for v2, p in vizinhos.items()])
             texto += f"  {v}: {conexoes}\n"
         return texto
+    
+
+class MultiGrafo:
+    def __init__(self):
+        #Estrutura: {u: {v: [pesos1, peso2, ...]}}
+        self.grafo = {}
+
+    
+    def adicionar_vertice(self, v):
+        #Adiciona um novo vértice ao grafo se ainda não existir
+        if v not in self.grafo:
+            self.grafo[v] = {}
+
+
+    def adicionar_aresta(self, u, v, peso):
+        #Adiciona uma aresta não direcionada entre u e v com o peso dado.
+
+        #Caso o vértice não exista, adiciona
+        self.adicionar_vertice(u)
+        self.adicionar_vertice(v)
+
+        #Adiciona no sentido u -> v
+        if v not in self.grafo[u]:
+            self.grafo[u][v] = []
+        self.grafo[u][v].append(peso)
+
+        #Adiciona no sentido v -> u
+        if u not in self.grafo[v]:
+            self.grafo[v][u] = []
+        self.grafo[v][u].append(peso)
+
+
+    # Apenas útil para depuração
+    def __str__(self):
+        return str(self.grafo)
+
+
+
 
 def teste():
     g = Grafo()

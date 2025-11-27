@@ -60,7 +60,7 @@ def dijkstra(grafo, inicio, destino = None):
     #Verifica se tem alguma aresta com peso negativo 
     for u, vizinhos in grafo.items():
         for v, peso in vizinhos.items():
-            if peso < 0:
+            if isinstance(peso, int) and peso < 0:
                 raise ValueError("Dijkstra não aceita arestas com peso negativo")
 
     #Distâncias mínimas acumuladas
@@ -101,12 +101,25 @@ def dijkstra(grafo, inicio, destino = None):
         #Atualiza distâncias dos vizinhos
         for vizinho, peso in grafo[atual].items():
 
-            #Caso o vértice vizinho não tenha sido fechado, atualiza a distância dele
-            if vizinho not in visitados:
-                nova_dist = dist[atual] + peso
-                if nova_dist < dist[vizinho]:
-                    dist[vizinho] = nova_dist
-                    anterior[vizinho] = atual
+            #Caso o grafo passado seja um multigrafo, considera a lista de pesos.
+            if isinstance(peso, list):
+                for peso in peso:
+
+                    if vizinho not in visitados:
+                        nova_dist = dist[atual] + peso
+
+                        if nova_dist < dist[vizinho]:
+                            dist[vizinho] = nova_dist
+                            anterior[vizinho] = atual
+            
+            #Caso não, não itera sobre os pesos
+            else:
+                #Caso o vértice vizinho não tenha sido fechado, atualiza a distância dele
+                if vizinho not in visitados:
+                    nova_dist = dist[atual] + peso
+                    if nova_dist < dist[vizinho]:
+                        dist[vizinho] = nova_dist
+                        anterior[vizinho] = atual
 
     #Caso não seja passado um destino, retorna tudo
     if destino is None:
@@ -130,11 +143,17 @@ def bellman_ford(grafo, inicio, destino=None):
     # Dicionário com o antecessor de cada vértice
     anterior = {v: None for v in grafo}
 
-    # Lista de arestas (origem, destino, peso)
+    #Lista de arestas (origem, destino, peso)
     arestas = []
     for u in grafo:
-        for v, peso in grafo[u].items():
-            arestas.append((u, v, peso))
+        for v, pesos in grafo[u].items():
+            #Se for lista → multigrafo
+            if isinstance(pesos, list):
+                for peso in pesos:
+                    arestas.append((u, v, peso))
+            else:
+                #Grafo simples
+                arestas.append((u, v, pesos))
 
     n = len(grafo)
 
