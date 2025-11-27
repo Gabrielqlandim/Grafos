@@ -1,45 +1,151 @@
-<h1>📊 Grafos do Recife</h1>
-  <p><strong>Projeto final da disciplina de Teoria dos Grafos — CESAR School</strong></p>
+# Projeto Grafos – 2ª Unidade
 
-  <div class="card">
-    <h2>🎯 Objetivo</h2>
-    <p>Construir e analisar o <strong>grafo dos bairros do Recife</strong>, implementando algoritmos clássicos (BFS, DFS, Dijkstra e Bellman-Ford) sem o uso de bibliotecas prontas. O projeto gera métricas, visualizações e comparações de desempenho em um dataset ampliado.</p>
-  </div>
+## Descrição
+Este projeto consiste na construção e análise de grafos aplicados a dois contextos:  
+1. **Bairros do Recife** – grafos ponderados representando bairros e ruas, permitindo cálculos de menor caminho, subgrafos, e métricas de conectividade.  
+2. **Voos na Índia (SpiceJet)** – grafos ponderados e multigrafos representando cidades conectadas por voos, permitindo comparação de algoritmos e análise de desempenho.
 
-  <div class="card">
-    <h2>👥 Integrantes</h2>
-    <ul>
-      <li>👤 <a href="https://github.com/gabrielqlandim" target="_blank">Gabriel Landim</a> — Derretimento e dados</li>
-      <li>⚙️ <a href="https://github.com/nandaord" target="_blank">Pedro Sampaio</a> — Algoritmos e testes</li>
-      <li>📈 <a href="https://github.com/nandaord" target="_blank">Maria Fernanda Ordonho</a> — Estrutura e métricas</li>
-      <li>🎨 <a href="https://github.com/rafabvidal" target="_blank">Rafaela Vidal</a> — Visualizações e Parte 2</li>
-    </ul>
-  </div>
+---
 
-  <div class="card">
-    <h2>▶️ Instruções para executar</h2>
-    <p>Instale as dependências (recomenda-se ambiente virtual):</p>
-    <pre><code>pip install -r requirements.txt</code></pre>
-    <p>Execute o projeto (exemplo):</p>
-    <pre><code>python -m src.cli --dataset ./data/bairros_recife.csv --alg BFS --source "Boa Viagem"</code></pre>
-  </div>
+## Integrantes
+- Gabriel Landim
+- Maria Fernanda Ordonho
+- Pedro Sampaio
+- Rafaela Vidal
 
-  <div class="card">
-    <h2>📂 Estrutura do projeto</h2>
-    <pre><code>projeto-grafos/
-├─ data/
-│  ├─ bairros_recife.csv
-│  ├─ adjacencias_bairros.csv
-│  └─ enderecos.csv
-├─ src/
-│  ├─ graphs/
-│  │  ├─ io.py
-│  │  ├─ graph.py
-│  │  └─ algorithms.py
-│  ├─ cli.py
-│  └─ solve.py
-├─ out/
-└─ tests/</code></pre>
-  </div>
-</body>
-</html>
+## Estrutura do Projeto
+
+```bash
+project/
+├── data/
+│   ├── adjacencias_bairros.csv
+│   ├── airlines_flights_data.csv
+│   ├── airlines_spicejet.csv
+│   ├── bairros_recife.csv
+│   ├── bairros_unique.csv
+│   └── enderecos.csv
+│
+├── out/
+│   ├── .gitkeep
+│   ├── arvore_percurso.png
+│   ├── bfs_Boa Viagem.json
+│   ├── dfs_Boa Viagem.json
+│   ├── dist_Boa Viagem_to_Pina.json
+│   ├── distancias_enderecos.csv
+│   ├── distribuicao_graus_parte2.csv
+│   ├── ego_bairro.csv
+│   ├── ego_Boa Viagem.json
+│   ├── grafo_interativo_parte1.html
+│   ├── grafo_interativo_parte2.html
+│   ├── grafo_interativo.html
+│   ├── graus.csv
+│   ├── histograma_graus.png
+│   ├── mapa_cores.png
+│   ├── microrregioes.json
+│   ├── parte2_report.json
+│   ├── percurso_nova_descoberta_setubal.json
+│   ├── recife_global.json
+│   └── subgrafo_top10.png
+│
+├── src/
+│   │
+│   ├── graphs/
+│   │   ├── __init__.py
+│   │   ├── algorithms.py
+│   │   ├── graph.py
+│   │   ├── histograma_graus.py
+│   │   ├── io.py
+│   │   ├── mapa_cores.py
+│   │   ├── metrics.py
+│   │   └── subgrafo_top10.py
+│   │
+│   ├── parte2/
+│   │   ├── __init__.py
+│   │   ├── distribuicao_graus_parte2.py
+│   │   ├── filtrar_csv.py
+│   │   └── main_2.py
+|   |
+│   ├── cli.py
+│   ├── front_inicial.py
+│   ├── front_part1.py
+│   ├── front_part2.py
+│   └── solve.py
+│
+├── tests/
+│   ├── test_bellman_ford.py
+│   ├── test_bfs.py
+│   ├── test_dfs.py
+│   └── test_dijkstra.py
+│
+├── .gitignore
+├── README.md
+└── requirements.txt
+
+
+```
+---
+
+## Algoritmos Implementados
+- **BFS** – Busca em largura  
+- **DFS** – Busca em profundidade  
+- **Dijkstra** – Menor caminho em grafos ponderados sem arestas negativas  
+- **Bellman-Ford** – Menor caminho em grafos ponderados, permite arestas negativas e detecção de ciclos negativos  
+
+---
+
+## Arquivos Principais
+- `adjacencias_bairros.csv` – Lista de adjacências dos bairros do Recife  
+- `bairros_recife.csv` / `bairros_unique.csv` – Informações dos bairros e microrregiões  
+- `enderecos.csv` – Endereços para cálculo de distâncias  
+- `airlines_spicejet.csv` – Dados filtrados da SpiceJet para análise de grafos de voos  
+- Saídas importantes: `out/graus.csv`, `out/ego_bairro.csv`, `out/subgrafo_top10.png`, `out/grafo_interativo.html`  
+
+---
+
+## Como Rodar
+
+### Parte 1 – Bairros do Recife
+```bash
+# BFS
+python -m src.cli --dataset data/adjacencias_bairros.csv --alg BFS --source "Boa Viagem"
+
+# DFS
+python -m src.cli --dataset data/adjacencias_bairros.csv --alg DFS --source "Boa Viagem"
+
+# Dijkstra
+python -m src.cli --dataset data/adjacencias_bairros.csv --alg DIJKSTRA --source "Boa Viagem" --target "Pina"
+
+# Métricas gerais
+python -m src.cli --dataset data/adjacencias_bairros.csv --alg METRICAS
+
+# Subgrafo top 10 bairros
+python -m src.cli --alg SUBGRAFO_TOP10 --dataset data/adjacencias_bairros.csv --out out --k 10
+
+```
+### Parte 2 – Voos SpiceJet
+```bash
+python -m src.parte2.main_2
+```
+Testes
+```bash
+python -m pytest -q
+```
+
+## Visualização Interativa
+O arquivo out/grafo_interativo.html funciona como menu para navegar entre:
+
+- Grafo dos bairros do Recife
+- Grafo de voos (Parte 2)
+
+## Para abrir:
+
+1. Instalar a extensão Live Server no VS Code
+
+2. Clicar com o botão direito em grafo_interativo.html → Open with Live Server
+
+## Observações
+
+- Todos os grafos são não direcionados para simplificação, exceto na Parte 2, onde originalmente seriam direcionados
+
+- Pesos representam distâncias em km (bairros) ou duração do voo em horas (voos)
+
