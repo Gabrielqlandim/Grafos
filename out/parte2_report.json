@@ -107,7 +107,7 @@
       "descricao": "Dataset airlines completo (com algumas durações negativas)",
       "source": "Delhi",
       "target": "Mumbai",
-      "tempo": 0.037027597427368164,
+      "tempo": 0.038459062576293945,
       "custo": 2.0,
       "tamanho_caminho": 2,
       "caminho": [
