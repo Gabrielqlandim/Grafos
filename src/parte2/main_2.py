@@ -1,10 +1,17 @@
 from src.graphs.graph import Grafo
 from src.graphs.io import criar_grafo
 from src.graphs.algorithms import *
+from .distribuicao_graus_parte2 import distribuicao_graus
 import time
 import json
 
+
 g = criar_grafo('data/airlines_spicejet.csv')
+
+#essa função é por causa da parte que Laura pede a distribuição dos graus no nosso novo dataset, 
+# ai ele ta contando os graus das cidades indianas
+distribuicao_graus(g)
+
 
 #Parte de BFS e DFS
 inicio_dfs = time.time()

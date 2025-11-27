@@ -2,7 +2,7 @@
   "BFS": [
     {
       "source BFS 1": "Mumbai",
-      "tempo": 1.621246337890625e-05,
+      "tempo": 1.6450881958007812e-05,
       "camadas": {
         "0": [
           "Mumbai"
@@ -21,7 +21,7 @@
     },
     {
       "source BFS 2": "Bangalore",
-      "tempo": 1.1920928955078125e-05,
+      "tempo": 1.049041748046875e-05,
       "camadas": {
         "0": [
           "Bangalore"
@@ -40,7 +40,7 @@
   "DFS": [
     {
       "source DFS": "Delhi",
-      "tempo": 1.8835067749023438e-05,
+      "tempo": 1.3828277587890625e-05,
       "ordem": 6,
       "ciclos": 6
     }
@@ -49,7 +49,7 @@
     {
       "source": "Delhi",
       "target": "Mumbai",
-      "tempo": 2.9087066650390625e-05,
+      "tempo": 2.6941299438476562e-05,
       "custo": 9.17,
       "tamanho_caminho": 4,
       "caminho": [
@@ -62,7 +62,7 @@
     {
       "source": "Delhi",
       "target": "Hyderabad",
-      "tempo": 1.2874603271484375e-05,
+      "tempo": 1.1682510375976562e-05,
       "custo": 7.33,
       "tamanho_caminho": 3,
       "caminho": [
@@ -74,7 +74,7 @@
     {
       "source": "Mumbai",
       "target": "Kolkata",
-      "tempo": 1.1444091796875e-05,
+      "tempo": 1.239776611328125e-05,
       "custo": 4.25,
       "tamanho_caminho": 3,
       "caminho": [
@@ -86,7 +86,7 @@
     {
       "source": "Bangalore",
       "target": "Delhi",
-      "tempo": 1.049041748046875e-05,
+      "tempo": 1.0251998901367188e-05,
       "custo": 6.25,
       "tamanho_caminho": 2,
       "caminho": [
@@ -97,7 +97,7 @@
     {
       "source": "Chennai",
       "target": "Mumbai",
-      "tempo": 9.775161743164062e-06,
+      "tempo": 9.298324584960938e-06,
       "custo": 2.25,
       "tamanho_caminho": 2,
       "caminho": [
@@ -111,7 +111,7 @@
       "descricao": "Dataset airlines completo (com algumas durações negativas)",
       "source": "Delhi",
       "target": "Mumbai",
-      "tempo": 3.337860107421875e-05,
+      "tempo": 2.8133392333984375e-05,
       "custo": 9.17,
       "tamanho_caminho": 4,
       "caminho": [
@@ -126,7 +126,7 @@
       "descricao": "Subgrafo airlines (pesos negativos, sem ciclo negativo)",
       "source": "Delhi",
       "target": "Hyderabad",
-      "tempo": 7.152557373046875e-06,
+      "tempo": 6.4373016357421875e-06,
       "custo": -27.67,
       "tamanho_caminho": 4,
       "caminho": [
@@ -141,7 +141,7 @@
       "descricao": "Subgrafo airlines (ciclo negativo)",
       "source": "Delhi",
       "target": null,
-      "tempo": 1.049041748046875e-05,
+      "tempo": 9.298324584960938e-06,
       "custo": null,
       "tamanho_caminho": null,
       "caminho": null,
