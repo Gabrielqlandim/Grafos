@@ -89,11 +89,11 @@ def gerar_html_inicial():
 
 <script>
 document.getElementById("parte1-btn").addEventListener("click", () => {
-    window.location.href = "grafo_interativo.html";
+    window.location.href = "grafo_interativo_parte1.html";
 });
 
 document.getElementById("parte2-btn").addEventListener("click", () => {
-    window.location.href = "grafo_interativo2.html";
+    window.location.href = "grafo_interativo_parte2.html";
 });
 </script>
 
@@ -110,7 +110,7 @@ def salvar_html(nome_arquivo: str, conteudo: str):
 
 def main():
     html = gerar_html_inicial()
-    salvar_html("out/index.html", html)
+    salvar_html("out/grafo_interativo.html", html)
 
 if __name__ == "__main__":
     main()

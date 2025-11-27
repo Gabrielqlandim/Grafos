@@ -259,7 +259,7 @@ def gerar_html(svg_content, voos_json):
 <body>
 
 <!-- BOTÃO DE VOLTAR MINIMALISTA NO LADO DIREITO -->
-<a href="index.html" 
+<a href="grafo_interativo.html" 
    style="
        position: fixed;
        top: 20px;
@@ -809,6 +809,6 @@ if __name__ == "__main__":
     voos_json = df_voos.to_dict(orient='records')
 
     html = gerar_html(svg, json.dumps(voos_json))
-    salvar_html(html, "out/grafo_interativo2.html")
+    salvar_html(html, "out/grafo_interativo_parte2.html")
 
-    print("HTML gerado com sucesso na pasta 'out': grafo_interativo2.html")
+    print("HTML gerado com sucesso na pasta 'out': grafo_interativo_parte2.html")

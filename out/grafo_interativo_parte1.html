@@ -1,0 +1,1054 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Vértices em Círculo por Microrregião</title>
+
+<style>
+    .legenda-container {
+        position: fixed;
+        left: 20px;
+        top: 20px;
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        font-family: Arial;
+        font-size: 18px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        width: 270px;
+        z-index: 9999;
+    }
+
+    .item-legenda {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+        cursor: pointer;
+    }
+
+    .cor-box {
+        width: 25px;
+        height: 25px;
+        margin-right: 10px;
+        border-radius: 5px;
+        border: 1px solid black;
+    }
+</style>
+
+</head>
+<body style="margin:0; padding:0;">
+
+<!-- BOTÃO DE VOLTAR MINIMALISTA NO LADO DIREITO -->
+<a href="grafo_interativo.html" 
+   style="
+       position: fixed;
+       top: 20px;
+       right: 20px;
+       z-index: 10000;
+       padding: 8px 16px;
+       color: #333;
+       font-weight: 600;
+       text-decoration: none;
+       border: 2px solid #333;
+       border-radius: 6px;
+       transition: all 0.2s ease-in-out;
+       background: transparent;
+   "
+   onmouseover="this.style.backgroundColor='#333'; this.style.color='white';"
+   onmouseout="this.style.backgroundColor='transparent'; this.style.color='#333';"
+>
+   ← Voltar
+</a>
+
+
+<!-- LEGENDA -->
+<div class="legenda-container">
+    <h3 style="margin-top:0;">Microrregiões</h3>
+    <div class="item-legenda" data-microrregiao="1"><div class="cor-box" style="background:#E74C3C;"></div><span>Centro</span></div>
+    <div class="item-legenda" data-microrregiao="2"><div class="cor-box" style="background:#3498DB;"></div><span>Norte</span></div>
+    <div class="item-legenda" data-microrregiao="3"><div class="cor-box" style="background:#2ECC71;"></div><span>Nordeste</span></div>
+    <div class="item-legenda" data-microrregiao="4"><div class="cor-box" style="background:#F1C40F;"></div><span>Oeste</span></div>
+    <div class="item-legenda" data-microrregiao="5"><div class="cor-box" style="background:#9B59B6;"></div><span>Sudoeste</span></div>
+    <div class="item-legenda" data-microrregiao="6"><div class="cor-box" style="background:#E67E22;"></div><span>Sul</span></div>
+    <div class="item-legenda" id="nova-descoberta-btn"><div class="cor-box" style="background:white; border:2px dashed black;"></div><span>Nova Descoberta → Setúbal</span></div>
+
+    <input id="busca-bairro" 
+       type="text" 
+       placeholder="Buscar bairro..." 
+       style="
+           width: 100%;
+           padding: 8px;
+           margin-top: 10px;
+           border: 1px solid #aaa;
+           border-radius: 6px;
+           font-size: 16px;
+       ">
+
+<button id="btn-buscar-bairro"
+        style="
+            width: 100%;
+            padding: 8px;
+            margin-top: 8px;
+            background: #3498DB;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        ">
+    Pesquisar
+</button>
+
+<button id="btn-limpar-busca"
+        style="
+            width: 100%;
+            padding: 8px;
+            margin-top: 8px;
+            background: #E74C3C;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        ">
+    Limpar
+</button>
+
+
+<div id="msg-bairro-nao-encontrado"
+     style="color:red; margin-top:10px; font-size:14px; display:none;">
+</div>
+
+    
+    </div>
+
+<svg id="meuSVG" width="100%" height="100vh" viewBox="-1000 -1000 2000 2000" style="border:1px solid black">
+<line class="aresta" x1="950.0" y1="0.0" x2="-803.7904897998887" y2="506.380142291594" stroke="#cccccc" stroke-width="1.5" title="1.1 km" data-origem="Aflitos" data-destino="Espinheiro" data-nome="R. Samuel Câmpelo" data-peso="1.1" />
+<line class="aresta" x1="950.0" y1="0.0" x2="-595.8175405498602" y2="739.9334148240068" stroke="#cccccc" stroke-width="1.5" title="3.0 km" data-origem="Aflitos" data-destino="Derby" data-nome="R. Quarenta e Oito" data-peso="3.0" />
+<line class="aresta" x1="950.0" y1="0.0" x2="-887.8362413694879" y2="338.0041545763904" stroke="#cccccc" stroke-width="1.5" title="2.3 km" data-origem="Aflitos" data-destino="Graças" data-nome="Av. Rui Barbosa" data-peso="2.3" />
+<line class="aresta" x1="950.0" y1="0.0" x2="-908.2339924576396" y2="-278.58753551524177" stroke="#cccccc" stroke-width="1.5" title="1.3 km" data-origem="Aflitos" data-destino="Jaqueira" data-nome="R. Carneiro Viléla" data-peso="1.3" />
+<line class="aresta" x1="950.0" y1="0.0" x2="749.6834839265742" y2="-583.502077055184" stroke="#cccccc" stroke-width="1.5" title="1.6 km" data-origem="Aflitos" data-destino="Tamarineira" data-nome="Av. Santos Dumont" data-peso="1.6" />
+<line class="aresta" x1="947.9229458578358" y1="62.78605510941448" x2="849.9928633297253" y2="424.2783665101662" stroke="#cccccc" stroke-width="1.5" title="4.8 km" data-origem="Afogados" data-destino="Areias" data-nome="R. Dom Pedrito" data-peso="4.8" />
+<line class="aresta" x1="947.9229458578358" y1="62.78605510941448" x2="519.6007502163054" y2="795.3081543494022" stroke="#cccccc" stroke-width="1.5" title="2.9 km" data-origem="Afogados" data-destino="Bongi" data-nome="Av. Manoel Gonçalves da Luz" data-peso="2.9" />
+<line class="aresta" x1="947.9229458578358" y1="62.78605510941448" x2="-438.27410482975336" y2="842.8616784714312" stroke="#cccccc" stroke-width="1.5" title="6.1 km" data-origem="Afogados" data-destino="Cordeiro" data-nome="Estr. dos Remédios" data-peso="6.1" />
+<line class="aresta" x1="947.9229458578358" y1="62.78605510941448" x2="-945.3287574177608" y2="94.09325373793952" stroke="#cccccc" stroke-width="1.5" title="3.0 km" data-origem="Afogados" data-destino="Ilha Joana Bezerra" data-nome="R. Cabo Eutrópio" data-peso="3.0" />
+<line class="aresta" x1="947.9229458578358" y1="62.78605510941448" x2="-949.4805944738797" y2="-31.410200851442774" stroke="#cccccc" stroke-width="1.5" title="4.8 km" data-origem="Afogados" data-destino="Ilha do Retiro" data-nome="Av. Abdias de carvalho" data-peso="4.8" />
+<line class="aresta" x1="947.9229458578358" y1="62.78605510941448" x2="-937.0432382325862" y2="-156.36486076669752" stroke="#cccccc" stroke-width="1.5" title="5.2 km" data-origem="Afogados" data-destino="Ipsep" data-nome="Av. Macarenhas de Moraes" data-peso="5.2" />
+<line class="aresta" x1="947.9229458578358" y1="62.78605510941448" x2="-493.0210950921544" y2="-812.0530769562621" stroke="#cccccc" stroke-width="1.5" title="2.4 km" data-origem="Afogados" data-destino="Mustardinha" data-nome="R. Joana Francisca de Azevedo" data-peso="2.4" />
+<line class="aresta" x1="947.9229458578358" y1="62.78605510941448" x2="171.83650761550467" y2="-934.3298211287631" stroke="#cccccc" stroke-width="1.5" title="4.4 km" data-origem="Afogados" data-destino="Prado" data-nome="R. Vinte e Um de Abril" data-peso="4.4" />
+<line class="aresta" x1="947.9229458578359" y1="-62.78605510941404" x2="749.6834839265739" y2="583.5020770551844" stroke="#cccccc" stroke-width="1.5" title="2.4 km" data-origem="Água Fria" data-destino="Beberibe" data-nome="R. da Cutia" data-peso="2.4" />
+<line class="aresta" x1="947.9229458578359" y1="-62.78605510941404" x2="-803.7904897998886" y2="-506.38014229159415" stroke="#cccccc" stroke-width="1.5" title="1.9 km" data-origem="Água Fria" data-destino="Linha do Tiro" data-nome="R. Ladeira de Pedra" data-peso="1.9" />
+<line class="aresta" x1="947.9229458578359" y1="-62.78605510941404" x2="47.104566939561145" y2="-948.8314706908897" stroke="#cccccc" stroke-width="1.5" title="1.3 km" data-origem="Água Fria" data-destino="Porto da Madeira" data-nome="R. São Sebastião" data-peso="1.3" />
+<line class="aresta" x1="947.9229458578359" y1="-62.78605510941404" x2="293.56614465620066" y2="-903.5036904803957" stroke="#cccccc" stroke-width="1.5" title="2.9 km" data-origem="Água Fria" data-destino="Rosarinho" data-nome="R. Nazaré" data-peso="2.9" />
+<line class="aresta" x1="941.7008658606264" y1="125.29756277496546" x2="931.3609675810688" y2="187.26117607890632" stroke="#cccccc" stroke-width="1.5" title="1.5 km" data-origem="Alto José Bonifácio" data-destino="Alto José do Pinho" data-nome="R. Alto José Bonifácio" data-peso="1.5" />
+<line class="aresta" x1="941.7008658606264" y1="125.29756277496546" x2="352.63738647230974" y2="882.1263365652218" stroke="#cccccc" stroke-width="1.5" title="2.3 km" data-origem="Alto José Bonifácio" data-destino="Brejo de Beberibe" data-nome="Av. Ver.Otacílio Azevedo" data-peso="2.3" />
+<line class="aresta" x1="941.7008658606264" y1="125.29756277496546" x2="571.0270899188738" y2="759.2285970501786" stroke="#cccccc" stroke-width="1.5" title="2.0 km" data-origem="Alto José Bonifácio" data-destino="Bomba do Hemetério" data-nome="R. Padre Oliveira" data-peso="2.0" />
+<line class="aresta" x1="941.7008658606264" y1="125.29756277496546" x2="-863.5562082967044" y2="395.94276747052584" stroke="#cccccc" stroke-width="1.5" title="4.5 km" data-origem="Alto José Bonifácio" data-destino="Fundão" data-nome="R. São Bento" data-peso="4.5" />
+<line class="aresta" x1="941.7008658606264" y1="125.29756277496546" x2="-803.7904897998886" y2="-506.38014229159415" stroke="#cccccc" stroke-width="1.5" title="1.5 km" data-origem="Alto José Bonifácio" data-destino="Linha do Tiro" data-nome="R Uriel de Holanda" data-peso="1.5" />
+<line class="aresta" x1="941.7008658606264" y1="125.29756277496546" x2="-545.6122295487966" y2="-777.6935739523577" stroke="#cccccc" stroke-width="1.5" title="0.9 km" data-origem="Alto José Bonifácio" data-destino="Morro da Conceição" data-nome="R Córrego do Ouro" data-peso="0.9" />
+<line class="aresta" x1="941.7008658606264" y1="125.29756277496546" x2="749.6834839265742" y2="-583.502077055184" stroke="#cccccc" stroke-width="1.5" title="2.7 km" data-origem="Alto José Bonifácio" data-destino="Tamarineira" data-nome="R. Bomba do Hemetério" data-peso="2.7" />
+<line class="aresta" x1="931.3609675810688" y1="187.26117607890632" x2="898.5263796156029" y2="308.4644957444493" stroke="#cccccc" stroke-width="1.5" title="2.6 km" data-origem="Alto José do Pinho" data-destino="Alto do Mandu" data-nome="R. Mandacaru" data-peso="2.6" />
+<line class="aresta" x1="931.3609675810688" y1="187.26117607890632" x2="-545.6122295487966" y2="-777.6935739523577" stroke="#cccccc" stroke-width="1.5" title="1.0 km" data-origem="Alto José do Pinho" data-destino="Morro da Conceição" data-nome="R. Valeriano Lobo" data-peso="1.0" />
+<line class="aresta" x1="916.9484647634813" y1="248.40594390612878" x2="571.0270899188738" y2="759.2285970501786" stroke="#cccccc" stroke-width="1.5" title="1.3 km" data-origem="Alto Santa Teresinha" data-destino="Bomba do Hemetério" data-nome="R. Chã de Alegria" data-peso="1.3" />
+<line class="aresta" x1="916.9484647634813" y1="248.40594390612878" x2="233.21121278375907" y2="920.9302526423639" stroke="#cccccc" stroke-width="1.5" title="3.6 km" data-origem="Alto Santa Teresinha" data-destino="Cajueiro" data-nome="R. Eládio Camboim" data-peso="3.6" />
+<line class="aresta" x1="916.9484647634813" y1="248.40594390612878" x2="916.9484647634814" y2="-248.40594390612804" stroke="#cccccc" stroke-width="1.5" title="1.6 km" data-origem="Alto Santa Teresinha" data-destino="Vasco da Gama" data-nome="R. Córrego do Euclides" data-peso="1.6" />
+<line class="aresta" x1="898.5263796156029" y1="308.4644957444493" x2="876.1752672285155" y2="367.17421082782965" stroke="#cccccc" stroke-width="1.5" title="1.2 km" data-origem="Alto do Mandu" data-destino="Apipucos" data-nome="R. Cianorte" data-peso="1.2" />
+<line class="aresta" x1="898.5263796156029" y1="308.4644957444493" x2="47.10456693956117" y2="948.8314706908897" stroke="#cccccc" stroke-width="1.5" title="1.3 km" data-origem="Alto do Mandu" data-destino="Casa Amarela" data-nome="Rua Carolina" data-peso="1.3" />
+<line class="aresta" x1="898.5263796156029" y1="308.4644957444493" x2="-595.8175405498598" y2="-739.9334148240072" stroke="#cccccc" stroke-width="1.5" title="0.75 km" data-origem="Alto do Mandu" data-destino="Monteiro" data-nome="R. Cametá" data-peso="0.75" />
+<line class="aresta" x1="898.5263796156029" y1="308.4644957444493" x2="-545.6122295487966" y2="-777.6935739523577" stroke="#cccccc" stroke-width="1.5" title="1.8 km" data-origem="Alto do Mandu" data-destino="Morro da Conceição" data-nome="R. Morro da Conceição" data-peso="1.8" />
+<line class="aresta" x1="898.5263796156029" y1="308.4644957444493" x2="749.6834839265742" y2="-583.502077055184" stroke="#cccccc" stroke-width="1.5" title="3.4 km" data-origem="Alto do Mandu" data-destino="Tamarineira" data-nome="R. Guimaraes peixoto" data-peso="3.4" />
+<line class="aresta" x1="876.1752672285155" y1="367.17421082782965" x2="-15.707247528040526" y2="949.8701397428456" stroke="#cccccc" stroke-width="1.5" title="3.1 km" data-origem="Apipucos" data-destino="Casa Forte" data-nome="R. Visc. de Ouro Preto" data-peso="3.1" />
+<line class="aresta" x1="876.1752672285155" y1="367.17421082782965" x2="-643.4174930444542" y2="698.9377151394749" stroke="#cccccc" stroke-width="1.5" title="1.5 km" data-origem="Apipucos" data-destino="Dois Irmãos" data-nome="R. Dois irmãos" data-peso="1.5" />
+<line class="aresta" x1="876.1752672285155" y1="367.17421082782965" x2="-595.8175405498598" y2="-739.9334148240072" stroke="#cccccc" stroke-width="1.5" title="1.1 km" data-origem="Apipucos" data-destino="Monteiro" data-nome="R. de Apipucos" data-peso="1.1" />
+<line class="aresta" x1="876.1752672285155" y1="367.17421082782965" x2="709.4804031349464" y2="-631.7733435081556" stroke="#cccccc" stroke-width="1.5" title="3.5 km" data-origem="Apipucos" data-destino="Sítio dos Pintos" data-nome="Av. Luiz Antônio de Araújo" data-peso="3.5" />
+<line class="aresta" x1="849.9928633297253" y1="424.2783665101662" x2="786.608389590619" y2="532.679304484089" stroke="#cccccc" stroke-width="1.5" title="5.3 km" data-origem="Areias" data-destino="Barro" data-nome="Av. Izabel de Góes" data-peso="5.3" />
+<line class="aresta" x1="849.9928633297253" y1="424.2783665101662" x2="-140.85046532624997" y2="939.500477071395" stroke="#cccccc" stroke-width="1.5" title="1.2 km" data-origem="Areias" data-destino="Caçote" data-nome="Av. Capitão Gregório de Caldas" data-peso="1.2" />
+<line class="aresta" x1="849.9928633297253" y1="424.2783665101662" x2="-835.5000636461647" y2="452.15002338521964" stroke="#cccccc" stroke-width="1.5" title="2.1 km" data-origem="Areias" data-destino="Estância" data-nome="R. Cap. Jacinto da Cruz" data-peso="2.1" />
+<line class="aresta" x1="849.9928633297253" y1="424.2783665101662" x2="-945.3287574177608" y2="-94.09325373793972" stroke="#cccccc" stroke-width="1.5" title="4.0 km" data-origem="Areias" data-destino="Imbiribeira" data-nome="Av. Ten. Felipe Bandeira de Melo" data-peso="4.0" />
+<line class="aresta" x1="820.0936569096951" y1="479.5272608481016" x2="947.9229458578359" y2="-62.78605510941404" stroke="#cccccc" stroke-width="1.5" title="1.4 km" data-origem="Arruda" data-destino="Água Fria" data-nome="R. Joao Uzeda Luna" data-peso="1.4" />
+<line class="aresta" x1="820.0936569096951" y1="479.5272608481016" x2="109.71040512110672" y2="943.6438030359562" stroke="#cccccc" stroke-width="1.5" title="2.1 km" data-origem="Arruda" data-destino="Campo Grande" data-nome="R. Prudente de Moraes" data-peso="2.1" />
+<line class="aresta" x1="820.0936569096951" y1="479.5272608481016" x2="-140.85046532624958" y2="-939.500477071395" stroke="#cccccc" stroke-width="1.5" title="2.6 km" data-origem="Arruda" data-destino="Peixinhos" data-nome="R. Marcílio Dias" data-peso="2.6" />
+<line class="aresta" x1="820.0936569096951" y1="479.5272608481016" x2="47.104566939561145" y2="-948.8314706908897" stroke="#cccccc" stroke-width="1.5" title="2.4 km" data-origem="Arruda" data-destino="Porto da Madeira" data-nome="R. Carceres" data-peso="2.4" />
+<line class="aresta" x1="849.9928633297253" y1="424.2783665101662" x2="-863.5562082967043" y2="-395.94276747052606" stroke="#cccccc" stroke-width="1.5" title="2.2 km" data-origem="Areias" data-destino="Jiquiá" data-nome="R. Antônio Carneiro" data-peso="2.2" />
+<line class="aresta" x1="786.608389590619" y1="532.679304484089" x2="-140.85046532624997" y2="939.500477071395" stroke="#cccccc" stroke-width="1.5" title="6.8 km" data-origem="Barro" data-destino="Caçote" data-nome="R. Desembargador Pedro Ribeiro Malta," data-peso="6.8" />
+<line class="aresta" x1="786.608389590619" y1="532.679304484089" x2="-323.27851571956086" y2="893.3034206103532" stroke="#cccccc" stroke-width="1.5" title="1.3 km" data-origem="Barro" data-destino="Cohab" data-nome="Av. Doze de junho" data-peso="1.3" />
+<line class="aresta" x1="786.608389590619" y1="532.679304484089" x2="-937.0432382325863" y2="156.36486076669692" stroke="#cccccc" stroke-width="1.5" title="3.6 km" data-origem="Barro" data-destino="Ibura" data-nome="Av. Rio São Francisco" data-peso="3.6" />
+<line class="aresta" x1="786.608389590619" y1="532.679304484089" x2="410.1666347215684" y2="-856.891668626311" stroke="#cccccc" stroke-width="1.5" title="5.0 km" data-origem="Barro" data-destino="Sancho" data-nome="Av. Conde Pereira Carneiro" data-peso="5.0" />
+<line class="aresta" x1="749.6834839265739" y1="583.5020770551844" x2="-688.2039445515345" y2="654.8857386626377" stroke="#cccccc" stroke-width="1.5" title="3.4 km" data-origem="Beberibe" data-destino="Dois Unidos" data-nome="Av. Leopoldino Canuto de Melo" data-peso="3.4" />
+<line class="aresta" x1="749.6834839265739" y1="583.5020770551844" x2="-863.5562082967044" y2="395.94276747052584" stroke="#cccccc" stroke-width="1.5" title="1.7 km" data-origem="Beberibe" data-destino="Fundão" data-nome="R. Florestópolis" data-peso="1.7" />
+<line class="aresta" x1="749.6834839265739" y1="583.5020770551844" x2="47.104566939561145" y2="-948.8314706908897" stroke="#cccccc" stroke-width="1.5" title="1.0 km" data-origem="Beberibe" data-destino="Porto da Madeira" data-nome="R. do Anil" data-peso="1.0" />
+<line class="aresta" x1="709.4804031349462" y1="631.7733435081558" x2="-937.0432382325863" y2="156.36486076669692" stroke="#cccccc" stroke-width="1.5" title="6.8 km" data-origem="Boa Viagem" data-destino="Ibura" data-nome="R. Hélio Brandão" data-peso="6.8" />
+<line class="aresta" x1="709.4804031349462" y1="631.7733435081558" x2="-945.3287574177608" y2="-94.09325373793972" stroke="#cccccc" stroke-width="1.5" title="4.2 km" data-origem="Boa Viagem" data-destino="Imbiribeira" data-nome="R. Barão de Souza Leão" data-peso="4.2" />
+<line class="aresta" x1="709.4804031349462" y1="631.7733435081558" x2="-937.0432382325862" y2="-156.36486076669752" stroke="#cccccc" stroke-width="1.5" title="5.3 km" data-origem="Boa Viagem" data-destino="Ipsep" data-nome="Av. Mascarenhas de Moraes" data-peso="5.3" />
+<line class="aresta" x1="709.4804031349462" y1="631.7733435081558" x2="-78.45037819871526" y2="-946.7552683563364" stroke="#cccccc" stroke-width="1.5" title="5.3 km" data-origem="Boa Viagem" data-destino="Pina" data-nome="Av. Boa Viagem" data-peso="5.3" />
+<line class="aresta" x1="619.9564734479602" y1="719.829126272318" x2="293.5661446561999" y2="903.503690480396" stroke="#cccccc" stroke-width="1.5" title="3.6 km" data-origem="Boa Vista" data-destino="Cabanga" data-nome="Av. Governador Carlos de Lima Cavalcanti" data-peso="3.6" />
+<line class="aresta" x1="619.9564734479602" y1="719.829126272318" x2="-263.5327633237524" y2="912.7159923300057" stroke="#cccccc" stroke-width="1.5" title="2.0 km" data-origem="Boa Vista" data-destino="Coelhos" data-nome="R. Dos Coelhos" data-peso="2.0" />
+<line class="aresta" x1="619.9564734479602" y1="719.829126272318" x2="-595.8175405498602" y2="739.9334148240068" stroke="#cccccc" stroke-width="1.5" title="0.85 km" data-origem="Boa Vista" data-destino="Derby" data-nome="R. Dom Bôsco" data-peso="0.85" />
+<line class="aresta" x1="619.9564734479602" y1="719.829126272318" x2="-887.8362413694879" y2="338.0041545763904" stroke="#cccccc" stroke-width="1.5" title="1.6 km" data-origem="Boa Vista" data-destino="Graças" data-nome="R. Das Graças" data-peso="1.6" />
+<line class="aresta" x1="619.9564734479602" y1="719.829126272318" x2="-949.4805944738797" y2="31.410200851442582" stroke="#cccccc" stroke-width="1.5" title="1.6 km" data-origem="Boa Vista" data-destino="Ilha do Leite" data-nome="R. Joaquim de Brito" data-peso="1.6" />
+<line class="aresta" x1="619.9564734479602" y1="719.829126272318" x2="-381.6106534203206" y2="-869.9846603223048" stroke="#cccccc" stroke-width="1.5" title="1.7 km" data-origem="Boa Vista" data-destino="Paissandu" data-nome="Av. Lins Petit" data-peso="1.7" />
+<line class="aresta" x1="619.9564734479602" y1="719.829126272318" x2="519.600750216306" y2="-795.3081543494019" stroke="#cccccc" stroke-width="1.5" title="3.3 km" data-origem="Boa Vista" data-destino="Santo Amaro" data-nome="R. Frei Cassimiro" data-peso="3.3" />
+<line class="aresta" x1="619.9564734479602" y1="719.829126272318" x2="571.0270899188744" y2="-759.2285970501781" stroke="#cccccc" stroke-width="1.5" title="2.9 km" data-origem="Boa Vista" data-destino="Santo Antônio" data-nome="R. Visconde de Goiana" data-peso="2.9" />
+<line class="aresta" x1="619.9564734479602" y1="719.829126272318" x2="619.9564734479602" y2="-719.8291262723179" stroke="#cccccc" stroke-width="1.5" title="1.1 km" data-origem="Boa Vista" data-destino="Soledade" data-nome="Av. Conde da Boa vista" data-peso="1.1" />
+<line class="aresta" x1="571.0270899188738" y1="759.2285970501786" x2="233.21121278375907" y2="920.9302526423639" stroke="#cccccc" stroke-width="1.5" title="2.5 km" data-origem="Bomba do Hemetério" data-destino="Cajueiro" data-nome="R. Barão de Tracunhaém" data-peso="2.5" />
+<line class="aresta" x1="571.0270899188738" y1="759.2285970501786" x2="-863.5562082967044" y2="395.94276747052584" stroke="#cccccc" stroke-width="1.5" title="1.7 km" data-origem="Bomba do Hemetério" data-destino="Fundão" data-nome="R. Dr. Eudes da Costa" data-peso="1.7" />
+<line class="aresta" x1="571.0270899188738" y1="759.2285970501786" x2="-545.6122295487966" y2="-777.6935739523577" stroke="#cccccc" stroke-width="1.5" title="3.6 km" data-origem="Bomba do Hemetério" data-destino="Morro da Conceição" data-nome="R. Corrego do Bartolomeu" data-peso="3.6" />
+<line class="aresta" x1="571.0270899188738" y1="759.2285970501786" x2="916.9484647634814" y2="-248.40594390612804" stroke="#cccccc" stroke-width="1.5" title="2.5 km" data-origem="Bomba do Hemetério" data-destino="Vasco da Gama" data-nome="R. Arlindo Cisneiros" data-peso="2.5" />
+<line class="aresta" x1="519.6007502163054" y1="795.3081543494022" x2="-768.5661446562003" y2="558.3959896778491" stroke="#cccccc" stroke-width="1.5" title="3.8 km" data-origem="Bongi" data-destino="Engenho do Meio" data-nome="R.Onze de fevereiro" data-peso="3.8" />
+<line class="aresta" x1="519.6007502163054" y1="795.3081543494022" x2="-493.0210950921544" y2="-812.0530769562621" stroke="#cccccc" stroke-width="1.5" title="1.0 km" data-origem="Bongi" data-destino="Mustardinha" data-nome="R. Randolfo Pinto Ferreira" data-peso="1.0" />
+<line class="aresta" x1="519.6007502163054" y1="795.3081543494022" x2="171.83650761550467" y2="-934.3298211287631" stroke="#cccccc" stroke-width="1.5" title="1.7 km" data-origem="Bongi" data-destino="Prado" data-nome="R. Santa Edwirges" data-peso="1.7" />
+<line class="aresta" x1="519.6007502163054" y1="795.3081543494022" x2="352.63738647230974" y2="-882.1263365652218" stroke="#cccccc" stroke-width="1.5" title="2.0 km" data-origem="Bongi" data-destino="San Martin" data-nome="Av. General San Martin" data-peso="2.0" />
+<line class="aresta" x1="519.6007502163054" y1="795.3081543494022" x2="876.1752672285156" y2="-367.17421082782926" stroke="#cccccc" stroke-width="1.5" title="3.2 km" data-origem="Bongi" data-destino="Torrões" data-nome="Av. Consul Vilares Fragoso" data-peso="3.2" />
+<line class="aresta" x1="519.6007502163054" y1="795.3081543494022" x2="941.7008658606265" y2="-125.2975627749652" stroke="#cccccc" stroke-width="1.5" title="2.9 km" data-origem="Bongi" data-destino="Zumbi" data-nome="R. Gomes Taborda" data-peso="2.9" />
+<line class="aresta" x1="465.9023286389827" y1="827.9100314459134" x2="293.5661446561999" y2="903.503690480396" stroke="#cccccc" stroke-width="1.5" title="3.5 km" data-origem="Brasília Teimosa" data-destino="Cabanga" data-nome="Av. Engenheiro José Estelita" data-peso="3.5" />
+<line class="aresta" x1="465.9023286389827" y1="827.9100314459134" x2="-945.3287574177608" y2="94.09325373793952" stroke="#cccccc" stroke-width="1.5" title="3.8 km" data-origem="Brasília Teimosa" data-destino="Ilha Joana Bezerra" data-nome="Av. Antônio de Goes" data-peso="3.8" />
+<line class="aresta" x1="465.9023286389827" y1="827.9100314459134" x2="-78.45037819871526" y2="-946.7552683563364" stroke="#cccccc" stroke-width="1.5" title="2.7 km" data-origem="Brasília Teimosa" data-destino="Pina" data-nome="Av. Domingos Ferreira" data-peso="2.7" />
+<line class="aresta" x1="410.16663472156824" y1="856.8916686263111" x2="-263.5327633237524" y2="-912.7159923300057" stroke="#cccccc" stroke-width="1.5" title="4.2 km" data-origem="Brejo da Guabiraba" data-destino="Passarinho" data-nome="Estr. dos Passarinhos" data-peso="4.2" />
+<line class="aresta" x1="410.16663472156824" y1="856.8916686263111" x2="709.4804031349464" y2="-631.7733435081556" stroke="#cccccc" stroke-width="1.5" title="6.1 km" data-origem="Brejo da Guabiraba" data-destino="Sítio dos Pintos" data-nome="Córrego José Idalino" data-peso="6.1" />
+<line class="aresta" x1="352.63738647230974" y1="882.1263365652218" x2="-688.2039445515345" y2="654.8857386626377" stroke="#cccccc" stroke-width="1.5" title="1.5 km" data-origem="Brejo de Beberibe" data-destino="Dois Unidos" data-nome="Av. Chagas Ferreira" data-peso="1.5" />
+<line class="aresta" x1="352.63738647230974" y1="882.1263365652218" x2="-863.5562082967044" y2="395.94276747052584" stroke="#cccccc" stroke-width="1.5" title="5.5 km" data-origem="Brejo de Beberibe" data-destino="Fundão" data-nome="Av. Ver Otacilio Azevedo" data-peso="5.5" />
+<line class="aresta" x1="352.63738647230974" y1="882.1263365652218" x2="-803.7904897998886" y2="-506.38014229159415" stroke="#cccccc" stroke-width="1.5" title="2.5 km" data-origem="Brejo de Beberibe" data-destino="Linha do Tiro" data-nome="Av. Vereador Otacilio Azevedo" data-peso="2.5" />
+<line class="aresta" x1="352.63738647230974" y1="882.1263365652218" x2="-768.5661446561999" y2="-558.3959896778497" stroke="#cccccc" stroke-width="1.5" title="2.6 km" data-origem="Brejo de Beberibe" data-destino="Macaxeira" data-nome="R. Nova Descoberta" data-peso="2.6" />
+<line class="aresta" x1="352.63738647230974" y1="882.1263365652218" x2="-438.2741048297532" y2="-842.8616784714313" stroke="#cccccc" stroke-width="1.5" title="1.0 km" data-origem="Brejo de Beberibe" data-destino="Nova Descoberta" data-nome="R. Corrego da Areia" data-peso="1.0" />
+<line class="aresta" x1="352.63738647230974" y1="882.1263365652218" x2="-263.5327633237524" y2="-912.7159923300057" stroke="#cccccc" stroke-width="1.5" title="5.0 km" data-origem="Brejo de Beberibe" data-destino="Passarinho" data-nome="Av. Recuperação" data-peso="5.0" />
+<line class="aresta" x1="293.5661446561999" y1="903.503690480396" x2="-945.3287574177608" y2="94.09325373793952" stroke="#cccccc" stroke-width="1.5" title="2.4 km" data-origem="Cabanga" data-destino="Ilha Joana Bezerra" data-nome="R. Dom Paulo II" data-peso="2.4" />
+<line class="aresta" x1="293.5661446561999" y1="903.503690480396" x2="-78.45037819871526" y2="-946.7552683563364" stroke="#cccccc" stroke-width="1.5" title="2.2 km" data-origem="Cabanga" data-destino="Pina" data-nome="Av. Herculano Bandeira" data-peso="2.2" />
+<line class="aresta" x1="293.5661446561999" y1="903.503690480396" x2="666.1749450588644" y2="-677.2820258768271" stroke="#cccccc" stroke-width="1.5" title="2.7 km" data-origem="Cabanga" data-destino="São José" data-nome="R. Gen. Estilac Leal" data-peso="2.7" />
+<line class="aresta" x1="233.21121278375907" y1="920.9302526423639" x2="749.6834839265739" y2="583.5020770551844" stroke="#cccccc" stroke-width="1.5" title="1.8 km" data-origem="Cajueiro" data-destino="Beberibe" data-nome="R. Luís Clericuzi" data-peso="1.8" />
+<line class="aresta" x1="233.21121278375907" y1="920.9302526423639" x2="171.83650761550427" y2="934.3298211287632" stroke="#cccccc" stroke-width="1.5" title="1.2 km" data-origem="Cajueiro" data-destino="Campina do Barreto" data-nome="Av. Sebastião Salazar" data-peso="1.2" />
+<line class="aresta" x1="233.21121278375907" y1="920.9302526423639" x2="-803.7904897998886" y2="-506.38014229159415" stroke="#cccccc" stroke-width="1.5" title="3.3 km" data-origem="Cajueiro" data-destino="Linha do Tiro" data-nome="Av. Aníbal Benévolo" data-peso="3.3" />
+<line class="aresta" x1="-140.85046532624997" y1="939.500477071395" x2="-323.27851571956086" y2="893.3034206103532" stroke="#cccccc" stroke-width="1.5" title="6.1 km" data-origem="Caçote" data-destino="Cohab" data-nome="R. Serra da Caiada" data-peso="6.1" />
+<line class="aresta" x1="-140.85046532624997" y1="939.500477071395" x2="-381.61065342032117" y2="869.9846603223045" stroke="#cccccc" stroke-width="1.5" title="5.4 km" data-origem="Caçote" data-destino="Coqueiral" data-nome="R. Heliópolis" data-peso="5.4" />
+<line class="aresta" x1="-140.85046532624997" y1="939.500477071395" x2="-835.5000636461647" y2="452.15002338521964" stroke="#cccccc" stroke-width="1.5" title="2.9 km" data-origem="Caçote" data-destino="Estância" data-nome="Av. Justiça e Paz" data-peso="2.9" />
+<line class="aresta" x1="-140.85046532624997" y1="939.500477071395" x2="-887.8362413694878" y2="-338.00415457639065" stroke="#cccccc" stroke-width="1.5" title="3.2 km" data-origem="Caçote" data-destino="Jardim São Paulo" data-nome="R. José Natário" data-peso="3.2" />
+<line class="aresta" x1="-140.85046532624997" y1="939.500477071395" x2="-643.4174930444537" y2="-698.9377151394754" stroke="#cccccc" stroke-width="1.5" title="4.2 km" data-origem="Caçote" data-destino="Mangueira" data-nome="Av. Central" data-peso="4.2" />
+<line class="aresta" x1="-140.85046532624997" y1="939.500477071395" x2="-493.0210950921544" y2="-812.0530769562621" stroke="#cccccc" stroke-width="1.5" title="4.9 km" data-origem="Caçote" data-destino="Mustardinha" data-nome="Av. Dr José Rufino" data-peso="4.9" />
+<line class="aresta" x1="-140.85046532624997" y1="939.500477071395" x2="352.63738647230974" y2="-882.1263365652218" stroke="#cccccc" stroke-width="1.5" title="4.0 km" data-origem="Caçote" data-destino="San Martin" data-nome="Av. João Cabral de Melo Neto" data-peso="4.0" />
+<line class="aresta" x1="-140.85046532624997" y1="939.500477071395" x2="410.1666347215684" y2="-856.891668626311" stroke="#cccccc" stroke-width="1.5" title="4.8 km" data-origem="Caçote" data-destino="Sancho" data-nome="PE-007" data-peso="4.8" />
+<line class="aresta" x1="171.83650761550427" y1="934.3298211287632" x2="109.71040512110672" y2="943.6438030359562" stroke="#cccccc" stroke-width="1.5" title="1.9 km" data-origem="Campina do Barreto" data-destino="Campo Grande" data-nome="R. Clara" data-peso="1.9" />
+<line class="aresta" x1="171.83650761550427" y1="934.3298211287632" x2="-729.9810553140162" y2="607.9701134781506" stroke="#cccccc" stroke-width="1.5" title="3.0 km" data-origem="Campina do Barreto" data-destino="Encruzilhada" data-nome="R. das Moças" data-peso="3.0" />
+<line class="aresta" x1="171.83650761550427" y1="934.3298211287632" x2="519.600750216306" y2="-795.3081543494019" stroke="#cccccc" stroke-width="1.5" title="3.8 km" data-origem="Campina do Barreto" data-destino="Santo Amaro" data-nome="R. Iguatu" data-peso="3.8" />
+<line class="aresta" x1="171.83650761550427" y1="934.3298211287632" x2="849.9928633297254" y2="-424.278366510166" stroke="#cccccc" stroke-width="1.5" title="2.9 km" data-origem="Campina do Barreto" data-destino="Torreão" data-nome="R. Jeronimo Vilela" data-peso="2.9" />
+<line class="aresta" x1="109.71040512110672" y1="943.6438030359562" x2="-729.9810553140162" y2="607.9701134781506" stroke="#cccccc" stroke-width="1.5" title="1.4 km" data-origem="Campo Grande" data-destino="Encruzilhada" data-nome="R. Nogueira Lima" data-peso="1.4" />
+<line class="aresta" x1="109.71040512110672" y1="943.6438030359562" x2="-924.6602673856056" y2="217.95272404441388" stroke="#cccccc" stroke-width="1.5" title="0.95 km" data-origem="Campo Grande" data-destino="Hipódromo" data-nome="Estr. de Belém" data-peso="0.95" />
+<line class="aresta" x1="109.71040512110672" y1="943.6438030359562" x2="519.600750216306" y2="-795.3081543494019" stroke="#cccccc" stroke-width="1.5" title="2.2 km" data-origem="Campo Grande" data-destino="Santo Amaro" data-nome="R. Odorico Mendes" data-peso="2.2" />
+<line class="aresta" x1="109.71040512110672" y1="943.6438030359562" x2="849.9928633297254" y2="-424.278366510166" stroke="#cccccc" stroke-width="1.5" title="1.3 km" data-origem="Campo Grande" data-destino="Torreão" data-nome="R. Professor Othon Paraíso" data-peso="1.3" />
+<line class="aresta" x1="47.10456693956117" y1="948.8314706908897" x2="-15.707247528040526" y2="949.8701397428456" stroke="#cccccc" stroke-width="1.5" title="1.2 km" data-origem="Casa Amarela" data-destino="Casa Forte" data-nome="Estr. das Ubaias" data-peso="1.2" />
+<line class="aresta" x1="47.10456693956117" y1="948.8314706908897" x2="-595.8175405498598" y2="-739.9334148240072" stroke="#cccccc" stroke-width="1.5" title="1.7 km" data-origem="Casa Amarela" data-destino="Monteiro" data-nome="Estr. do Arraial" data-peso="1.7" />
+<line class="aresta" x1="47.10456693956117" y1="948.8314706908897" x2="109.7104051211069" y2="-943.6438030359562" stroke="#cccccc" stroke-width="1.5" title="1.5 km" data-origem="Casa Amarela" data-destino="Poço da Panela" data-nome="R. Marechal Rondon" data-peso="1.5" />
+<line class="aresta" x1="47.10456693956117" y1="948.8314706908897" x2="749.6834839265742" y2="-583.502077055184" stroke="#cccccc" stroke-width="1.5" title="3.7 km" data-origem="Casa Amarela" data-destino="Tamarineira" data-nome="Av. Professor José dos Anjos" data-peso="3.7" />
+<line class="aresta" x1="-15.707247528040526" y1="949.8701397428456" x2="-323.2785157195603" y2="-893.3034206103534" stroke="#cccccc" stroke-width="1.5" title="1.5 km" data-origem="Casa Forte" data-destino="Parnamirim" data-nome="R. Jerônimo de Albuquerque" data-peso="1.5" />
+<line class="aresta" x1="-15.707247528040526" y1="949.8701397428456" x2="109.7104051211069" y2="-943.6438030359562" stroke="#cccccc" stroke-width="1.5" title="0.9 km" data-origem="Casa Forte" data-destino="Poço da Panela" data-nome="Estr. Real do Poço" data-peso="0.9" />
+<line class="aresta" x1="-15.707247528040526" y1="949.8701397428456" x2="465.902328638983" y2="-827.9100314459132" stroke="#cccccc" stroke-width="1.5" title="1.0 km" data-origem="Casa Forte" data-destino="Santana" data-nome="R. Sant'Anna" data-peso="1.0" />
+<line class="aresta" x1="-78.45037819871587" y1="946.7552683563364" x2="-202.63464920655957" y2="928.1374892444193" stroke="#cccccc" stroke-width="1.5" title="5.6 km" data-origem="Caxangá" data-destino="Cidade Universitária" data-nome="Av. Professor Moraes Rego" data-peso="5.6" />
+<line class="aresta" x1="-78.45037819871587" y1="946.7552683563364" x2="-768.5661446562003" y2="558.3959896778491" stroke="#cccccc" stroke-width="1.5" title="5.9 km" data-origem="Caxangá" data-destino="Engenho do Meio" data-nome="R. Gáspar Pérez" data-peso="5.9" />
+<line class="aresta" x1="-78.45037819871587" y1="946.7552683563364" x2="-924.6602673856056" y2="-217.95272404441408" stroke="#cccccc" stroke-width="1.5" title="5.7 km" data-origem="Caxangá" data-destino="Iputinga" data-nome="Av.Joaquim Ribeiro" data-peso="5.7" />
+<line class="aresta" x1="-78.45037819871587" y1="946.7552683563364" x2="-887.8362413694878" y2="-338.00415457639065" stroke="#cccccc" stroke-width="1.5" title="9.2 km" data-origem="Caxangá" data-destino="Jardim São Paulo" data-nome="R. Dr. Dustan de Carvalho Soares" data-peso="9.2" />
+<line class="aresta" x1="-78.45037819871587" y1="946.7552683563364" x2="352.63738647230974" y2="-882.1263365652218" stroke="#cccccc" stroke-width="1.5" title="10.0 km" data-origem="Caxangá" data-destino="San Martin" data-nome="R. Francisco Tôrres" data-peso="10.0" />
+<line class="aresta" x1="-78.45037819871587" y1="946.7552683563364" x2="876.1752672285156" y2="-367.17421082782926" stroke="#cccccc" stroke-width="1.5" title="6.8 km" data-origem="Caxangá" data-destino="Torrões" data-nome="R. Ambrósio Machado" data-peso="6.8" />
+<line class="aresta" x1="-78.45037819871587" y1="946.7552683563364" x2="931.3609675810688" y2="-187.26117607890623" stroke="#cccccc" stroke-width="1.5" title="4.0 km" data-origem="Caxangá" data-destino="Várzea" data-nome="Av. Afonso Olindense" data-peso="4.0" />
+<line class="aresta" x1="-202.63464920655957" y1="928.1374892444193" x2="-493.02109509215444" y2="812.053076956262" stroke="#cccccc" stroke-width="1.5" title="3.9 km" data-origem="Cidade Universitária" data-destino="Curado" data-nome="Av. dos Reitores" data-peso="3.9" />
+<line class="aresta" x1="-202.63464920655957" y1="928.1374892444193" x2="-887.8362413694878" y2="-338.00415457639065" stroke="#cccccc" stroke-width="1.5" title="4.6 km" data-origem="Cidade Universitária" data-destino="Jardim São Paulo" data-nome="Av. Recife" data-peso="4.6" />
+<line class="aresta" x1="-202.63464920655957" y1="928.1374892444193" x2="931.3609675810688" y2="-187.26117607890623" stroke="#cccccc" stroke-width="1.5" title="1.8 km" data-origem="Cidade Universitária" data-destino="Várzea" data-nome="R. Amaro Gomes Poroca" data-peso="1.8" />
+<line class="aresta" x1="-263.5327633237524" y1="912.7159923300057" x2="-945.3287574177608" y2="94.09325373793952" stroke="#cccccc" stroke-width="1.5" title="2.2 km" data-origem="Coelhos" data-destino="Ilha Joana Bezerra" data-nome="R. Prefeito Jorge Martins" data-peso="2.2" />
+<line class="aresta" x1="-263.5327633237524" y1="912.7159923300057" x2="-381.6106534203206" y2="-869.9846603223048" stroke="#cccccc" stroke-width="1.5" title="1.9 km" data-origem="Coelhos" data-destino="Paissandu" data-nome="R. Estado De Israel" data-peso="1.9" />
+<line class="aresta" x1="-263.5327633237524" y1="912.7159923300057" x2="571.0270899188744" y2="-759.2285970501781" stroke="#cccccc" stroke-width="1.5" title="1.4 km" data-origem="Coelhos" data-destino="Santo Antônio" data-nome="R. Rêgo Melo" data-peso="1.4" />
+<line class="aresta" x1="-263.5327633237524" y1="912.7159923300057" x2="666.1749450588644" y2="-677.2820258768271" stroke="#cccccc" stroke-width="1.5" title="2.4 km" data-origem="Coelhos" data-destino="São José" data-nome="Ponte Viaduto Joaquim Cardozo" data-peso="2.4" />
+<line class="aresta" x1="-323.27851571956086" y1="893.3034206103532" x2="-381.61065342032117" y2="869.9846603223045" stroke="#cccccc" stroke-width="1.5" title="5.7 km" data-origem="Cohab" data-destino="Coqueiral" data-nome="Av. Jornalista Costa Pôrto" data-peso="5.7" />
+<line class="aresta" x1="-323.27851571956086" y1="893.3034206103532" x2="-937.0432382325863" y2="156.36486076669692" stroke="#cccccc" stroke-width="1.5" title="4.0 km" data-origem="Cohab" data-destino="Ibura" data-nome="Av. Dois Rios" data-peso="4.0" />
+<line class="aresta" x1="-323.27851571956086" y1="893.3034206103532" x2="-835.5000636461644" y2="-452.1500233852202" stroke="#cccccc" stroke-width="1.5" title="4.6 km" data-origem="Cohab" data-destino="Jordão" data-nome="Av. Doná Carentina" data-peso="4.6" />
+<line class="aresta" x1="-323.27851571956086" y1="893.3034206103532" x2="410.1666347215684" y2="-856.891668626311" stroke="#cccccc" stroke-width="1.5" title="5.3 km" data-origem="Cohab" data-destino="Sancho" data-nome="Av. General Manoel Rabelo" data-peso="5.3" />
+<line class="aresta" x1="-381.61065342032117" y1="869.9846603223045" x2="-493.02109509215444" y2="812.053076956262" stroke="#cccccc" stroke-width="1.5" title="5.6 km" data-origem="Coqueiral" data-destino="Curado" data-nome="Av. Getúlio Vargas" data-peso="5.6" />
+<line class="aresta" x1="-381.61065342032117" y1="869.9846603223045" x2="-937.0432382325863" y2="156.36486076669692" stroke="#cccccc" stroke-width="1.5" title="7.4 km" data-origem="Coqueiral" data-destino="Ibura" data-nome="R. do Sancho" data-peso="7.4" />
+<line class="aresta" x1="-381.61065342032117" y1="869.9846603223045" x2="410.1666347215684" y2="-856.891668626311" stroke="#cccccc" stroke-width="1.5" title="1.6 km" data-origem="Coqueiral" data-destino="Sancho" data-nome="R. Aprígio Guimarães" data-peso="1.6" />
+<line class="aresta" x1="-381.61065342032117" y1="869.9846603223045" x2="786.6083895906195" y2="-532.6793044840884" stroke="#cccccc" stroke-width="1.5" title="1.2 km" data-origem="Coqueiral" data-destino="Tejipió" data-nome="R. Alto da Bela Vista" data-peso="1.2" />
+<line class="aresta" x1="-381.61065342032117" y1="869.9846603223045" x2="898.5263796156031" y2="-308.46449574444875" stroke="#cccccc" stroke-width="1.5" title="0.7 km" data-origem="Coqueiral" data-destino="Totó" data-nome="R. Alto do Paraizo" data-peso="0.7" />
+<line class="aresta" x1="-438.27410482975336" y1="842.8616784714312" x2="519.6007502163054" y2="795.3081543494022" stroke="#cccccc" stroke-width="1.5" title="3.8 km" data-origem="Cordeiro" data-destino="Bongi" data-nome="R. Carlos Gomes" data-peso="3.8" />
+<line class="aresta" x1="-438.27410482975336" y1="842.8616784714312" x2="-768.5661446562003" y2="558.3959896778491" stroke="#cccccc" stroke-width="1.5" title="3.1 km" data-origem="Cordeiro" data-destino="Engenho do Meio" data-nome="R. Dr. Miguel Viêira Ferreira" data-peso="3.1" />
+<line class="aresta" x1="-438.27410482975336" y1="842.8616784714312" x2="-924.6602673856056" y2="-217.95272404441408" stroke="#cccccc" stroke-width="1.5" title="2.6 km" data-origem="Cordeiro" data-destino="Iputinga" data-nome="R. São Mateus" data-peso="2.6" />
+<line class="aresta" x1="-438.27410482975336" y1="842.8616784714312" x2="-729.9810553140161" y2="-607.9701134781507" stroke="#cccccc" stroke-width="1.5" title="4.0 km" data-origem="Cordeiro" data-destino="Madalena" data-nome="Av. Beira Rio" data-peso="4.0" />
+<line class="aresta" x1="-438.27410482975336" y1="842.8616784714312" x2="820.0936569096953" y2="-479.5272608481015" stroke="#cccccc" stroke-width="1.5" title="3.2 km" data-origem="Cordeiro" data-destino="Torre" data-nome="R. Souza Bandeira" data-peso="3.2" />
+<line class="aresta" x1="-438.27410482975336" y1="842.8616784714312" x2="876.1752672285156" y2="-367.17421082782926" stroke="#cccccc" stroke-width="1.5" title="2.4 km" data-origem="Cordeiro" data-destino="Torrões" data-nome="Estr. do Forte do Arraial Novo do Bom Jesus" data-peso="2.4" />
+<line class="aresta" x1="-438.27410482975336" y1="842.8616784714312" x2="941.7008658606265" y2="-125.2975627749652" stroke="#cccccc" stroke-width="1.5" title="1.1 km" data-origem="Cordeiro" data-destino="Zumbi" data-nome="Av. Caxangá" data-peso="1.1" />
+<line class="aresta" x1="-545.6122295487967" y1="777.6935739523576" x2="931.3609675810688" y2="187.26117607890632" stroke="#cccccc" stroke-width="1.5" title="4.7 km" data-origem="Córrego do Jenipapo" data-destino="Alto José do Pinho" data-nome="R. Popular" data-peso="4.7" />
+<line class="aresta" x1="-545.6122295487967" y1="777.6935739523576" x2="352.63738647230974" y2="882.1263365652218" stroke="#cccccc" stroke-width="1.5" title="2.6 km" data-origem="Córrego do Jenipapo" data-destino="Brejo de Beberibe" data-nome="R. Anita" data-peso="2.6" />
+<line class="aresta" x1="-545.6122295487967" y1="777.6935739523576" x2="47.10456693956117" y2="948.8314706908897" stroke="#cccccc" stroke-width="1.5" title="3.6 km" data-origem="Córrego do Jenipapo" data-destino="Casa Amarela" data-nome="R. Francisco campos" data-peso="3.6" />
+<line class="aresta" x1="-545.6122295487967" y1="777.6935739523576" x2="-688.2039445515345" y2="654.8857386626377" stroke="#cccccc" stroke-width="1.5" title="3.7 km" data-origem="Córrego do Jenipapo" data-destino="Dois Unidos" data-nome="Av. Ver. Otacílio Azevedo" data-peso="3.7" />
+<line class="aresta" x1="-545.6122295487967" y1="777.6935739523576" x2="-924.6602673856056" y2="-217.95272404441408" stroke="#cccccc" stroke-width="1.5" title="5.2 km" data-origem="Córrego do Jenipapo" data-destino="Iputinga" data-nome="Av. da Recuperação" data-peso="5.2" />
+<line class="aresta" x1="-545.6122295487967" y1="777.6935739523576" x2="-768.5661446561999" y2="-558.3959896778497" stroke="#cccccc" stroke-width="1.5" title="0.8 km" data-origem="Córrego do Jenipapo" data-destino="Macaxeira" data-nome="Av. José Américo de Almeida" data-peso="0.8" />
+<line class="aresta" x1="-545.6122295487967" y1="777.6935739523576" x2="-688.2039445515343" y2="-654.8857386626377" stroke="#cccccc" stroke-width="1.5" title="5.2 km" data-origem="Córrego do Jenipapo" data-destino="Mangabeira" data-nome="R. Maragogi" data-peso="5.2" />
+<line class="aresta" x1="-545.6122295487967" y1="777.6935739523576" x2="-438.2741048297532" y2="-842.8616784714313" stroke="#cccccc" stroke-width="1.5" title="1.6 km" data-origem="Córrego do Jenipapo" data-destino="Nova Descoberta" data-nome="R. dos Coquinhos" data-peso="1.6" />
+<line class="aresta" x1="-493.02109509215444" y1="812.053076956262" x2="-937.0432382325863" y2="156.36486076669692" stroke="#cccccc" stroke-width="1.5" title="9.5 km" data-origem="Curado" data-destino="Ibura" data-nome="Rod. Luiz Gonzaga" data-peso="9.5" />
+<line class="aresta" x1="-493.02109509215444" y1="812.053076956262" x2="-887.8362413694878" y2="-338.00415457639065" stroke="#cccccc" stroke-width="1.5" title="4.2 km" data-origem="Curado" data-destino="Jardim São Paulo" data-nome="R. Lorena" data-peso="4.2" />
+<line class="aresta" x1="-493.02109509215444" y1="812.053076956262" x2="410.1666347215684" y2="-856.891668626311" stroke="#cccccc" stroke-width="1.5" title="6.8 km" data-origem="Curado" data-destino="Sancho" data-nome="Av. Liberdade" data-peso="6.8" />
+<line class="aresta" x1="-493.02109509215444" y1="812.053076956262" x2="786.6083895906195" y2="-532.6793044840884" stroke="#cccccc" stroke-width="1.5" title="6.7 km" data-origem="Curado" data-destino="Tejipió" data-nome="R. Papa João XXIII" data-peso="6.7" />
+<line class="aresta" x1="-595.8175405498602" y1="739.9334148240068" x2="-263.5327633237524" y2="912.7159923300057" stroke="#cccccc" stroke-width="1.5" title="2.5 km" data-origem="Derby" data-destino="Coelhos" data-nome="R. Henrique Dias" data-peso="2.5" />
+<line class="aresta" x1="-595.8175405498602" y1="739.9334148240068" x2="-887.8362413694879" y2="338.0041545763904" stroke="#cccccc" stroke-width="1.5" title="1.4 km" data-origem="Derby" data-destino="Graças" data-nome="R. das Pernambucanas" data-peso="1.4" />
+<line class="aresta" x1="-595.8175405498602" y1="739.9334148240068" x2="-803.7904897998887" y2="506.380142291594" stroke="#cccccc" stroke-width="1.5" title="2.5 km" data-origem="Derby" data-destino="Espinheiro" data-nome="R. do Espinheiro" data-peso="2.5" />
+<line class="aresta" x1="-595.8175405498602" y1="739.9334148240068" x2="-949.4805944738797" y2="31.410200851442582" stroke="#cccccc" stroke-width="1.5" title="2.3 km" data-origem="Derby" data-destino="Ilha do Leite" data-nome="R. Antônio Gomes de Freitas" data-peso="2.3" />
+<line class="aresta" x1="-595.8175405498602" y1="739.9334148240068" x2="-949.4805944738797" y2="-31.410200851442774" stroke="#cccccc" stroke-width="1.5" title="2.0 km" data-origem="Derby" data-destino="Ilha do Retiro" data-nome="R. João Elísio Ramos" data-peso="2.0" />
+<line class="aresta" x1="-595.8175405498602" y1="739.9334148240068" x2="-729.9810553140161" y2="-607.9701134781507" stroke="#cccccc" stroke-width="1.5" title="1.7 km" data-origem="Derby" data-destino="Madalena" data-nome="R. Arlíndo Gouvêia" data-peso="1.7" />
+<line class="aresta" x1="-595.8175405498602" y1="739.9334148240068" x2="-381.6106534203206" y2="-869.9846603223048" stroke="#cccccc" stroke-width="1.5" title="1.4 km" data-origem="Derby" data-destino="Paissandu" data-nome="R. Amauri de Medeiros" data-peso="1.4" />
+<line class="aresta" x1="-595.8175405498602" y1="739.9334148240068" x2="519.600750216306" y2="-795.3081543494019" stroke="#cccccc" stroke-width="1.5" title="4.0 km" data-origem="Derby" data-destino="Santo Amaro" data-nome="R. das Creoulas" data-peso="4.0" />
+<line class="aresta" x1="-643.4174930444542" y1="698.9377151394749" x2="352.63738647230974" y2="882.1263365652218" stroke="#cccccc" stroke-width="1.5" title="5.9 km" data-origem="Dois Irmãos" data-destino="Brejo de Beberibe" data-nome="R. Sr. do Bonfim" data-peso="5.9" />
+<line class="aresta" x1="-643.4174930444542" y1="698.9377151394749" x2="47.10456693956117" y2="948.8314706908897" stroke="#cccccc" stroke-width="1.5" title="4.7 km" data-origem="Dois Irmãos" data-destino="Casa Amarela" data-nome="Praça Dois Irmãos" data-peso="4.7" />
+<line class="aresta" x1="-643.4174930444542" y1="698.9377151394749" x2="-768.5661446561999" y2="-558.3959896778497" stroke="#cccccc" stroke-width="1.5" title="2.5 km" data-origem="Dois Irmãos" data-destino="Macaxeira" data-nome="R. do Monte" data-peso="2.5" />
+<line class="aresta" x1="-643.4174930444542" y1="698.9377151394749" x2="-595.8175405498598" y2="-739.9334148240072" stroke="#cccccc" stroke-width="1.5" title="2.7 km" data-origem="Dois Irmãos" data-destino="Monteiro" data-nome="R. Caetés" data-peso="2.7" />
+<line class="aresta" x1="-643.4174930444542" y1="698.9377151394749" x2="-545.6122295487966" y2="-777.6935739523577" stroke="#cccccc" stroke-width="1.5" title="5.9 km" data-origem="Dois Irmãos" data-destino="Morro da Conceição" data-nome="Largo Dom Luiz" data-peso="5.9" />
+<line class="aresta" x1="-643.4174930444542" y1="698.9377151394749" x2="-202.63464920655937" y2="-928.1374892444193" stroke="#cccccc" stroke-width="1.5" title="10.7 km" data-origem="Dois Irmãos" data-destino="Pau-Ferro" data-nome="Av. Carlos Laet de Lima" data-peso="10.7" />
+<line class="aresta" x1="-643.4174930444542" y1="698.9377151394749" x2="709.4804031349464" y2="-631.7733435081556" stroke="#cccccc" stroke-width="1.5" title="2.0 km" data-origem="Dois Irmãos" data-destino="Sítio dos Pintos" data-nome="R. Manuel de Medeiros" data-peso="2.0" />
+<line class="aresta" x1="-688.2039445515345" y1="654.8857386626377" x2="947.9229458578359" y2="-62.78605510941404" stroke="#cccccc" stroke-width="1.5" title="3.6 km" data-origem="Dois Unidos" data-destino="Água Fria" data-nome="R. Tupiraçaba" data-peso="3.6" />
+<line class="aresta" x1="-688.2039445515345" y1="654.8857386626377" x2="931.3609675810688" y2="187.26117607890632" stroke="#cccccc" stroke-width="1.5" title="3.8 km" data-origem="Dois Unidos" data-destino="Alto José do Pinho" data-nome="R. Acaiaca" data-peso="3.8" />
+<line class="aresta" x1="-688.2039445515345" y1="654.8857386626377" x2="-803.7904897998886" y2="-506.38014229159415" stroke="#cccccc" stroke-width="1.5" title="2.0 km" data-origem="Dois Unidos" data-destino="Linha do Tiro" data-nome="R. Divisópolis" data-peso="2.0" />
+<line class="aresta" x1="-688.2039445515345" y1="654.8857386626377" x2="-263.5327633237524" y2="-912.7159923300057" stroke="#cccccc" stroke-width="1.5" title="3.1 km" data-origem="Dois Unidos" data-destino="Passarinho" data-nome="R. Arquelau Silveira Líra" data-peso="3.1" />
+<line class="aresta" x1="-729.9810553140162" y1="607.9701134781506" x2="820.0936569096951" y2="479.5272608481016" stroke="#cccccc" stroke-width="1.5" title="1.2 km" data-origem="Encruzilhada" data-destino="Arruda" data-nome="R. Petronilda Botelho" data-peso="1.2" />
+<line class="aresta" x1="-729.9810553140162" y1="607.9701134781506" x2="-803.7904897998887" y2="506.380142291594" stroke="#cccccc" stroke-width="1.5" title="1.0 km" data-origem="Encruzilhada" data-destino="Espinheiro" data-nome="R. Conselheiro Portela" data-peso="1.0" />
+<line class="aresta" x1="-729.9810553140162" y1="607.9701134781506" x2="-924.6602673856056" y2="217.95272404441388" stroke="#cccccc" stroke-width="1.5" title="0.7 km" data-origem="Encruzilhada" data-destino="Hipódromo" data-nome="R. Professor Miranda Curió" data-peso="0.7" />
+<line class="aresta" x1="-729.9810553140162" y1="607.9701134781506" x2="-15.707247528039911" y2="-949.8701397428456" stroke="#cccccc" stroke-width="1.5" title="1.0 km" data-origem="Encruzilhada" data-destino="Ponto de Parada" data-nome="R. Dona Julieta" data-peso="1.0" />
+<line class="aresta" x1="-729.9810553140162" y1="607.9701134781506" x2="293.56614465620066" y2="-903.5036904803957" stroke="#cccccc" stroke-width="1.5" title="1.7 km" data-origem="Encruzilhada" data-destino="Rosarinho" data-nome="R. André Rebouças" data-peso="1.7" />
+<line class="aresta" x1="-729.9810553140162" y1="607.9701134781506" x2="519.600750216306" y2="-795.3081543494019" stroke="#cccccc" stroke-width="1.5" title="2.3 km" data-origem="Encruzilhada" data-destino="Santo Amaro" data-nome="Av. Norte Miguel Arraes de Alencar" data-peso="2.3" />
+<line class="aresta" x1="-729.9810553140162" y1="607.9701134781506" x2="619.9564734479602" y2="-719.8291262723179" stroke="#cccccc" stroke-width="1.5" title="3.9 km" data-origem="Encruzilhada" data-destino="Soledade" data-nome="R. Gervásio Pires" data-peso="3.9" />
+<line class="aresta" x1="-729.9810553140162" y1="607.9701134781506" x2="749.6834839265742" y2="-583.502077055184" stroke="#cccccc" stroke-width="1.5" title="1.7 km" data-origem="Encruzilhada" data-destino="Tamarineira" data-nome="R. Amaro Coutinho" data-peso="1.7" />
+<line class="aresta" x1="-729.9810553140162" y1="607.9701134781506" x2="849.9928633297254" y2="-424.278366510166" stroke="#cccccc" stroke-width="1.5" title="1.7 km" data-origem="Encruzilhada" data-destino="Torreão" data-nome="R. Antônio Rangel" data-peso="1.7" />
+<line class="aresta" x1="-768.5661446562003" y1="558.3959896778491" x2="-924.6602673856056" y2="-217.95272404441408" stroke="#cccccc" stroke-width="1.5" title="3.4 km" data-origem="Engenho do Meio" data-destino="Iputinga" data-nome="R. Manoel Côrte Real" data-peso="3.4" />
+<line class="aresta" x1="-768.5661446562003" y1="558.3959896778491" x2="171.83650761550467" y2="-934.3298211287631" stroke="#cccccc" stroke-width="1.5" title="4.4 km" data-origem="Engenho do Meio" data-destino="Prado" data-nome="R. Lindolfo Color" data-peso="4.4" />
+<line class="aresta" x1="-768.5661446562003" y1="558.3959896778491" x2="352.63738647230974" y2="-882.1263365652218" stroke="#cccccc" stroke-width="1.5" title="3.0 km" data-origem="Engenho do Meio" data-destino="San Martin" data-nome="R. Arsênio Calaça" data-peso="3.0" />
+<line class="aresta" x1="-768.5661446562003" y1="558.3959896778491" x2="820.0936569096953" y2="-479.5272608481015" stroke="#cccccc" stroke-width="1.5" title="5.7 km" data-origem="Engenho do Meio" data-destino="Torre" data-nome="R. Cláudio Brotherhood" data-peso="5.7" />
+<line class="aresta" x1="-768.5661446562003" y1="558.3959896778491" x2="931.3609675810688" y2="-187.26117607890623" stroke="#cccccc" stroke-width="1.5" title="3.1 km" data-origem="Engenho do Meio" data-destino="Várzea" data-nome="Av. dos Economistas" data-peso="3.1" />
+<line class="aresta" x1="-768.5661446562003" y1="558.3959896778491" x2="941.7008658606265" y2="-125.2975627749652" stroke="#cccccc" stroke-width="1.5" title="4.1 km" data-origem="Engenho do Meio" data-destino="Zumbi" data-nome="R. Gov. Lopo Garro" data-peso="4.1" />
+<line class="aresta" x1="-803.7904897998887" y1="506.380142291594" x2="-887.8362413694879" y2="338.0041545763904" stroke="#cccccc" stroke-width="1.5" title="1.8 km" data-origem="Espinheiro" data-destino="Graças" data-nome="R. Bruno Maia" data-peso="1.8" />
+<line class="aresta" x1="-803.7904897998887" y1="506.380142291594" x2="293.56614465620066" y2="-903.5036904803957" stroke="#cccccc" stroke-width="1.5" title="2.9 km" data-origem="Espinheiro" data-destino="Rosarinho" data-nome="R. Barão de Itamaracá" data-peso="2.9" />
+<line class="aresta" x1="-803.7904897998887" y1="506.380142291594" x2="619.9564734479602" y2="-719.8291262723179" stroke="#cccccc" stroke-width="1.5" title="2.8 km" data-origem="Espinheiro" data-destino="Soledade" data-nome="Av. João de Barros" data-peso="2.8" />
+<line class="aresta" x1="-803.7904897998887" y1="506.380142291594" x2="849.9928633297254" y2="-424.278366510166" stroke="#cccccc" stroke-width="1.5" title="3.1 km" data-origem="Espinheiro" data-destino="Torreão" data-nome="R. Djalma Farias" data-peso="3.1" />
+<line class="aresta" x1="-835.5000636461647" y1="452.15002338521964" x2="786.608389590619" y2="532.679304484089" stroke="#cccccc" stroke-width="1.5" title="7.6 km" data-origem="Estância" data-destino="Barro" data-nome="R. S D 5519" data-peso="7.6" />
+<line class="aresta" x1="-835.5000636461647" y1="452.15002338521964" x2="-945.3287574177608" y2="-94.09325373793972" stroke="#cccccc" stroke-width="1.5" title="5.6 km" data-origem="Estância" data-destino="Imbiribeira" data-nome="R. Peroba" data-peso="5.6" />
+<line class="aresta" x1="-835.5000636461647" y1="452.15002338521964" x2="-887.8362413694878" y2="-338.00415457639065" stroke="#cccccc" stroke-width="1.5" title="3.2 km" data-origem="Estância" data-destino="Jardim São Paulo" data-nome="R. Aníbal Portela" data-peso="3.2" />
+<line class="aresta" x1="-835.5000636461647" y1="452.15002338521964" x2="410.1666347215684" y2="-856.891668626311" stroke="#cccccc" stroke-width="1.5" title="5.1 km" data-origem="Estância" data-destino="Sancho" data-nome="Estr. do Curado" data-peso="5.1" />
+<line class="aresta" x1="-835.5000636461647" y1="452.15002338521964" x2="786.6083895906195" y2="-532.6793044840884" stroke="#cccccc" stroke-width="1.5" title="5.1 km" data-origem="Estância" data-destino="Tejipió" data-nome="Av. Dr. José Rufino" data-peso="5.1" />
+<line class="aresta" x1="-863.5562082967044" y1="395.94276747052584" x2="947.9229458578359" y2="-62.78605510941404" stroke="#cccccc" stroke-width="1.5" title="1.2 km" data-origem="Fundão" data-destino="Água Fria" data-nome="R. Belo Jardim" data-peso="1.2" />
+<line class="aresta" x1="-863.5562082967044" y1="395.94276747052584" x2="410.16663472156824" y2="856.8916686263111" stroke="#cccccc" stroke-width="1.5" title="6.8 km" data-origem="Fundão" data-destino="Brejo da Guabiraba" data-nome="R. Pres. Costa e Silva" data-peso="6.8" />
+<line class="aresta" x1="-863.5562082967044" y1="395.94276747052584" x2="-803.7904897998886" y2="-506.38014229159415" stroke="#cccccc" stroke-width="1.5" title="2.4 km" data-origem="Fundão" data-destino="Linha do Tiro" data-nome="R. Maj. Davino" data-peso="2.4" />
+<line class="aresta" x1="-863.5562082967044" y1="395.94276747052584" x2="47.104566939561145" y2="-948.8314706908897" stroke="#cccccc" stroke-width="1.5" title="1.1 km" data-origem="Fundão" data-destino="Porto da Madeira" data-nome="R.Conselheiro Barros Barreto" data-peso="1.1" />
+<line class="aresta" x1="-887.8362413694879" y1="338.0041545763904" x2="-949.4805944738797" y2="31.410200851442582" stroke="#cccccc" stroke-width="1.5" title="3.1 km" data-origem="Graças" data-destino="Ilha do Leite" data-nome="R. Sen. José Henrique" data-peso="3.1" />
+<line class="aresta" x1="-887.8362413694879" y1="338.0041545763904" x2="-908.2339924576396" y2="-278.58753551524177" stroke="#cccccc" stroke-width="1.5" title="2.1 km" data-origem="Graças" data-destino="Jaqueira" data-nome="R. Confederação do Equador" data-peso="2.1" />
+<line class="aresta" x1="-887.8362413694879" y1="338.0041545763904" x2="-729.9810553140161" y2="-607.9701134781507" stroke="#cccccc" stroke-width="1.5" title="2.1 km" data-origem="Graças" data-destino="Madalena" data-nome="R. Joaquim Nabuco" data-peso="2.1" />
+<line class="aresta" x1="-887.8362413694879" y1="338.0041545763904" x2="-323.2785157195603" y2="-893.3034206103534" stroke="#cccccc" stroke-width="1.5" title="3.3 km" data-origem="Graças" data-destino="Parnamirim" data-nome="R. Desembargador Góis Cavalcante" data-peso="3.3" />
+<line class="aresta" x1="-887.8362413694879" y1="338.0041545763904" x2="109.7104051211069" y2="-943.6438030359562" stroke="#cccccc" stroke-width="1.5" title="5.3 km" data-origem="Graças" data-destino="Poço da Panela" data-nome="R. Aberlardo Carneiro Leão" data-peso="5.3" />
+<line class="aresta" x1="-887.8362413694879" y1="338.0041545763904" x2="293.56614465620066" y2="-903.5036904803957" stroke="#cccccc" stroke-width="1.5" title="2.8 km" data-origem="Graças" data-destino="Rosarinho" data-nome="Av. Conselheiro Rosa e Silva" data-peso="2.8" />
+<line class="aresta" x1="-887.8362413694879" y1="338.0041545763904" x2="619.9564734479602" y2="-719.8291262723179" stroke="#cccccc" stroke-width="1.5" title="2.5 km" data-origem="Graças" data-destino="Soledade" data-nome="R. João Fernandes Viêira" data-peso="2.5" />
+<line class="aresta" x1="-887.8362413694879" y1="338.0041545763904" x2="749.6834839265742" y2="-583.502077055184" stroke="#cccccc" stroke-width="1.5" title="2.8 km" data-origem="Graças" data-destino="Tamarineira" data-nome="R. Senador Alberto Paiva" data-peso="2.8" />
+<line class="aresta" x1="-887.8362413694879" y1="338.0041545763904" x2="849.9928633297254" y2="-424.278366510166" stroke="#cccccc" stroke-width="1.5" title="3.6 km" data-origem="Graças" data-destino="Torreão" data-nome="R. Engenho Megaípe" data-peso="3.6" />
+<line class="aresta" x1="-908.2339924576398" y1="278.58753551524114" x2="-643.4174930444542" y2="698.9377151394749" stroke="#cccccc" stroke-width="1.5" title="11.8 km" data-origem="Guabiraba" data-destino="Dois Irmãos" data-nome="Rod. Governardor Mário Covas" data-peso="11.8" />
+<line class="aresta" x1="-908.2339924576398" y1="278.58753551524114" x2="410.16663472156824" y2="856.8916686263111" stroke="#cccccc" stroke-width="1.5" title="9.1 km" data-origem="Guabiraba" data-destino="Brejo da Guabiraba" data-nome="PE-016" data-peso="9.1" />
+<line class="aresta" x1="-908.2339924576398" y1="278.58753551524114" x2="-263.5327633237524" y2="-912.7159923300057" stroke="#cccccc" stroke-width="1.5" title="10.9 km" data-origem="Guabiraba" data-destino="Passarinho" data-nome="Estr. da Muribeca" data-peso="10.9" />
+<line class="aresta" x1="-908.2339924576398" y1="278.58753551524114" x2="-202.63464920655937" y2="-928.1374892444193" stroke="#cccccc" stroke-width="1.5" title="17.3 km" data-origem="Guabiraba" data-destino="Pau-Ferro" data-nome="Rod. Conselheiro João Campos" data-peso="17.3" />
+<line class="aresta" x1="-908.2339924576398" y1="278.58753551524114" x2="709.4804031349464" y2="-631.7733435081556" stroke="#cccccc" stroke-width="1.5" title="13.8 km" data-origem="Guabiraba" data-destino="Sítio dos Pintos" data-nome="Estrada dos Pintos" data-peso="13.8" />
+<line class="aresta" x1="-924.6602673856056" y1="217.95272404441388" x2="820.0936569096951" y2="479.5272608481016" stroke="#cccccc" stroke-width="1.5" title="1.4 km" data-origem="Hipódromo" data-destino="Arruda" data-nome="R. Me. Rosa Gatorno" data-peso="1.4" />
+<line class="aresta" x1="-924.6602673856056" y1="217.95272404441388" x2="-323.2785157195603" y2="-893.3034206103534" stroke="#cccccc" stroke-width="1.5" title="3.8 km" data-origem="Hipódromo" data-destino="Parnamirim" data-nome="R. Gomes Coutinho" data-peso="3.8" />
+<line class="aresta" x1="-924.6602673856056" y1="217.95272404441388" x2="-140.85046532624958" y2="-939.500477071395" stroke="#cccccc" stroke-width="1.5" title="2.3 km" data-origem="Hipódromo" data-destino="Peixinhos" data-nome="R. Marquês de Baipendi" data-peso="2.3" />
+<line class="aresta" x1="-924.6602673856056" y1="217.95272404441388" x2="-15.707247528039911" y2="-949.8701397428456" stroke="#cccccc" stroke-width="1.5" title="1.0 km" data-origem="Hipódromo" data-destino="Ponto de Parada" data-nome="R. Mem de Sá" data-peso="1.0" />
+<line class="aresta" x1="-924.6602673856056" y1="217.95272404441388" x2="47.104566939561145" y2="-948.8314706908897" stroke="#cccccc" stroke-width="1.5" title="3.4 km" data-origem="Hipódromo" data-destino="Porto da Madeira" data-nome="R. do Machado" data-peso="3.4" />
+<line class="aresta" x1="-924.6602673856056" y1="217.95272404441388" x2="465.902328638983" y2="-827.9100314459132" stroke="#cccccc" stroke-width="1.5" title="4.9 km" data-origem="Hipódromo" data-destino="Santana" data-nome="R. Samuel de Farias" data-peso="4.9" />
+<line class="aresta" x1="-924.6602673856056" y1="217.95272404441388" x2="749.6834839265742" y2="-583.502077055184" stroke="#cccccc" stroke-width="1.5" title="1.9 km" data-origem="Hipódromo" data-destino="Tamarineira" data-nome="R. Fonseca Oliveira" data-peso="1.9" />
+<line class="aresta" x1="-937.0432382325863" y1="156.36486076669692" x2="849.9928633297253" y2="424.2783665101662" stroke="#cccccc" stroke-width="1.5" title="2.8 km" data-origem="Ibura" data-destino="Areias" data-nome="Av. Dom Hélder Câmara" data-peso="2.8" />
+<line class="aresta" x1="-937.0432382325863" y1="156.36486076669692" x2="-945.3287574177608" y2="-94.09325373793972" stroke="#cccccc" stroke-width="1.5" title="3.3 km" data-origem="Ibura" data-destino="Imbiribeira" data-nome="R. Pontegy" data-peso="3.3" />
+<line class="aresta" x1="-937.0432382325863" y1="156.36486076669692" x2="-937.0432382325862" y2="-156.36486076669752" stroke="#cccccc" stroke-width="1.5" title="1.6 km" data-origem="Ibura" data-destino="Ipsep" data-nome="R. Pintor Antônio de Albuquerque" data-peso="1.6" />
+<line class="aresta" x1="-937.0432382325863" y1="156.36486076669692" x2="-835.5000636461644" y2="-452.1500233852202" stroke="#cccccc" stroke-width="1.5" title="3.7 km" data-origem="Ibura" data-destino="Jordão" data-nome="R. Rio Xingu" data-peso="3.7" />
+<line class="aresta" x1="-937.0432382325863" y1="156.36486076669692" x2="410.1666347215684" y2="-856.891668626311" stroke="#cccccc" stroke-width="1.5" title="5.4 km" data-origem="Ibura" data-destino="Sancho" data-nome="R. Dracena" data-peso="5.4" />
+<line class="aresta" x1="-945.3287574177608" y1="94.09325373793952" x2="-949.4805944738797" y2="-31.410200851442774" stroke="#cccccc" stroke-width="1.5" title="2.7 km" data-origem="Ilha Joana Bezerra" data-destino="Ilha do Retiro" data-nome="Av. Sport Clube do Recife" data-peso="2.7" />
+<line class="aresta" x1="-945.3287574177608" y1="94.09325373793952" x2="-937.0432382325862" y2="-156.36486076669752" stroke="#cccccc" stroke-width="1.5" title="7.2 km" data-origem="Ilha Joana Bezerra" data-destino="Ipsep" data-nome="PE-008" data-peso="7.2" />
+<line class="aresta" x1="-945.3287574177608" y1="94.09325373793952" x2="-381.6106534203206" y2="-869.9846603223048" stroke="#cccccc" stroke-width="1.5" title="2.2 km" data-origem="Ilha Joana Bezerra" data-destino="Paissandu" data-nome="R. Dr. João Asfora" data-peso="2.2" />
+<line class="aresta" x1="-945.3287574177608" y1="94.09325373793952" x2="666.1749450588644" y2="-677.2820258768271" stroke="#cccccc" stroke-width="1.5" title="3.1 km" data-origem="Ilha Joana Bezerra" data-destino="São José" data-nome="Praça Frei Caneca" data-peso="3.1" />
+<line class="aresta" x1="-949.4805944738797" y1="31.410200851442582" x2="293.5661446561999" y2="903.503690480396" stroke="#cccccc" stroke-width="1.5" title="2.5 km" data-origem="Ilha do Leite" data-destino="Cabanga" data-nome="R. Cmte. Antônio Manhães de Matos" data-peso="2.5" />
+<line class="aresta" x1="-949.4805944738797" y1="31.410200851442582" x2="-945.3287574177608" y2="94.09325373793952" stroke="#cccccc" stroke-width="1.5" title="1.8 km" data-origem="Ilha do Leite" data-destino="Ilha Joana Bezerra" data-nome="R. Francisco Alves" data-peso="1.8" />
+<line class="aresta" x1="-949.4805944738797" y1="31.410200851442582" x2="-381.6106534203206" y2="-869.9846603223048" stroke="#cccccc" stroke-width="1.5" title="1.0 km" data-origem="Ilha do Leite" data-destino="Paissandu" data-nome="R. Gen. Joaquim Inácio" data-peso="1.0" />
+<line class="aresta" x1="-949.4805944738797" y1="31.410200851442582" x2="666.1749450588644" y2="-677.2820258768271" stroke="#cccccc" stroke-width="1.5" title="2.8 km" data-origem="Ilha do Leite" data-destino="São José" data-nome="Av. Sul Gov. Cid Sampaio" data-peso="2.8" />
+<line class="aresta" x1="-949.4805944738797" y1="-31.410200851442774" x2="519.6007502163054" y2="795.3081543494022" stroke="#cccccc" stroke-width="1.5" title="3.6 km" data-origem="Ilha do Retiro" data-destino="Bongi" data-nome="Estr. do Bongi" data-peso="3.6" />
+<line class="aresta" x1="-949.4805944738797" y1="-31.410200851442774" x2="-438.27410482975336" y2="842.8616784714312" stroke="#cccccc" stroke-width="1.5" title="5.4 km" data-origem="Ilha do Retiro" data-destino="Cordeiro" data-nome="R. Rodrigues de Mendonça" data-peso="5.4" />
+<line class="aresta" x1="-949.4805944738797" y1="-31.410200851442774" x2="-729.9810553140161" y2="-607.9701134781507" stroke="#cccccc" stroke-width="1.5" title="3.0 km" data-origem="Ilha do Retiro" data-destino="Madalena" data-nome="R. do Paissandú" data-peso="3.0" />
+<line class="aresta" x1="-949.4805944738797" y1="-31.410200851442774" x2="-381.6106534203206" y2="-869.9846603223048" stroke="#cccccc" stroke-width="1.5" title="2.7 km" data-origem="Ilha do Retiro" data-destino="Paissandu" data-nome="R. Benfica" data-peso="2.7" />
+<line class="aresta" x1="-949.4805944738797" y1="-31.410200851442774" x2="171.83650761550467" y2="-934.3298211287631" stroke="#cccccc" stroke-width="1.5" title="2.7 km" data-origem="Ilha do Retiro" data-destino="Prado" data-nome="R. Pandiá Calógeras" data-peso="2.7" />
+<line class="aresta" x1="-945.3287574177608" y1="-94.09325373793972" x2="-937.0432382325862" y2="-156.36486076669752" stroke="#cccccc" stroke-width="1.5" title="1.6 km" data-origem="Imbiribeira" data-destino="Ipsep" data-nome="R. Itacari" data-peso="1.6" />
+<line class="aresta" x1="-945.3287574177608" y1="-94.09325373793972" x2="-835.5000636461644" y2="-452.1500233852202" stroke="#cccccc" stroke-width="1.5" title="6.3 km" data-origem="Imbiribeira" data-destino="Jordão" data-nome="Av. Maria Irene" data-peso="6.3" />
+<line class="aresta" x1="-945.3287574177608" y1="-94.09325373793972" x2="-78.45037819871526" y2="-946.7552683563364" stroke="#cccccc" stroke-width="1.5" title="5.6 km" data-origem="Imbiribeira" data-destino="Pina" data-nome="R. Joaquim Bandeira" data-peso="5.6" />
+<line class="aresta" x1="-937.0432382325862" y1="-156.36486076669752" x2="849.9928633297253" y2="424.2783665101662" stroke="#cccccc" stroke-width="1.5" title="2.2 km" data-origem="Ipsep" data-destino="Areias" data-nome="R. Aldemar de Oliveira" data-peso="2.2" />
+<line class="aresta" x1="-924.6602673856056" y1="-217.95272404441408" x2="-202.63464920655957" y2="928.1374892444193" stroke="#cccccc" stroke-width="1.5" title="3.3 km" data-origem="Iputinga" data-destino="Cidade Universitária" data-nome="Estr. do Barbalho" data-peso="3.3" />
+<line class="aresta" x1="-924.6602673856056" y1="-217.95272404441408" x2="-768.5661446561999" y2="-558.3959896778497" stroke="#cccccc" stroke-width="1.5" title="4.7 km" data-origem="Iputinga" data-destino="Macaxeira" data-nome="R. do Palanque" data-peso="4.7" />
+<line class="aresta" x1="-924.6602673856056" y1="-217.95272404441408" x2="-438.2741048297532" y2="-842.8616784714313" stroke="#cccccc" stroke-width="1.5" title="6.3 km" data-origem="Iputinga" data-destino="Nova Descoberta" data-nome="Av. Maurício de Nassau" data-peso="6.3" />
+<line class="aresta" x1="-924.6602673856056" y1="-217.95272404441408" x2="820.0936569096953" y2="-479.5272608481015" stroke="#cccccc" stroke-width="1.5" title="4.2 km" data-origem="Iputinga" data-destino="Torre" data-nome="R. 10 de Novembro" data-peso="4.2" />
+<line class="aresta" x1="-924.6602673856056" y1="-217.95272404441408" x2="931.3609675810688" y2="-187.26117607890623" stroke="#cccccc" stroke-width="1.5" title="4.0 km" data-origem="Iputinga" data-destino="Várzea" data-nome="R. Acdo. Hélio Ramos" data-peso="4.0" />
+<line class="aresta" x1="-908.2339924576396" y1="-278.58753551524177" x2="-729.9810553140162" y2="607.9701134781506" stroke="#cccccc" stroke-width="1.5" title="1.8 km" data-origem="Jaqueira" data-destino="Encruzilhada" data-nome="R. Hoel Sette" data-peso="1.8" />
+<line class="aresta" x1="-908.2339924576396" y1="-278.58753551524177" x2="-803.7904897998887" y2="506.380142291594" stroke="#cccccc" stroke-width="1.5" title="1.9 km" data-origem="Jaqueira" data-destino="Espinheiro" data-nome="R. Ricardo Hardman" data-peso="1.9" />
+<line class="aresta" x1="-908.2339924576396" y1="-278.58753551524177" x2="-595.8175405498598" y2="-739.9334148240072" stroke="#cccccc" stroke-width="1.5" title="4.0 km" data-origem="Jaqueira" data-destino="Monteiro" data-nome="R. Simão Mendes" data-peso="4.0" />
+<line class="aresta" x1="-908.2339924576396" y1="-278.58753551524177" x2="-323.2785157195603" y2="-893.3034206103534" stroke="#cccccc" stroke-width="1.5" title="1.2 km" data-origem="Jaqueira" data-destino="Parnamirim" data-nome="R. do Futuro" data-peso="1.2" />
+<line class="aresta" x1="-908.2339924576396" y1="-278.58753551524177" x2="109.7104051211069" y2="-943.6438030359562" stroke="#cccccc" stroke-width="1.5" title="2.9 km" data-origem="Jaqueira" data-destino="Poço da Panela" data-nome="R. Muniz Tavares" data-peso="2.9" />
+<line class="aresta" x1="-908.2339924576396" y1="-278.58753551524177" x2="293.56614465620066" y2="-903.5036904803957" stroke="#cccccc" stroke-width="1.5" title="1.1 km" data-origem="Jaqueira" data-destino="Rosarinho" data-nome="R. Gen. Abreu e Lima" data-peso="1.1" />
+<line class="aresta" x1="-908.2339924576396" y1="-278.58753551524177" x2="749.6834839265742" y2="-583.502077055184" stroke="#cccccc" stroke-width="1.5" title="1.6 km" data-origem="Jaqueira" data-destino="Tamarineira" data-nome="R. Canápolis" data-peso="1.6" />
+<line class="aresta" x1="-887.8362413694878" y1="-338.00415457639065" x2="849.9928633297253" y2="424.2783665101662" stroke="#cccccc" stroke-width="1.5" title="3.0 km" data-origem="Jardim São Paulo" data-destino="Areias" data-nome="Av. São Paulo" data-peso="3.0" />
+<line class="aresta" x1="-887.8362413694878" y1="-338.00415457639065" x2="786.608389590619" y2="532.679304484089" stroke="#cccccc" stroke-width="1.5" title="4.3 km" data-origem="Jardim São Paulo" data-destino="Barro" data-nome="R. Leobina Pereira" data-peso="4.3" />
+<line class="aresta" x1="-887.8362413694878" y1="-338.00415457639065" x2="352.63738647230974" y2="-882.1263365652218" stroke="#cccccc" stroke-width="1.5" title="3.8 km" data-origem="Jardim São Paulo" data-destino="San Martin" data-nome="BR-101" data-peso="3.8" />
+<line class="aresta" x1="-887.8362413694878" y1="-338.00415457639065" x2="410.1666347215684" y2="-856.891668626311" stroke="#cccccc" stroke-width="1.5" title="3.1 km" data-origem="Jardim São Paulo" data-destino="Sancho" data-nome="R. Morena Flôr" data-peso="3.1" />
+<line class="aresta" x1="-887.8362413694878" y1="-338.00415457639065" x2="786.6083895906195" y2="-532.6793044840884" stroke="#cccccc" stroke-width="1.5" title="3.1 km" data-origem="Jardim São Paulo" data-destino="Tejipió" data-nome="R. Leandro Barreto " data-peso="3.1" />
+<line class="aresta" x1="-863.5562082967043" y1="-395.94276747052606" x2="947.9229458578358" y2="62.78605510941448" stroke="#cccccc" stroke-width="1.5" title="3.4 km" data-origem="Jiquiá" data-destino="Afogados" data-nome="R. Passo da Santa Cruz" data-peso="3.4" />
+<line class="aresta" x1="-863.5562082967043" y1="-395.94276747052606" x2="-140.85046532624997" y2="939.500477071395" stroke="#cccccc" stroke-width="1.5" title="2.6 km" data-origem="Jiquiá" data-destino="Caçote" data-nome="R. Cap. Gregório de Caldas" data-peso="2.6" />
+<line class="aresta" x1="-863.5562082967043" y1="-395.94276747052606" x2="-835.5000636461647" y2="452.15002338521964" stroke="#cccccc" stroke-width="1.5" title="1.7 km" data-origem="Jiquiá" data-destino="Estância" data-nome="R. Rocha Pombo" data-peso="1.7" />
+<line class="aresta" x1="-863.5562082967043" y1="-395.94276747052606" x2="-643.4174930444537" y2="-698.9377151394754" stroke="#cccccc" stroke-width="1.5" title="2.0 km" data-origem="Jiquiá" data-destino="Mangueira" data-nome="R. Marquês de Sapucaiá" data-peso="2.0" />
+<line class="aresta" x1="-863.5562082967043" y1="-395.94276747052606" x2="-493.0210950921544" y2="-812.0530769562621" stroke="#cccccc" stroke-width="1.5" title="3.0 km" data-origem="Jiquiá" data-destino="Mustardinha" data-nome="R. São Miguel" data-peso="3.0" />
+<line class="aresta" x1="-863.5562082967043" y1="-395.94276747052606" x2="410.1666347215684" y2="-856.891668626311" stroke="#cccccc" stroke-width="1.5" title="5.1 km" data-origem="Jiquiá" data-destino="Sancho" data-nome="R. João Teixeira" data-peso="5.1" />
+<line class="aresta" x1="-803.7904897998886" y1="-506.38014229159415" x2="820.0936569096951" y2="479.5272608481016" stroke="#cccccc" stroke-width="1.5" title="3.5 km" data-origem="Linha do Tiro" data-destino="Arruda" data-nome="R. Sodrelândia" data-peso="3.5" />
+<line class="aresta" x1="-803.7904897998886" y1="-506.38014229159415" x2="571.0270899188738" y2="759.2285970501786" stroke="#cccccc" stroke-width="1.5" title="2.4 km" data-origem="Linha do Tiro" data-destino="Bomba do Hemetério" data-nome="R. Prof. José Amarino dos Réis" data-peso="2.4" />
+<line class="aresta" x1="-803.7904897998886" y1="-506.38014229159415" x2="-545.6122295487966" y2="-777.6935739523577" stroke="#cccccc" stroke-width="1.5" title="3.9 km" data-origem="Linha do Tiro" data-destino="Morro da Conceição" data-nome="R. Itacoatira" data-peso="3.9" />
+<line class="aresta" x1="-803.7904897998886" y1="-506.38014229159415" x2="47.104566939561145" y2="-948.8314706908897" stroke="#cccccc" stroke-width="1.5" title="2.5 km" data-origem="Linha do Tiro" data-destino="Porto da Madeira" data-nome="R. Santa Mercedes" data-peso="2.5" />
+<line class="aresta" x1="-768.5661446561999" y1="-558.3959896778497" x2="876.1752672285155" y2="367.17421082782965" stroke="#cccccc" stroke-width="1.5" title="1.7 km" data-origem="Macaxeira" data-destino="Apipucos" data-nome="R. Cel. João Batista do Rêgo Barros" data-peso="1.7" />
+<line class="aresta" x1="-768.5661446561999" y1="-558.3959896778497" x2="410.16663472156824" y2="856.8916686263111" stroke="#cccccc" stroke-width="1.5" title="3.4 km" data-origem="Macaxeira" data-destino="Brejo da Guabiraba" data-nome="R. Dionísio Cerqueira" data-peso="3.4" />
+<line class="aresta" x1="-768.5661446561999" y1="-558.3959896778497" x2="47.10456693956117" y2="948.8314706908897" stroke="#cccccc" stroke-width="1.5" title="2.7 km" data-origem="Macaxeira" data-destino="Casa Amarela" data-nome="R. Maria Cândida" data-peso="2.7" />
+<line class="aresta" x1="-768.5661446561999" y1="-558.3959896778497" x2="-438.2741048297532" y2="-842.8616784714313" stroke="#cccccc" stroke-width="1.5" title="1.5 km" data-origem="Macaxeira" data-destino="Nova Descoberta" data-nome="R. Maria Amália" data-peso="1.5" />
+<line class="aresta" x1="-729.9810553140161" y1="-607.9701134781507" x2="171.83650761550467" y2="-934.3298211287631" stroke="#cccccc" stroke-width="1.5" title="1.3 km" data-origem="Madalena" data-destino="Prado" data-nome="R. Real da Torre" data-peso="1.3" />
+<line class="aresta" x1="-729.9810553140161" y1="-607.9701134781507" x2="820.0936569096953" y2="-479.5272608481015" stroke="#cccccc" stroke-width="1.5" title="2.0 km" data-origem="Madalena" data-destino="Torre" data-nome="R. Ernâni Braga" data-peso="2.0" />
+<line class="aresta" x1="-729.9810553140161" y1="-607.9701134781507" x2="849.9928633297254" y2="-424.278366510166" stroke="#cccccc" stroke-width="1.5" title="5.3 km" data-origem="Madalena" data-destino="Torreão" data-nome="Av. Gov. Agamenon Magalhães" data-peso="5.3" />
+<line class="aresta" x1="-729.9810553140161" y1="-607.9701134781507" x2="941.7008658606265" y2="-125.2975627749652" stroke="#cccccc" stroke-width="1.5" title="2.0 km" data-origem="Madalena" data-destino="Zumbi" data-nome="R. José Osório" data-peso="2.0" />
+<line class="aresta" x1="-688.2039445515343" y1="-654.8857386626377" x2="-545.6122295487966" y2="-777.6935739523577" stroke="#cccccc" stroke-width="1.5" title="3.1 km" data-origem="Mangabeira" data-destino="Morro da Conceição" data-nome="R. Dom Maurício" data-peso="3.1" />
+<line class="aresta" x1="-688.2039445515343" y1="-654.8857386626377" x2="-438.2741048297532" y2="-842.8616784714313" stroke="#cccccc" stroke-width="1.5" title="5.2 km" data-origem="Mangabeira" data-destino="Nova Descoberta" data-nome="R. Lage de Úna" data-peso="5.2" />
+<line class="aresta" x1="-688.2039445515343" y1="-654.8857386626377" x2="916.9484647634814" y2="-248.40594390612804" stroke="#cccccc" stroke-width="1.5" title="2.9 km" data-origem="Mangabeira" data-destino="Vasco da Gama" data-nome="R. Severino Bernardino Pereira" data-peso="2.9" />
+<line class="aresta" x1="-643.4174930444537" y1="-698.9377151394754" x2="947.9229458578358" y2="62.78605510941448" stroke="#cccccc" stroke-width="1.5" title="1.7 km" data-origem="Mangueira" data-destino="Afogados" data-nome="R. Aurino Eutíquio da Rocha" data-peso="1.7" />
+<line class="aresta" x1="-643.4174930444537" y1="-698.9377151394754" x2="519.6007502163054" y2="795.3081543494022" stroke="#cccccc" stroke-width="1.5" title="1.7 km" data-origem="Mangueira" data-destino="Bongi" data-nome="R. Mandari" data-peso="1.7" />
+<line class="aresta" x1="-643.4174930444537" y1="-698.9377151394754" x2="-493.0210950921544" y2="-812.0530769562621" stroke="#cccccc" stroke-width="1.5" title="1.1 km" data-origem="Mangueira" data-destino="Mustardinha" data-nome="R. Dr. João Elísio" data-peso="1.1" />
+<line class="aresta" x1="-643.4174930444537" y1="-698.9377151394754" x2="352.63738647230974" y2="-882.1263365652218" stroke="#cccccc" stroke-width="1.5" title="1.2 km" data-origem="Mangueira" data-destino="San Martin" data-nome="R. Benício Dias" data-peso="1.2" />
+<line class="aresta" x1="-595.8175405498598" y1="-739.9334148240072" x2="-15.707247528040526" y2="949.8701397428456" stroke="#cccccc" stroke-width="1.5" title="2.1 km" data-origem="Monteiro" data-destino="Casa Forte" data-nome="Igreja Matriz de Casa Forte" data-peso="2.1" />
+<line class="aresta" x1="-595.8175405498598" y1="-739.9334148240072" x2="109.7104051211069" y2="-943.6438030359562" stroke="#cccccc" stroke-width="1.5" title="1.6 km" data-origem="Monteiro" data-destino="Poço da Panela" data-nome="R. Luiz Guimarães" data-peso="1.6" />
+<line class="aresta" x1="-595.8175405498598" y1="-739.9334148240072" x2="709.4804031349464" y2="-631.7733435081556" stroke="#cccccc" stroke-width="1.5" title="4.4 km" data-origem="Monteiro" data-destino="Sítio dos Pintos" data-nome="R. das Levadas" data-peso="4.4" />
+<line class="aresta" x1="-595.8175405498598" y1="-739.9334148240072" x2="749.6834839265742" y2="-583.502077055184" stroke="#cccccc" stroke-width="1.5" title="4.5 km" data-origem="Monteiro" data-destino="Tamarineira" data-nome="R. Tito Rosas" data-peso="4.5" />
+<line class="aresta" x1="-595.8175405498598" y1="-739.9334148240072" x2="941.7008658606265" y2="-125.2975627749652" stroke="#cccccc" stroke-width="1.5" title="4.5 km" data-origem="Monteiro" data-destino="Zumbi" data-nome="R. Ilha do Temporal" data-peso="4.5" />
+<line class="aresta" x1="-545.6122295487966" y1="-777.6935739523577" x2="47.10456693956117" y2="948.8314706908897" stroke="#cccccc" stroke-width="1.5" title="1.4 km" data-origem="Morro da Conceição" data-destino="Casa Amarela" data-nome="Estr. do Morro da Conceição" data-peso="1.4" />
+<line class="aresta" x1="-545.6122295487966" y1="-777.6935739523577" x2="-438.2741048297532" y2="-842.8616784714313" stroke="#cccccc" stroke-width="1.5" title="5.0 km" data-origem="Morro da Conceição" data-destino="Nova Descoberta" data-nome="R. Ipanema" data-peso="5.0" />
+<line class="aresta" x1="-545.6122295487966" y1="-777.6935739523577" x2="749.6834839265742" y2="-583.502077055184" stroke="#cccccc" stroke-width="1.5" title="2.5 km" data-origem="Morro da Conceição" data-destino="Tamarineira" data-nome="Estr. Velha de Água Fria" data-peso="2.5" />
+<line class="aresta" x1="-545.6122295487966" y1="-777.6935739523577" x2="916.9484647634814" y2="-248.40594390612804" stroke="#cccccc" stroke-width="1.5" title="2.0 km" data-origem="Morro da Conceição" data-destino="Vasco da Gama" data-nome="R. Dois de Fevereiro" data-peso="2.0" />
+<line class="aresta" x1="-438.2741048297532" y1="-842.8616784714313" x2="410.16663472156824" y2="856.8916686263111" stroke="#cccccc" stroke-width="1.5" title="2.8 km" data-origem="Nova Descoberta" data-destino="Brejo da Guabiraba" data-nome="R. Alto da Brasileira" data-peso="2.8" />
+<line class="aresta" x1="-438.2741048297532" y1="-842.8616784714313" x2="47.10456693956117" y2="948.8314706908897" stroke="#cccccc" stroke-width="1.5" title="3.8 km" data-origem="Nova Descoberta" data-destino="Casa Amarela" data-nome="R. Padre Lemos" data-peso="3.8" />
+<line class="aresta" x1="-438.2741048297532" y1="-842.8616784714313" x2="-688.2039445515345" y2="654.8857386626377" stroke="#cccccc" stroke-width="1.5" title="2.1 km" data-origem="Nova Descoberta" data-destino="Dois Unidos" data-nome="Subida Alto do Cap." data-peso="2.1" />
+<line class="aresta" x1="-438.2741048297532" y1="-842.8616784714313" x2="-263.5327633237524" y2="-912.7159923300057" stroke="#cccccc" stroke-width="1.5" title="7.6 km" data-origem="Nova Descoberta" data-destino="Passarinho" data-nome="Estr. do Passarinho" data-peso="7.6" />
+<line class="aresta" x1="-438.2741048297532" y1="-842.8616784714313" x2="916.9484647634814" y2="-248.40594390612804" stroke="#cccccc" stroke-width="1.5" title="2.3 km" data-origem="Nova Descoberta" data-destino="Vasco da Gama" data-nome="R. Vasco da Gama" data-peso="2.3" />
+<line class="aresta" x1="-381.6106534203206" y1="-869.9846603223048" x2="571.0270899188744" y2="-759.2285970501781" stroke="#cccccc" stroke-width="1.5" title="2.9 km" data-origem="Paissandu" data-destino="Santo Antônio" data-nome="R. Dr. José Mariano" data-peso="2.9" />
+<line class="aresta" x1="-381.6106534203206" y1="-869.9846603223048" x2="519.600750216306" y2="-795.3081543494019" stroke="#cccccc" stroke-width="1.5" title="5.4 km" data-origem="Paissandu" data-destino="Santo Amaro" data-nome="R. da Aurora" data-peso="5.4" />
+<line class="aresta" x1="-323.2785157195603" y1="-893.3034206103534" x2="47.10456693956117" y2="948.8314706908897" stroke="#cccccc" stroke-width="1.5" title="1.8 km" data-origem="Parnamirim" data-destino="Casa Amarela" data-nome="R. Estrela" data-peso="1.8" />
+<line class="aresta" x1="-323.2785157195603" y1="-893.3034206103534" x2="-595.8175405498598" y2="-739.9334148240072" stroke="#cccccc" stroke-width="1.5" title="3.5 km" data-origem="Parnamirim" data-destino="Monteiro" data-nome="R. Ferreira Lopes" data-peso="3.5" />
+<line class="aresta" x1="-323.2785157195603" y1="-893.3034206103534" x2="109.7104051211069" y2="-943.6438030359562" stroke="#cccccc" stroke-width="1.5" title="2.6 km" data-origem="Parnamirim" data-destino="Poço da Panela" data-nome="R. João Tude de Melo" data-peso="2.6" />
+<line class="aresta" x1="-323.2785157195603" y1="-893.3034206103534" x2="465.902328638983" y2="-827.9100314459132" stroke="#cccccc" stroke-width="1.5" title="1.7 km" data-origem="Parnamirim" data-destino="Santana" data-nome="R. Leonardo Bezerra Cavalcante" data-peso="1.7" />
+<line class="aresta" x1="-323.2785157195603" y1="-893.3034206103534" x2="749.6834839265742" y2="-583.502077055184" stroke="#cccccc" stroke-width="1.5" title="1.9 km" data-origem="Parnamirim" data-destino="Tamarineira" data-nome="R. Cônego Barata" data-peso="1.9" />
+<line class="aresta" x1="-202.63464920655937" y1="-928.1374892444193" x2="-768.5661446561999" y2="-558.3959896778497" stroke="#cccccc" stroke-width="1.5" title="11.0 km" data-origem="Pau-Ferro" data-destino="Macaxeira" data-nome="Estr. dos Macacos" data-peso="11.0" />
+<line class="aresta" x1="-202.63464920655937" y1="-928.1374892444193" x2="709.4804031349464" y2="-631.7733435081556" stroke="#cccccc" stroke-width="1.5" title="8.6 km" data-origem="Pau-Ferro" data-destino="Sítio dos Pintos" data-nome="Av. Tiradentes" data-peso="8.6" />
+<line class="aresta" x1="-202.63464920655937" y1="-928.1374892444193" x2="931.3609675810688" y2="-187.26117607890623" stroke="#cccccc" stroke-width="1.5" title="11.7 km" data-origem="Pau-Ferro" data-destino="Várzea" data-nome="Estr. de Aldeia" data-peso="11.7" />
+<line class="aresta" x1="-140.85046532624958" y1="-939.500477071395" x2="109.71040512110672" y2="943.6438030359562" stroke="#cccccc" stroke-width="1.5" title="2.8 km" data-origem="Peixinhos" data-destino="Campo Grande" data-nome="Av. Antônio da Costa Azevedo" data-peso="2.8" />
+<line class="aresta" x1="-140.85046532624958" y1="-939.500477071395" x2="47.104566939561145" y2="-948.8314706908897" stroke="#cccccc" stroke-width="1.5" title="2.8 km" data-origem="Peixinhos" data-destino="Porto da Madeira" data-nome="Av. Presidente Kennedy" data-peso="2.8" />
+<line class="aresta" x1="-15.707247528039911" y1="-949.8701397428456" x2="820.0936569096951" y2="479.5272608481016" stroke="#cccccc" stroke-width="1.5" title="0.55 km" data-origem="Ponto de Parada" data-destino="Arruda" data-nome="Av. Beberibe " data-peso="0.55" />
+<line class="aresta" x1="-15.707247528039911" y1="-949.8701397428456" x2="749.6834839265739" y2="583.5020770551844" stroke="#cccccc" stroke-width="1.5" title="3.6 km" data-origem="Ponto de Parada" data-destino="Beberibe" data-nome="R. da Regeneração" data-peso="3.6" />
+<line class="aresta" x1="-15.707247528039911" y1="-949.8701397428456" x2="-140.85046532624958" y2="-939.500477071395" stroke="#cccccc" stroke-width="1.5" title="2.4 km" data-origem="Ponto de Parada" data-destino="Peixinhos" data-nome="R. Passarela" data-peso="2.4" />
+<line class="aresta" x1="-15.707247528039911" y1="-949.8701397428456" x2="293.56614465620066" y2="-903.5036904803957" stroke="#cccccc" stroke-width="1.5" title="1.2 km" data-origem="Ponto de Parada" data-destino="Rosarinho" data-nome="R. Couto Magalhães" data-peso="1.2" />
+<line class="aresta" x1="-15.707247528039911" y1="-949.8701397428456" x2="749.6834839265742" y2="-583.502077055184" stroke="#cccccc" stroke-width="1.5" title="1.2 km" data-origem="Ponto de Parada" data-destino="Tamarineira" data-nome="R. Treze de Junho" data-peso="1.2" />
+<line class="aresta" x1="171.83650761550467" y1="-934.3298211287631" x2="820.0936569096953" y2="-479.5272608481015" stroke="#cccccc" stroke-width="1.5" title="4.3 km" data-origem="Prado" data-destino="Torre" data-nome="R. Xavier Sobrinho" data-peso="4.3" />
+<line class="aresta" x1="171.83650761550467" y1="-934.3298211287631" x2="876.1752672285156" y2="-367.17421082782926" stroke="#cccccc" stroke-width="1.5" title="3.3 km" data-origem="Prado" data-destino="Torrões" data-nome="BR-232" data-peso="3.3" />
+<line class="aresta" x1="171.83650761550467" y1="-934.3298211287631" x2="941.7008658606265" y2="-125.2975627749652" stroke="#cccccc" stroke-width="1.5" title="1.9 km" data-origem="Prado" data-destino="Zumbi" data-nome="R. Fidélis Moliterno" data-peso="1.9" />
+<line class="aresta" x1="233.21121278375966" y1="-920.9302526423637" x2="293.5661446561999" y2="903.503690480396" stroke="#cccccc" stroke-width="1.5" title="5.1 km" data-origem="Recife" data-destino="Cabanga" data-nome="PE-009" data-peso="5.1" />
+<line class="aresta" x1="233.21121278375966" y1="-920.9302526423637" x2="519.600750216306" y2="-795.3081543494019" stroke="#cccccc" stroke-width="1.5" title="1.1 km" data-origem="Recife" data-destino="Santo Amaro" data-nome="PE-001" data-peso="1.1" />
+<line class="aresta" x1="233.21121278375966" y1="-920.9302526423637" x2="571.0270899188744" y2="-759.2285970501781" stroke="#cccccc" stroke-width="1.5" title="1.2 km" data-origem="Recife" data-destino="Santo Antônio" data-nome="R. Princesa Isabel" data-peso="1.2" />
+<line class="aresta" x1="233.21121278375966" y1="-920.9302526423637" x2="666.1749450588644" y2="-677.2820258768271" stroke="#cccccc" stroke-width="1.5" title="3.5 km" data-origem="Recife" data-destino="São José" data-nome="Via Cais do Apolo" data-peso="3.5" />
+<line class="aresta" x1="293.56614465620066" y1="-903.5036904803957" x2="950.0" y2="0.0" stroke="#cccccc" stroke-width="1.5" title="1.6 km" data-origem="Rosarinho" data-destino="Aflitos" data-nome="R. Manuel de Carvalho" data-peso="1.6" />
+<line class="aresta" x1="293.56614465620066" y1="-903.5036904803957" x2="749.6834839265742" y2="-583.502077055184" stroke="#cccccc" stroke-width="1.5" title="1.2 km" data-origem="Rosarinho" data-destino="Tamarineira" data-nome="R. Regueira Costa" data-peso="1.2" />
+<line class="aresta" x1="352.63738647230974" y1="-882.1263365652218" x2="-493.0210950921544" y2="-812.0530769562621" stroke="#cccccc" stroke-width="1.5" title="1.7 km" data-origem="San Martin" data-destino="Mustardinha" data-nome="R. Neto Campêlo Júnior" data-peso="1.7" />
+<line class="aresta" x1="352.63738647230974" y1="-882.1263365652218" x2="876.1752672285156" y2="-367.17421082782926" stroke="#cccccc" stroke-width="1.5" title="2.3 km" data-origem="San Martin" data-destino="Torrões" data-nome="R. Edvaldo Maranhão Ferreira" data-peso="2.3" />
+<line class="aresta" x1="519.600750216306" y1="-795.3081543494019" x2="-263.5327633237524" y2="912.7159923300057" stroke="#cccccc" stroke-width="1.5" title="2.9 km" data-origem="Santo Amaro" data-destino="Coelhos" data-nome="R. São Gonçalo" data-peso="2.9" />
+<line class="aresta" x1="519.600750216306" y1="-795.3081543494019" x2="-803.7904897998887" y2="506.380142291594" stroke="#cccccc" stroke-width="1.5" title="2.4 km" data-origem="Santo Amaro" data-destino="Espinheiro" data-nome="R. Tupinambás" data-peso="2.4" />
+<line class="aresta" x1="519.600750216306" y1="-795.3081543494019" x2="571.0270899188744" y2="-759.2285970501781" stroke="#cccccc" stroke-width="1.5" title="2.6 km" data-origem="Santo Amaro" data-destino="Santo Antônio" data-nome="R. do Sol" data-peso="2.6" />
+<line class="aresta" x1="519.600750216306" y1="-795.3081543494019" x2="619.9564734479602" y2="-719.8291262723179" stroke="#cccccc" stroke-width="1.5" title="2.4 km" data-origem="Santo Amaro" data-destino="Soledade" data-nome="Av. Cruz Cabugá" data-peso="2.4" />
+<line class="aresta" x1="571.0270899188744" y1="-759.2285970501781" x2="293.5661446561999" y2="903.503690480396" stroke="#cccccc" stroke-width="1.5" title="3.6 km" data-origem="Santo Antônio" data-destino="Cabanga" data-nome="R. Imperial" data-peso="3.6" />
+<line class="aresta" x1="571.0270899188744" y1="-759.2285970501781" x2="666.1749450588644" y2="-677.2820258768271" stroke="#cccccc" stroke-width="1.5" title="1.2 km" data-origem="Santo Antônio" data-destino="São José" data-nome="R. Floriano Peixoto" data-peso="1.2" />
+<line class="aresta" x1="465.902328638983" y1="-827.9100314459132" x2="-595.8175405498598" y2="-739.9334148240072" stroke="#cccccc" stroke-width="1.5" title="2.5 km" data-origem="Santana" data-destino="Monteiro" data-nome="R. Dom Malam" data-peso="2.5" />
+<line class="aresta" x1="465.902328638983" y1="-827.9100314459132" x2="109.7104051211069" y2="-943.6438030359562" stroke="#cccccc" stroke-width="1.5" title="1.4 km" data-origem="Santana" data-destino="Poço da Panela" data-nome="R. Álvaro Macedo" data-peso="1.4" />
+<line class="aresta" x1="465.902328638983" y1="-827.9100314459132" x2="749.6834839265742" y2="-583.502077055184" stroke="#cccccc" stroke-width="1.5" title="3.1 km" data-origem="Santana" data-destino="Tamarineira" data-nome="Av. Dezessete de Agosto" data-peso="3.1" />
+<line class="aresta" x1="465.902328638983" y1="-827.9100314459132" x2="941.7008658606265" y2="-125.2975627749652" stroke="#cccccc" stroke-width="1.5" title="4.6 km" data-origem="Santana" data-destino="Zumbi" data-nome="R. José Bonifácio" data-peso="4.6" />
+<line class="aresta" x1="666.1749450588644" y1="-677.2820258768271" x2="571.0270899188744" y2="-759.2285970501781" stroke="#cccccc" stroke-width="1.5" title="2.2 km" data-origem="São José" data-destino="Santo Antônio" data-nome="R. da Concórdia" data-peso="2.2" />
+<line class="aresta" x1="786.6083895906195" y1="-532.6793044840884" x2="898.5263796156031" y2="-308.46449574444875" stroke="#cccccc" stroke-width="1.5" title="1.6 km" data-origem="Tejipió" data-destino="Totó" data-nome="R. Paulino de Freitas" data-peso="1.6" />
+<line class="aresta" x1="820.0936569096953" y1="-479.5272608481015" x2="941.7008658606265" y2="-125.2975627749652" stroke="#cccccc" stroke-width="1.5" title="2.2 km" data-origem="Torre" data-destino="Zumbi" data-nome="R. Marquês de Maricá" data-peso="2.2" />
+<line class="aresta" x1="876.1752672285156" y1="-367.17421082782926" x2="931.3609675810688" y2="-187.26117607890623" stroke="#cccccc" stroke-width="1.5" title="4.1 km" data-origem="Torrões" data-destino="Várzea" data-nome="R. Manuel Alves Deus Dara" data-peso="4.1" />
+<line class="aresta" x1="666.1749450588643" y1="677.2820258768272" x2="-937.0432382325863" y2="156.36486076669692" stroke="#cccccc" stroke-width="1.5" title="8.1 km" data-origem="Boa Viagem(Setúbal)" data-destino="Ibura" data-nome="R. São Nicolau" data-peso="8.1" />
+<line class="aresta" x1="666.1749450588643" y1="677.2820258768272" x2="-945.3287574177608" y2="-94.09325373793972" stroke="#cccccc" stroke-width="1.5" title="5.8 km" data-origem="Boa Viagem(Setúbal)" data-destino="Imbiribeira" data-nome="R. Ribeiro de Brito" data-peso="5.8" />
+<line class="aresta" x1="666.1749450588643" y1="677.2820258768272" x2="-937.0432382325862" y2="-156.36486076669752" stroke="#cccccc" stroke-width="1.5" title="7.6 km" data-origem="Boa Viagem(Setúbal)" data-destino="Ipsep" data-nome="R. Dr Tavares Correia" data-peso="7.6" />
+<line class="aresta" x1="666.1749450588643" y1="677.2820258768272" x2="709.4804031349462" y2="631.7733435081558" stroke="#cccccc" stroke-width="1.5" title="2.4 km" data-origem="Boa Viagem(Setúbal)" data-destino="Boa Viagem" data-nome="Av. Visconde de Jequitinhonha" data-peso="2.4" />
+<circle class="vertice" cx="950.0" cy="0.0" r="30" fill="#2ECC71" fill-opacity="0.4102040816326531" data-nome="Aflitos" data-microrregiao="3" data-densidade="0.810" data-grau="6" />
+<text x="950.0" y="0.0" font-size="8" text-anchor="middle" dominant-baseline="middle">Aflitos</text>
+<circle class="vertice" cx="947.9229458578358" cy="62.78605510941448" r="30" fill="#9B59B6" fill-opacity="0.8286280991735537" data-nome="Afogados" data-microrregiao="5" data-densidade="0.436" data-grau="10" />
+<text x="947.9229458578358" y="62.78605510941448" font-size="8" text-anchor="middle" dominant-baseline="middle">Afogados</text>
+<circle class="vertice" cx="941.7008658606264" cy="125.29756277496546" r="30" fill="#2ECC71" fill-opacity="0.7061224489795919" data-nome="Alto José Bonifácio" data-microrregiao="3" data-densidade="0.571" data-grau="7" />
+<text x="941.7008658606264" y="125.29756277496546" font-size="8" text-anchor="middle" dominant-baseline="middle">Alto José Bonifácio</text>
+<circle class="vertice" cx="931.3609675810688" cy="187.26117607890632" r="30" fill="#2ECC71" fill-opacity="0.744" data-nome="Alto José do Pinho" data-microrregiao="3" data-densidade="0.533" data-grau="5" />
+<text x="931.3609675810688" y="187.26117607890632" font-size="8" text-anchor="middle" dominant-baseline="middle">Alto José do Pinho</text>
+<circle class="vertice" cx="916.9484647634813" cy="248.40594390612878" r="30" fill="#3498DB" fill-opacity="0.3749999999999999" data-nome="Alto Santa Teresinha" data-microrregiao="2" data-densidade="0.833" data-grau="3" />
+<text x="916.9484647634813" y="248.40594390612878" font-size="8" text-anchor="middle" dominant-baseline="middle">Alto Santa Teresinha</text>
+<circle class="vertice" cx="898.5263796156029" cy="308.4644957444493" r="30" fill="#2ECC71" fill-opacity="0.6551020408163265" data-nome="Alto do Mandu" data-microrregiao="3" data-densidade="0.619" data-grau="6" />
+<text x="898.5263796156029" y="308.4644957444493" font-size="8" text-anchor="middle" dominant-baseline="middle">Alto do Mandu</text>
+<circle class="vertice" cx="876.1752672285155" cy="367.17421082782965" r="30" fill="#2ECC71" fill-opacity="0.7061224489795919" data-nome="Apipucos" data-microrregiao="3" data-densidade="0.571" data-grau="6" />
+<text x="876.1752672285155" y="367.17421082782965" font-size="8" text-anchor="middle" dominant-baseline="middle">Apipucos</text>
+<circle class="vertice" cx="849.9928633297253" cy="424.2783665101662" r="30" fill="#9B59B6" fill-opacity="0.744" data-nome="Areias" data-microrregiao="5" data-densidade="0.533" data-grau="9" />
+<text x="849.9928633297253" y="424.2783665101662" font-size="8" text-anchor="middle" dominant-baseline="middle">Areias</text>
+<circle class="vertice" cx="820.0936569096951" cy="479.5272608481016" r="30" fill="#3498DB" fill-opacity="0.6937499999999999" data-nome="Arruda" data-microrregiao="2" data-densidade="0.583" data-grau="8" />
+<text x="820.0936569096951" y="479.5272608481016" font-size="8" text-anchor="middle" dominant-baseline="middle">Arruda</text>
+<circle class="vertice" cx="786.608389590619" cy="532.679304484089" r="30" fill="#9B59B6" fill-opacity="0.49375" data-nome="Barro" data-microrregiao="5" data-densidade="0.750" data-grau="7" />
+<text x="786.608389590619" y="532.679304484089" font-size="8" text-anchor="middle" dominant-baseline="middle">Barro</text>
+<circle class="vertice" cx="749.6834839265739" cy="583.5020770551844" r="30" fill="#3498DB" fill-opacity="0.7530612244897958" data-nome="Beberibe" data-microrregiao="2" data-densidade="0.524" data-grau="6" />
+<text x="749.6834839265739" y="583.5020770551844" font-size="8" text-anchor="middle" dominant-baseline="middle">Beberibe</text>
+<circle class="vertice" cx="709.4804031349462" cy="631.7733435081558" r="30" fill="#E67E22" fill-opacity="0.4239999999999998" data-nome="Boa Viagem" data-microrregiao="6" data-densidade="0.800" data-grau="5" />
+<text x="709.4804031349462" y="631.7733435081558" font-size="8" text-anchor="middle" dominant-baseline="middle">Boa Viagem</text>
+<circle class="vertice" cx="666.1749450588643" cy="677.2820258768272" r="30" fill="#E67E22" fill-opacity="0.1" data-nome="Boa Viagem(Setúbal)" data-microrregiao="6" data-densidade="1.000" data-grau="4" />
+<text x="666.1749450588643" y="677.2820258768272" font-size="8" text-anchor="middle" dominant-baseline="middle">Boa Viagem(Setúbal)</text>
+<circle class="vertice" cx="619.9564734479602" cy="719.829126272318" r="30" fill="#E74C3C" fill-opacity="0.6995555555555556" data-nome="Boa Vista" data-microrregiao="1" data-densidade="0.578" data-grau="9" />
+<text x="619.9564734479602" y="719.829126272318" font-size="8" text-anchor="middle" dominant-baseline="middle">Boa Vista</text>
+<circle class="vertice" cx="571.0270899188738" cy="759.2285970501786" r="30" fill="#3498DB" fill-opacity="0.7061224489795919" data-nome="Bomba do Hemetério" data-microrregiao="2" data-densidade="0.571" data-grau="7" />
+<text x="571.0270899188738" y="759.2285970501786" font-size="8" text-anchor="middle" dominant-baseline="middle">Bomba do Hemetério</text>
+<circle class="vertice" cx="519.6007502163054" cy="795.3081543494022" r="30" fill="#9B59B6" fill-opacity="0.7497851239669422" data-nome="Bongi" data-microrregiao="5" data-densidade="0.527" data-grau="10" />
+<text x="519.6007502163054" y="795.3081543494022" font-size="8" text-anchor="middle" dominant-baseline="middle">Bongi</text>
+<circle class="vertice" cx="465.9023286389827" cy="827.9100314459134" r="30" fill="#E67E22" fill-opacity="0.3749999999999999" data-nome="Brasília Teimosa" data-microrregiao="6" data-densidade="0.833" data-grau="3" />
+<text x="465.9023286389827" y="827.9100314459134" font-size="8" text-anchor="middle" dominant-baseline="middle">Brasília Teimosa</text>
+<circle class="vertice" cx="410.16663472156824" cy="856.8916686263111" r="30" fill="#2ECC71" fill-opacity="0.7959183673469388" data-nome="Brejo da Guabiraba" data-microrregiao="3" data-densidade="0.476" data-grau="6" />
+<text x="410.16663472156824" y="856.8916686263111" font-size="8" text-anchor="middle" dominant-baseline="middle">Brejo da Guabiraba</text>
+<circle class="vertice" cx="352.63738647230974" cy="882.1263365652218" r="30" fill="#2ECC71" fill-opacity="0.804" data-nome="Brejo de Beberibe" data-microrregiao="3" data-densidade="0.467" data-grau="9" />
+<text x="352.63738647230974" y="882.1263365652218" font-size="8" text-anchor="middle" dominant-baseline="middle">Brejo de Beberibe</text>
+<circle class="vertice" cx="293.5661446561999" cy="903.503690480396" r="30" fill="#E74C3C" fill-opacity="0.775" data-nome="Cabanga" data-microrregiao="1" data-densidade="0.500" data-grau="8" />
+<text x="293.5661446561999" y="903.503690480396" font-size="8" text-anchor="middle" dominant-baseline="middle">Cabanga</text>
+<circle class="vertice" cx="233.21121278375907" cy="920.9302526423639" r="30" fill="#3498DB" fill-opacity="0.804" data-nome="Cajueiro" data-microrregiao="2" data-densidade="0.467" data-grau="5" />
+<text x="233.21121278375907" y="920.9302526423639" font-size="8" text-anchor="middle" dominant-baseline="middle">Cajueiro</text>
+<circle class="vertice" cx="171.83650761550427" cy="934.3298211287632" r="30" fill="#3498DB" fill-opacity="0.6000000000000001" data-nome="Campina do Barreto" data-microrregiao="2" data-densidade="0.667" data-grau="5" />
+<text x="171.83650761550427" y="934.3298211287632" font-size="8" text-anchor="middle" dominant-baseline="middle">Campina do Barreto</text>
+<circle class="vertice" cx="109.71040512110672" cy="943.6438030359562" r="30" fill="#3498DB" fill-opacity="0.6682397959183675" data-nome="Campo Grande" data-microrregiao="2" data-densidade="0.607" data-grau="7" />
+<text x="109.71040512110672" y="943.6438030359562" font-size="8" text-anchor="middle" dominant-baseline="middle">Campo Grande</text>
+<circle class="vertice" cx="47.10456693956117" cy="948.8314706908897" r="30" fill="#2ECC71" fill-opacity="0.8140495867768596" data-nome="Casa Amarela" data-microrregiao="3" data-densidade="0.455" data-grau="11" />
+<text x="47.10456693956117" y="948.8314706908897" font-size="8" text-anchor="middle" dominant-baseline="middle">Casa Amarela</text>
+<circle class="vertice" cx="-15.707247528040526" cy="949.8701397428456" r="30" fill="#2ECC71" fill-opacity="0.47755102040816333" data-nome="Casa Forte" data-microrregiao="3" data-densidade="0.762" data-grau="6" />
+<text x="-15.707247528040526" y="949.8701397428456" font-size="8" text-anchor="middle" dominant-baseline="middle">Casa Forte</text>
+<circle class="vertice" cx="-78.45037819871587" cy="946.7552683563364" r="30" fill="#F1C40F" fill-opacity="0.6682397959183675" data-nome="Caxangá" data-microrregiao="4" data-densidade="0.607" data-grau="7" />
+<text x="-78.45037819871587" y="946.7552683563364" font-size="8" text-anchor="middle" dominant-baseline="middle">Caxangá</text>
+<circle class="vertice" cx="-140.85046532624997" cy="939.500477071395" r="30" fill="#9B59B6" fill-opacity="0.775" data-nome="Caçote" data-microrregiao="5" data-densidade="0.500" data-grau="11" />
+<text x="-140.85046532624997" y="939.500477071395" font-size="8" text-anchor="middle" dominant-baseline="middle">Caçote</text>
+<circle class="vertice" cx="-202.63464920655957" cy="928.1374892444193" r="30" fill="#F1C40F" fill-opacity="0.6000000000000001" data-nome="Cidade Universitária" data-microrregiao="4" data-densidade="0.667" data-grau="5" />
+<text x="-202.63464920655957" y="928.1374892444193" font-size="8" text-anchor="middle" dominant-baseline="middle">Cidade Universitária</text>
+<circle class="vertice" cx="-263.5327633237524" cy="912.7159923300057" r="30" fill="#E74C3C" fill-opacity="0.5855867346938775" data-nome="Coelhos" data-microrregiao="1" data-densidade="0.679" data-grau="7" />
+<text x="-263.5327633237524" y="912.7159923300057" font-size="8" text-anchor="middle" dominant-baseline="middle">Coelhos</text>
+<circle class="vertice" cx="-323.27851571956086" cy="893.3034206103532" r="30" fill="#E67E22" fill-opacity="0.5408163265306123" data-nome="Cohab" data-microrregiao="6" data-densidade="0.714" data-grau="6" />
+<text x="-323.27851571956086" y="893.3034206103532" font-size="8" text-anchor="middle" dominant-baseline="middle">Cohab</text>
+<circle class="vertice" cx="-381.61065342032117" cy="869.9846603223045" r="30" fill="#9B59B6" fill-opacity="0.7061224489795919" data-nome="Coqueiral" data-microrregiao="5" data-densidade="0.571" data-grau="7" />
+<text x="-381.61065342032117" y="869.9846603223045" font-size="8" text-anchor="middle" dominant-baseline="middle">Coqueiral</text>
+<circle class="vertice" cx="-438.27410482975336" cy="842.8616784714312" r="30" fill="#F1C40F" fill-opacity="0.764888888888889" data-nome="Cordeiro" data-microrregiao="4" data-densidade="0.511" data-grau="9" />
+<text x="-438.27410482975336" y="842.8616784714312" font-size="8" text-anchor="middle" dominant-baseline="middle">Cordeiro</text>
+<circle class="vertice" cx="-493.02109509215444" cy="812.053076956262" r="30" fill="#9B59B6" fill-opacity="0.6551020408163265" data-nome="Curado" data-microrregiao="5" data-densidade="0.619" data-grau="6" />
+<text x="-493.02109509215444" y="812.053076956262" font-size="8" text-anchor="middle" dominant-baseline="middle">Curado</text>
+<circle class="vertice" cx="-545.6122295487967" cy="777.6935739523576" r="30" fill="#2ECC71" fill-opacity="0.7493055555555556" data-nome="Córrego do Jenipapo" data-microrregiao="3" data-densidade="0.528" data-grau="8" />
+<text x="-545.6122295487967" y="777.6935739523576" font-size="8" text-anchor="middle" dominant-baseline="middle">Córrego do Jenipapo</text>
+<circle class="vertice" cx="-595.8175405498602" cy="739.9334148240068" r="30" fill="#2ECC71" fill-opacity="0.7831074380165289" data-nome="Derby" data-microrregiao="3" data-densidade="0.491" data-grau="10" />
+<text x="-595.8175405498602" y="739.9334148240068" font-size="8" text-anchor="middle" dominant-baseline="middle">Derby</text>
+<circle class="vertice" cx="-643.4174930444542" cy="698.9377151394749" r="30" fill="#2ECC71" fill-opacity="0.804" data-nome="Dois Irmãos" data-microrregiao="3" data-densidade="0.467" data-grau="9" />
+<text x="-643.4174930444542" y="698.9377151394749" font-size="8" text-anchor="middle" dominant-baseline="middle">Dois Irmãos</text>
+<circle class="vertice" cx="-688.2039445515345" cy="654.8857386626377" r="30" fill="#3498DB" fill-opacity="0.7993055555555555" data-nome="Dois Unidos" data-microrregiao="2" data-densidade="0.472" data-grau="8" />
+<text x="-688.2039445515345" y="654.8857386626377" font-size="8" text-anchor="middle" dominant-baseline="middle">Dois Unidos</text>
+<circle class="vertice" cx="-729.9810553140162" cy="607.9701134781506" r="30" fill="#3498DB" fill-opacity="0.8289940828402367" data-nome="Encruzilhada" data-microrregiao="2" data-densidade="0.436" data-grau="12" />
+<text x="-729.9810553140162" y="607.9701134781506" font-size="8" text-anchor="middle" dominant-baseline="middle">Encruzilhada</text>
+<circle class="vertice" cx="-768.5661446562003" cy="558.3959896778491" r="30" fill="#F1C40F" fill-opacity="0.744" data-nome="Engenho do Meio" data-microrregiao="4" data-densidade="0.533" data-grau="9" />
+<text x="-768.5661446562003" y="558.3959896778491" font-size="8" text-anchor="middle" dominant-baseline="middle">Engenho do Meio</text>
+<circle class="vertice" cx="-803.7904897998887" cy="506.380142291594" r="30" fill="#2ECC71" fill-opacity="0.6995555555555556" data-nome="Espinheiro" data-microrregiao="3" data-densidade="0.578" data-grau="9" />
+<text x="-803.7904897998887" y="506.380142291594" font-size="8" text-anchor="middle" dominant-baseline="middle">Espinheiro</text>
+<circle class="vertice" cx="-835.5000636461647" cy="452.15002338521964" r="30" fill="#9B59B6" fill-opacity="0.6638888888888889" data-nome="Estância" data-microrregiao="5" data-densidade="0.611" data-grau="8" />
+<text x="-835.5000636461647" y="452.15002338521964" font-size="8" text-anchor="middle" dominant-baseline="middle">Estância</text>
+<circle class="vertice" cx="-863.5562082967044" cy="395.94276747052584" r="30" fill="#3498DB" fill-opacity="0.8222222222222222" data-nome="Fundão" data-microrregiao="2" data-densidade="0.444" data-grau="9" />
+<text x="-863.5562082967044" y="395.94276747052584" font-size="8" text-anchor="middle" dominant-baseline="middle">Fundão</text>
+<circle class="vertice" cx="-887.8362413694879" cy="338.0041545763904" r="30" fill="#2ECC71" fill-opacity="0.8591474459606327" data-nome="Graças" data-microrregiao="3" data-densidade="0.396" data-grau="13" />
+<text x="-887.8362413694879" y="338.0041545763904" font-size="8" text-anchor="middle" dominant-baseline="middle">Graças</text>
+<circle class="vertice" cx="-908.2339924576398" cy="278.58753551524114" r="30" fill="#2ECC71" fill-opacity="0.6000000000000001" data-nome="Guabiraba" data-microrregiao="3" data-densidade="0.667" data-grau="5" />
+<text x="-908.2339924576398" y="278.58753551524114" font-size="8" text-anchor="middle" dominant-baseline="middle">Guabiraba</text>
+<circle class="vertice" cx="-924.6602673856056" cy="217.95272404441388" r="30" fill="#3498DB" fill-opacity="0.744" data-nome="Hipódromo" data-microrregiao="2" data-densidade="0.533" data-grau="9" />
+<text x="-924.6602673856056" y="217.95272404441388" font-size="8" text-anchor="middle" dominant-baseline="middle">Hipódromo</text>
+<circle class="vertice" cx="-937.0432382325863" cy="156.36486076669692" r="30" fill="#E67E22" fill-opacity="0.8262396694214876" data-nome="Ibura" data-microrregiao="6" data-densidade="0.439" data-grau="11" />
+<text x="-937.0432382325863" y="156.36486076669692" font-size="8" text-anchor="middle" dominant-baseline="middle">Ibura</text>
+<circle class="vertice" cx="-945.3287574177608" cy="94.09325373793952" r="30" fill="#E74C3C" fill-opacity="0.8395555555555556" data-nome="Ilha Joana Bezerra" data-microrregiao="1" data-densidade="0.422" data-grau="9" />
+<text x="-945.3287574177608" y="94.09325373793952" font-size="8" text-anchor="middle" dominant-baseline="middle">Ilha Joana Bezerra</text>
+<circle class="vertice" cx="-949.4805944738797" cy="31.410200851442582" r="30" fill="#E74C3C" fill-opacity="0.6682397959183675" data-nome="Ilha do Leite" data-microrregiao="1" data-densidade="0.607" data-grau="7" />
+<text x="-949.4805944738797" y="31.410200851442582" font-size="8" text-anchor="middle" dominant-baseline="middle">Ilha do Leite</text>
+<circle class="vertice" cx="-949.4805944738797" cy="-31.410200851442774" r="30" fill="#F1C40F" fill-opacity="0.7493055555555556" data-nome="Ilha do Retiro" data-microrregiao="4" data-densidade="0.528" data-grau="8" />
+<text x="-949.4805944738797" y="-31.410200851442774" font-size="8" text-anchor="middle" dominant-baseline="middle">Ilha do Retiro</text>
+<circle class="vertice" cx="-945.3287574177608" cy="-94.09325373793972" r="30" fill="#E67E22" fill-opacity="0.7493055555555556" data-nome="Imbiribeira" data-microrregiao="6" data-densidade="0.528" data-grau="8" />
+<text x="-945.3287574177608" y="-94.09325373793972" font-size="8" text-anchor="middle" dominant-baseline="middle">Imbiribeira</text>
+<circle class="vertice" cx="-937.0432382325862" cy="-156.36486076669752" r="30" fill="#E67E22" fill-opacity="0.6682397959183675" data-nome="Ipsep" data-microrregiao="6" data-densidade="0.607" data-grau="7" />
+<text x="-937.0432382325862" y="-156.36486076669752" font-size="8" text-anchor="middle" dominant-baseline="middle">Ipsep</text>
+<circle class="vertice" cx="-924.6602673856056" cy="-217.95272404441408" r="30" fill="#F1C40F" fill-opacity="0.8222222222222222" data-nome="Iputinga" data-microrregiao="4" data-densidade="0.444" data-grau="9" />
+<text x="-924.6602673856056" y="-217.95272404441408" font-size="8" text-anchor="middle" dominant-baseline="middle">Iputinga</text>
+<circle class="vertice" cx="-908.2339924576396" cy="-278.58753551524177" r="30" fill="#2ECC71" fill-opacity="0.6515555555555556" data-nome="Jaqueira" data-microrregiao="3" data-densidade="0.622" data-grau="9" />
+<text x="-908.2339924576396" y="-278.58753551524177" font-size="8" text-anchor="middle" dominant-baseline="middle">Jaqueira</text>
+<circle class="vertice" cx="-887.8362413694878" cy="-338.00415457639065" r="30" fill="#9B59B6" fill-opacity="0.7988760330578513" data-nome="Jardim São Paulo" data-microrregiao="5" data-densidade="0.473" data-grau="10" />
+<text x="-887.8362413694878" y="-338.00415457639065" font-size="8" text-anchor="middle" dominant-baseline="middle">Jardim São Paulo</text>
+<circle class="vertice" cx="-863.5562082967043" cy="-395.94276747052606" r="30" fill="#9B59B6" fill-opacity="0.6280612244897958" data-nome="Jiquiá" data-microrregiao="5" data-densidade="0.643" data-grau="7" />
+<text x="-863.5562082967043" y="-395.94276747052606" font-size="8" text-anchor="middle" dominant-baseline="middle">Jiquiá</text>
+<circle class="vertice" cx="-835.5000636461644" cy="-452.1500233852202" r="30" fill="#E67E22" fill-opacity="0.3749999999999999" data-nome="Jordão" data-microrregiao="6" data-densidade="0.833" data-grau="3" />
+<text x="-835.5000636461644" y="-452.1500233852202" font-size="8" text-anchor="middle" dominant-baseline="middle">Jordão</text>
+<circle class="vertice" cx="-803.7904897998886" cy="-506.38014229159415" r="30" fill="#3498DB" fill-opacity="0.8140495867768596" data-nome="Linha do Tiro" data-microrregiao="2" data-densidade="0.455" data-grau="10" />
+<text x="-803.7904897998886" y="-506.38014229159415" font-size="8" text-anchor="middle" dominant-baseline="middle">Linha do Tiro</text>
+<circle class="vertice" cx="-768.5661446561999" cy="-558.3959896778497" r="30" fill="#2ECC71" fill-opacity="0.804" data-nome="Macaxeira" data-microrregiao="3" data-densidade="0.467" data-grau="9" />
+<text x="-768.5661446561999" y="-558.3959896778497" font-size="8" text-anchor="middle" dominant-baseline="middle">Macaxeira</text>
+<circle class="vertice" cx="-729.9810553140161" cy="-607.9701134781507" r="30" fill="#F1C40F" fill-opacity="0.775" data-nome="Madalena" data-microrregiao="4" data-densidade="0.500" data-grau="8" />
+<text x="-729.9810553140161" y="-607.9701134781507" font-size="8" text-anchor="middle" dominant-baseline="middle">Madalena</text>
+<circle class="vertice" cx="-688.2039445515343" cy="-654.8857386626377" r="30" fill="#2ECC71" fill-opacity="0.4239999999999998" data-nome="Mangabeira" data-microrregiao="3" data-densidade="0.800" data-grau="4" />
+<text x="-688.2039445515343" y="-654.8857386626377" font-size="8" text-anchor="middle" dominant-baseline="middle">Mangabeira</text>
+<circle class="vertice" cx="-643.4174930444537" cy="-698.9377151394754" r="30" fill="#9B59B6" fill-opacity="0.47755102040816333" data-nome="Mangueira" data-microrregiao="5" data-densidade="0.762" data-grau="6" />
+<text x="-643.4174930444537" y="-698.9377151394754" font-size="8" text-anchor="middle" dominant-baseline="middle">Mangueira</text>
+<circle class="vertice" cx="-595.8175405498598" cy="-739.9334148240072" r="30" fill="#2ECC71" fill-opacity="0.808284023668639" data-nome="Monteiro" data-microrregiao="3" data-densidade="0.462" data-grau="12" />
+<text x="-595.8175405498598" y="-739.9334148240072" font-size="8" text-anchor="middle" dominant-baseline="middle">Monteiro</text>
+<circle class="vertice" cx="-545.6122295487966" cy="-777.6935739523577" r="30" fill="#2ECC71" fill-opacity="0.8603305785123967" data-nome="Morro da Conceição" data-microrregiao="3" data-densidade="0.394" data-grau="11" />
+<text x="-545.6122295487966" y="-777.6935739523577" font-size="8" text-anchor="middle" dominant-baseline="middle">Morro da Conceição</text>
+<circle class="vertice" cx="-493.0210950921544" cy="-812.0530769562621" r="30" fill="#9B59B6" fill-opacity="0.47755102040816333" data-nome="Mustardinha" data-microrregiao="5" data-densidade="0.762" data-grau="6" />
+<text x="-493.0210950921544" y="-812.0530769562621" font-size="8" text-anchor="middle" dominant-baseline="middle">Mustardinha</text>
+<circle class="vertice" cx="-438.2741048297532" cy="-842.8616784714313" r="30" fill="#2ECC71" fill-opacity="0.8262396694214876" data-nome="Nova Descoberta" data-microrregiao="3" data-densidade="0.439" data-grau="11" />
+<text x="-438.2741048297532" y="-842.8616784714313" font-size="8" text-anchor="middle" dominant-baseline="middle">Nova Descoberta</text>
+<circle class="vertice" cx="-381.6106534203206" cy="-869.9846603223048" r="30" fill="#E74C3C" fill-opacity="0.632638888888889" data-nome="Paissandu" data-microrregiao="1" data-densidade="0.639" data-grau="8" />
+<text x="-381.6106534203206" y="-869.9846603223048" font-size="8" text-anchor="middle" dominant-baseline="middle">Paissandu</text>
+<circle class="vertice" cx="-323.2785157195603" cy="-893.3034206103534" r="30" fill="#2ECC71" fill-opacity="0.6262222222222222" data-nome="Parnamirim" data-microrregiao="3" data-densidade="0.644" data-grau="9" />
+<text x="-323.2785157195603" y="-893.3034206103534" font-size="8" text-anchor="middle" dominant-baseline="middle">Parnamirim</text>
+<circle class="vertice" cx="-263.5327633237524" cy="-912.7159923300057" r="30" fill="#2ECC71" fill-opacity="0.6000000000000001" data-nome="Passarinho" data-microrregiao="3" data-densidade="0.667" data-grau="5" />
+<text x="-263.5327633237524" y="-912.7159923300057" font-size="8" text-anchor="middle" dominant-baseline="middle">Passarinho</text>
+<circle class="vertice" cx="-202.63464920655937" cy="-928.1374892444193" r="30" fill="#2ECC71" fill-opacity="0.6759999999999999" data-nome="Pau-Ferro" data-microrregiao="3" data-densidade="0.600" data-grau="5" />
+<text x="-202.63464920655937" y="-928.1374892444193" font-size="8" text-anchor="middle" dominant-baseline="middle">Pau-Ferro</text>
+<circle class="vertice" cx="-140.85046532624958" cy="-939.500477071395" r="30" fill="#3498DB" fill-opacity="0.4239999999999998" data-nome="Peixinhos" data-microrregiao="2" data-densidade="0.800" data-grau="5" />
+<text x="-140.85046532624958" y="-939.500477071395" font-size="8" text-anchor="middle" dominant-baseline="middle">Peixinhos</text>
+<circle class="vertice" cx="-78.45037819871526" cy="-946.7552683563364" r="30" fill="#E67E22" fill-opacity="0.6759999999999999" data-nome="Pina" data-microrregiao="6" data-densidade="0.600" data-grau="4" />
+<text x="-78.45037819871526" y="-946.7552683563364" font-size="8" text-anchor="middle" dominant-baseline="middle">Pina</text>
+<circle class="vertice" cx="-15.707247528039911" cy="-949.8701397428456" r="30" fill="#3498DB" fill-opacity="0.775" data-nome="Ponto de Parada" data-microrregiao="2" data-densidade="0.500" data-grau="8" />
+<text x="-15.707247528039911" y="-949.8701397428456" font-size="8" text-anchor="middle" dominant-baseline="middle">Ponto de Parada</text>
+<circle class="vertice" cx="47.104566939561145" cy="-948.8314706908897" r="30" fill="#3498DB" fill-opacity="0.6682397959183675" data-nome="Porto da Madeira" data-microrregiao="2" data-densidade="0.607" data-grau="7" />
+<text x="47.104566939561145" y="-948.8314706908897" font-size="8" text-anchor="middle" dominant-baseline="middle">Porto da Madeira</text>
+<circle class="vertice" cx="109.7104051211069" cy="-943.6438030359562" r="30" fill="#2ECC71" fill-opacity="0.5408163265306123" data-nome="Poço da Panela" data-microrregiao="3" data-densidade="0.714" data-grau="7" />
+<text x="109.7104051211069" y="-943.6438030359562" font-size="8" text-anchor="middle" dominant-baseline="middle">Poço da Panela</text>
+<circle class="vertice" cx="171.83650761550467" cy="-934.3298211287631" r="30" fill="#F1C40F" fill-opacity="0.7222222222222221" data-nome="Prado" data-microrregiao="4" data-densidade="0.556" data-grau="8" />
+<text x="171.83650761550467" y="-934.3298211287631" font-size="8" text-anchor="middle" dominant-baseline="middle">Prado</text>
+<circle class="vertice" cx="233.21121278375966" cy="-920.9302526423637" r="30" fill="#E74C3C" fill-opacity="0.4239999999999998" data-nome="Recife" data-microrregiao="1" data-densidade="0.800" data-grau="4" />
+<text x="233.21121278375966" y="-920.9302526423637" font-size="8" text-anchor="middle" dominant-baseline="middle">Recife</text>
+<circle class="vertice" cx="293.56614465620066" cy="-903.5036904803957" r="30" fill="#3498DB" fill-opacity="0.6638888888888889" data-nome="Rosarinho" data-microrregiao="2" data-densidade="0.611" data-grau="8" />
+<text x="293.56614465620066" y="-903.5036904803957" font-size="8" text-anchor="middle" dominant-baseline="middle">Rosarinho</text>
+<circle class="vertice" cx="352.63738647230974" cy="-882.1263365652218" r="30" fill="#9B59B6" fill-opacity="0.7493055555555556" data-nome="San Martin" data-microrregiao="5" data-densidade="0.528" data-grau="8" />
+<text x="352.63738647230974" y="-882.1263365652218" font-size="8" text-anchor="middle" dominant-baseline="middle">San Martin</text>
+<circle class="vertice" cx="410.1666347215684" cy="-856.891668626311" r="30" fill="#9B59B6" fill-opacity="0.6759999999999999" data-nome="Sancho" data-microrregiao="5" data-densidade="0.600" data-grau="9" />
+<text x="410.1666347215684" y="-856.891668626311" font-size="8" text-anchor="middle" dominant-baseline="middle">Sancho</text>
+<circle class="vertice" cx="465.902328638983" cy="-827.9100314459132" r="30" fill="#2ECC71" fill-opacity="0.6280612244897958" data-nome="Santana" data-microrregiao="3" data-densidade="0.643" data-grau="7" />
+<text x="465.902328638983" y="-827.9100314459132" font-size="8" text-anchor="middle" dominant-baseline="middle">Santana</text>
+<circle class="vertice" cx="519.600750216306" cy="-795.3081543494019" r="30" fill="#E74C3C" fill-opacity="0.8262396694214876" data-nome="Santo Amaro" data-microrregiao="1" data-densidade="0.439" data-grau="11" />
+<text x="519.600750216306" y="-795.3081543494019" font-size="8" text-anchor="middle" dominant-baseline="middle">Santo Amaro</text>
+<circle class="vertice" cx="571.0270899188744" cy="-759.2285970501781" r="30" fill="#E74C3C" fill-opacity="0.5855867346938775" data-nome="Santo Antônio" data-microrregiao="1" data-densidade="0.679" data-grau="7" />
+<text x="571.0270899188744" y="-759.2285970501781" font-size="8" text-anchor="middle" dominant-baseline="middle">Santo Antônio</text>
+<circle class="vertice" cx="619.9564734479602" cy="-719.8291262723179" r="30" fill="#E74C3C" fill-opacity="0.516" data-nome="Soledade" data-microrregiao="1" data-densidade="0.733" data-grau="5" />
+<text x="619.9564734479602" y="-719.8291262723179" font-size="8" text-anchor="middle" dominant-baseline="middle">Soledade</text>
+<circle class="vertice" cx="666.1749450588644" cy="-677.2820258768271" r="30" fill="#E74C3C" fill-opacity="0.6000000000000001" data-nome="São José" data-microrregiao="1" data-densidade="0.667" data-grau="6" />
+<text x="666.1749450588644" y="-677.2820258768271" font-size="8" text-anchor="middle" dominant-baseline="middle">São José</text>
+<circle class="vertice" cx="709.4804031349464" cy="-631.7733435081556" r="30" fill="#2ECC71" fill-opacity="0.6551020408163265" data-nome="Sítio dos Pintos" data-microrregiao="3" data-densidade="0.619" data-grau="6" />
+<text x="709.4804031349464" y="-631.7733435081556" font-size="8" text-anchor="middle" dominant-baseline="middle">Sítio dos Pintos</text>
+<circle class="vertice" cx="749.6834839265742" cy="-583.502077055184" r="30" fill="#2ECC71" fill-opacity="0.8627755102040816" data-nome="Tamarineira" data-microrregiao="3" data-densidade="0.390" data-grau="14" />
+<text x="749.6834839265742" y="-583.502077055184" font-size="8" text-anchor="middle" dominant-baseline="middle">Tamarineira</text>
+<circle class="vertice" cx="786.6083895906195" cy="-532.6793044840884" r="30" fill="#9B59B6" fill-opacity="0.6759999999999999" data-nome="Tejipió" data-microrregiao="5" data-densidade="0.600" data-grau="5" />
+<text x="786.6083895906195" y="-532.6793044840884" font-size="8" text-anchor="middle" dominant-baseline="middle">Tejipió</text>
+<circle class="vertice" cx="820.0936569096953" cy="-479.5272608481015" r="30" fill="#F1C40F" fill-opacity="0.47755102040816333" data-nome="Torre" data-microrregiao="4" data-densidade="0.762" data-grau="6" />
+<text x="820.0936569096953" y="-479.5272608481015" font-size="8" text-anchor="middle" dominant-baseline="middle">Torre</text>
+<circle class="vertice" cx="849.9928633297254" cy="-424.278366510166" r="30" fill="#3498DB" fill-opacity="0.7061224489795919" data-nome="Torreão" data-microrregiao="2" data-densidade="0.571" data-grau="6" />
+<text x="849.9928633297254" y="-424.278366510166" font-size="8" text-anchor="middle" dominant-baseline="middle">Torreão</text>
+<circle class="vertice" cx="876.1752672285156" cy="-367.17421082782926" r="30" fill="#F1C40F" fill-opacity="0.7530612244897958" data-nome="Torrões" data-microrregiao="4" data-densidade="0.524" data-grau="6" />
+<text x="876.1752672285156" y="-367.17421082782926" font-size="8" text-anchor="middle" dominant-baseline="middle">Torrões</text>
+<circle class="vertice" cx="898.5263796156031" cy="-308.46449574444875" r="30" fill="#9B59B6" fill-opacity="0.1" data-nome="Totó" data-microrregiao="5" data-densidade="1.000" data-grau="2" />
+<text x="898.5263796156031" y="-308.46449574444875" font-size="8" text-anchor="middle" dominant-baseline="middle">Totó</text>
+<circle class="vertice" cx="916.9484647634814" cy="-248.40594390612804" r="30" fill="#2ECC71" fill-opacity="0.6000000000000001" data-nome="Vasco da Gama" data-microrregiao="3" data-densidade="0.667" data-grau="5" />
+<text x="916.9484647634814" y="-248.40594390612804" font-size="8" text-anchor="middle" dominant-baseline="middle">Vasco da Gama</text>
+<circle class="vertice" cx="931.3609675810688" cy="-187.26117607890623" r="30" fill="#F1C40F" fill-opacity="0.7061224489795919" data-nome="Várzea" data-microrregiao="4" data-densidade="0.571" data-grau="6" />
+<text x="931.3609675810688" y="-187.26117607890623" font-size="8" text-anchor="middle" dominant-baseline="middle">Várzea</text>
+<circle class="vertice" cx="941.7008658606265" cy="-125.2975627749652" r="30" fill="#F1C40F" fill-opacity="0.7222222222222221" data-nome="Zumbi" data-microrregiao="4" data-densidade="0.556" data-grau="8" />
+<text x="941.7008658606265" y="-125.2975627749652" font-size="8" text-anchor="middle" dominant-baseline="middle">Zumbi</text>
+<circle class="vertice" cx="947.9229458578359" cy="-62.78605510941404" r="30" fill="#3498DB" fill-opacity="0.7061224489795919" data-nome="Água Fria" data-microrregiao="2" data-densidade="0.571" data-grau="7" />
+<text x="947.9229458578359" y="-62.78605510941404" font-size="8" text-anchor="middle" dominant-baseline="middle">Água Fria</text>
+
+    <rect id="fundoTextoNome" x="-500" y="-150" width="1000" height="100" fill="white" fill-opacity="0.9" visibility="hidden" rx="20" ry="20"/>
+    <text id="textoNome" x="0" y="-100" font-size="50" text-anchor="middle" dominant-baseline="middle" fill="black"></text>
+    <rect id="fundoTextoConecta" x="-500" y="-40" width="1000" height="100" fill="white" fill-opacity="0.9" visibility="hidden" rx="20" ry="20"/>
+    <text id="textoConecta" x="0" y="10" font-size="50" text-anchor="middle" dominant-baseline="middle" fill="black"></text>
+    <rect id="fundoTextoLista" x="-500" y="70" width="1000" height="100" fill="white" fill-opacity="0.9" visibility="hidden" rx="20" ry="20"/>
+    <text id="textoLista" x="0" y="100" font-size="40" text-anchor="middle" dominant-baseline="middle" fill="black"></text>
+    <rect id="fundoTextoMicrorregiao" x="-500" y="-270" width="1000" height="100" fill="white" fill-opacity="0.9" visibility="hidden" rx="20" ry="20"/>
+    <text id="textoMicrorregiao" x="0" y="-220" font-size="40" text-anchor="middle" dominant-baseline="middle" fill="black"></text>
+    
+    <style>
+        .dim { opacity: 0.2; transition: opacity 0.3s; }
+        .destacado { stroke: black; stroke-width: 3; opacity: 1 !important; }
+        text { white-space: pre; }
+        .item-legenda { cursor: pointer; }
+    </style>
+    <script>
+        const vertices = document.querySelectorAll('.vertice');
+        const arestas = document.querySelectorAll('.aresta');
+        const percursoNDSetubal = {"origem": "R. Corrego da Areia, 820", "destino": "R. Ribeiro de Brito, 800", "bairro_origem": "Nova Descoberta", "bairro_destino": "Boa Viagem(Set\u00fabal)", "custo": 23.9, "caminho_bairros": ["Nova Descoberta", "Brejo de Beberibe", "Alto Jos\u00e9 Bonif\u00e1cio", "Tamarineira", "Gra\u00e7as", "Boa Vista", "Cabanga", "Pina", "Boa Viagem", "Boa Viagem(Set\u00fabal)"]};
+        let microrSelecionada = null;
+        let percursoAtivo = false;
+
+        function escurecerTodos() {
+            vertices.forEach(v => v.classList.add('dim'));
+            arestas.forEach(a => a.classList.add('dim'));
+        }
+
+        function restaurarTodos() {
+            vertices.forEach(v => v.classList.remove('dim', 'destacado'));
+            arestas.forEach(a => a.classList.remove('dim', 'destacado'));
+        }
+
+        function verticesNamed(nome){
+            return Array.from(vertices).find(v => v.getAttribute('data-nome') === nome);
+        }
+
+        vertices.forEach(v => {
+            v.addEventListener('mouseenter', () => {
+                escurecerTodos();
+                v.classList.add('destacado');
+                const nome = v.getAttribute('data-nome');
+                const dens = v.getAttribute('data-densidade');
+                const grau = v.getAttribute('data-grau');
+                let listaArestas = [];
+                arestas.forEach(a => {
+                    const origem = a.getAttribute('data-origem');
+                    const destino = a.getAttribute('data-destino');
+                    const nomeA = a.getAttribute('data-nome');
+                    if(origem === nome || destino === nome){
+                        a.classList.add('destacado');
+                        a.classList.remove('dim');
+                        vertices.forEach(other => {
+                            if(other.getAttribute('data-nome') === origem || other.getAttribute('data-nome') === destino){
+                                other.classList.add('destacado');
+                                other.classList.remove('dim');
+                            }
+                        });
+                        listaArestas.push(nomeA + ' - conecta ' + origem + ' e ' + destino);
+                    }
+                });
+                const textoLista = document.getElementById('textoLista');
+                textoLista.innerHTML = '';
+                listaArestas.forEach((linha, i) => {
+                    const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                    tspan.setAttribute("x", 0);
+                    tspan.setAttribute("dy", i === 0 ? 0 : 50);
+                    tspan.setAttribute("text-anchor", "middle");
+                    tspan.textContent = linha;
+                    textoLista.appendChild(tspan);
+                });
+                document.getElementById('fundoTextoLista').setAttribute('height', Math.max(100, listaArestas.length * 50));
+                document.getElementById('textoNome').textContent = nome + ' | Grau: ' + grau + ' | Densidade: ' + dens;
+                document.getElementById('fundoTextoNome').setAttribute('visibility', 'visible');
+                document.getElementById('fundoTextoConecta').setAttribute('visibility', 'hidden');
+                document.getElementById('fundoTextoLista').setAttribute('visibility', 'visible');
+            });
+            v.addEventListener('mouseleave', () => {
+                restaurarTodos();
+                document.getElementById('textoNome').textContent = '';
+                document.getElementById('textoConecta').textContent = '';
+                document.getElementById('textoLista').innerHTML = '';
+                document.getElementById('fundoTextoNome').setAttribute('visibility', 'hidden');
+                document.getElementById('fundoTextoConecta').setAttribute('visibility', 'hidden');
+                document.getElementById('fundoTextoLista').setAttribute('visibility', 'hidden');
+            });
+        });
+
+        arestas.forEach(a => {
+            a.addEventListener('mouseenter', () => {
+                escurecerTodos();
+                a.classList.add('destacado');
+                const nome = a.getAttribute('data-nome');
+                const peso = a.getAttribute('data-peso');
+                const origem = a.getAttribute('data-origem');
+                const destino = a.getAttribute('data-destino');
+                vertices.forEach(v => {
+                    const vNome = v.getAttribute('data-nome');
+                    if(vNome === origem || vNome === destino){
+                        v.classList.add('destacado');
+                        v.classList.remove('dim');
+                    }
+                });
+                document.getElementById('textoNome').textContent = nome + ' - ' + peso + ' km';
+                document.getElementById('textoConecta').textContent = 'Conecta ' + origem + ' ↔ ' + destino;
+                document.getElementById('fundoTextoNome').setAttribute('visibility', 'visible');
+                document.getElementById('fundoTextoConecta').setAttribute('visibility', 'visible');
+                document.getElementById('fundoTextoLista').setAttribute('visibility', 'hidden');
+            });
+            a.addEventListener('mouseleave', () => {
+                restaurarTodos();
+                document.getElementById('textoNome').textContent = '';
+                document.getElementById('textoConecta').textContent = '';
+                document.getElementById('textoLista').innerHTML = '';
+                document.getElementById('fundoTextoNome').setAttribute('visibility', 'hidden');
+                document.getElementById('fundoTextoConecta').setAttribute('visibility', 'hidden');
+                document.getElementById('fundoTextoLista').setAttribute('visibility', 'hidden');
+            });
+        });
+
+        const legendas = document.querySelectorAll('.item-legenda[data-microrregiao]');
+        const textoListaCentral = document.getElementById('textoLista');
+        const textoMicror = document.getElementById('textoMicrorregiao');
+        const microrData = [{"microrregiao": "1", "ordem": 11, "tamanho": 30, "densidade": 0.5454545455}, {"microrregiao": "2", "ordem": 18, "tamanho": 48, "densidade": 0.3137254902}, {"microrregiao": "3", "ordem": 29, "tamanho": 91, "densidade": 0.224137931}, {"microrregiao": "4", "ordem": 12, "tamanho": 31, "densidade": 0.4696969697}, {"microrregiao": "5", "ordem": 16, "tamanho": 46, "densidade": 0.3833333333}, {"microrregiao": "6", "ordem": 9, "tamanho": 17, "densidade": 0.4722222222}];
+
+        legendas.forEach(item => {
+            item.addEventListener('click', () => {
+                const micror = item.getAttribute('data-microrregiao');
+                if(microrSelecionada === micror){
+                    restaurarTodos();
+                    textoListaCentral.innerHTML = '';
+                    textoMicror.textContent = '';
+                    document.getElementById('fundoTextoLista').setAttribute('visibility', 'hidden');
+                    document.getElementById('fundoTextoMicrorregiao').setAttribute('visibility', 'hidden');
+                    microrSelecionada = null;
+                    return;
+                }
+                microrSelecionada = micror;
+                restaurarTodos();
+                escurecerTodos();
+                let bairrosDaMicror = [];
+                vertices.forEach(v => {
+                    if(v.getAttribute('data-microrregiao') === micror){
+                        v.classList.remove('dim');
+                        v.classList.add('destacado');
+                        bairrosDaMicror.push(v.getAttribute('data-nome'));
+                    }
+                });
+                arestas.forEach(a => {
+                    const origem = verticesNamed(a.getAttribute('data-origem'));
+                    const destino = verticesNamed(a.getAttribute('data-destino'));
+                    if(origem.getAttribute('data-microrregiao') === micror && destino.getAttribute('data-microrregiao') === micror){
+                        a.classList.remove('dim');
+                        a.classList.add('destacado');
+                    }
+                });
+                textoListaCentral.innerHTML = '';
+                const metade = Math.ceil(bairrosDaMicror.length / 2);
+                const espaco = 50;
+                const y_inicial = 0;
+                bairrosDaMicror.forEach((bairro, i) => {
+                    const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                    const coluna = i < metade ? -200 : 200;
+                    const index_coluna = i < metade ? i : i - metade;
+                    tspan.setAttribute("x", coluna);
+                    tspan.setAttribute("y", y_inicial + index_coluna * espaco);
+                    tspan.setAttribute("text-anchor", "middle");
+                    tspan.textContent = bairro;
+                    textoListaCentral.appendChild(tspan);
+                });
+                const alturaLista = Math.max(100, Math.ceil(bairrosDaMicror.length / 2) * espaco + 20);
+                const y_caixa = y_inicial - 20;
+                document.getElementById('fundoTextoLista').setAttribute('height', alturaLista);
+                document.getElementById('fundoTextoLista').setAttribute('y', y_caixa);
+                const microrInfo = microrData.find(m => m.microrregiao === micror);
+                if(microrInfo){
+                    textoMicror.textContent = `Microrregião ${micror} | Ordem: ${microrInfo.ordem} | Tamanho: ${microrInfo.tamanho} | Densidade: ${microrInfo.densidade.toFixed(3)}`;
+                }
+                document.getElementById('fundoTextoMicrorregiao').setAttribute('visibility', 'visible');
+                document.getElementById('fundoTextoLista').setAttribute('visibility', 'visible');
+            });
+        });
+
+        const btnPercurso = document.getElementById("nova-descoberta-btn");
+        btnPercurso.addEventListener("click", () => {
+            if(percursoAtivo){
+                restaurarTodos();
+                document.getElementById("textoNome").textContent = '';
+                document.getElementById("textoConecta").textContent = '';
+                document.getElementById("textoLista").innerHTML = '';
+                document.getElementById("fundoTextoNome").setAttribute("visibility", "hidden");
+                document.getElementById("fundoTextoConecta").setAttribute("visibility", "hidden");
+                document.getElementById("fundoTextoLista").setAttribute("visibility", "hidden");
+                percursoAtivo = false;
+                return;
+            }
+            percursoAtivo = true;
+            restaurarTodos();
+            escurecerTodos();
+            const origem = percursoNDSetubal.origem;
+            const destino = percursoNDSetubal.destino;
+            const custo = percursoNDSetubal.custo;
+            const caminho = percursoNDSetubal.caminho_bairros;
+            caminho.forEach(nomeBairro => {
+                const v = verticesNamed(nomeBairro);
+                if (v) {
+                    v.classList.remove("dim");
+                    v.classList.add("destacado");
+                }
+            });
+            arestas.forEach(a => {
+                const o = a.getAttribute("data-origem");
+                const d = a.getAttribute("data-destino");
+                for (let i = 0; i < caminho.length - 1; i++) {
+                    if ((caminho[i] === o && caminho[i+1] === d) ||
+                        (caminho[i] === d && caminho[i+1] === o)) {
+                        a.classList.remove("dim");
+                        a.classList.add("destacado");
+                    }
+                }
+            });
+            document.getElementById("textoNome").textContent =
+                `Menor Caminho da Nova Descoberta para Setúbal | Custo: ${custo} km`;
+            const textoLista = document.getElementById("textoLista");
+            textoLista.innerHTML = "";
+            const percursoTexto = caminho.join(' → ');
+            const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+            tspan.setAttribute("x", 0);
+            tspan.setAttribute("y", 0);
+            tspan.setAttribute("text-anchor", "middle");
+            tspan.setAttribute("font-size", "24");
+            tspan.textContent = percursoTexto;
+            textoLista.appendChild(tspan);
+
+            document.getElementById("fundoTextoNome").setAttribute("visibility", "visible");
+            document.getElementById("fundoTextoLista").setAttribute("visibility", "visible");
+        });
+
+const inputBusca = document.getElementById("busca-bairro");
+const btnBuscar = document.getElementById("btn-buscar-bairro");
+const msgNaoEncontrado = document.getElementById("msg-bairro-nao-encontrado");
+
+function mostrarInfoCentralDoVertice(v) {
+    const nome = v.getAttribute("data-nome");
+    const dens = v.getAttribute("data-densidade");
+    const grau = v.getAttribute("data-grau");
+
+    document.getElementById("textoNome").textContent =
+        `${nome} | Grau: ${grau} | Densidade: ${dens}`;
+    document.getElementById("fundoTextoNome").setAttribute("visibility", "visible");
+
+    const listaArestas = [];
+    arestas.forEach(a => {
+        const origem = a.getAttribute("data-origem");
+        const destino = a.getAttribute("data-destino");
+        const nomeA = a.getAttribute("data-nome");
+
+        if (origem === nome || destino === nome) {
+            listaArestas.push(`${nomeA} - conecta ${origem} e ${destino}`);
+        }
+    });
+
+    const textoLista = document.getElementById("textoLista");
+    textoLista.innerHTML = "";
+    listaArestas.forEach((linha, i) => {
+        const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+        tspan.setAttribute("x", 0);
+        tspan.setAttribute("dy", i === 0 ? 0 : 50);
+        tspan.textContent = linha;
+        textoLista.appendChild(tspan);
+    });
+
+    document.getElementById("fundoTextoLista").setAttribute("visibility", "visible");
+}
+
+btnBuscar.addEventListener("click", () => {
+
+    restaurarTodos();
+    document.getElementById("textoNome").textContent = "";
+    document.getElementById("textoLista").innerHTML = "";
+    document.getElementById("fundoTextoNome").setAttribute("visibility", "hidden");
+    document.getElementById("fundoTextoLista").setAttribute("visibility", "hidden");
+    msgNaoEncontrado.style.display = "none";
+
+    const texto = inputBusca.value.trim().toLowerCase();
+    if (texto === "") return;
+
+    escurecerTodos();
+    let encontrado = false;
+
+    vertices.forEach(v => {
+        const nome = v.getAttribute("data-nome").toLowerCase();
+
+        if (nome === texto) {
+            encontrado = true;
+            v.classList.remove("dim");
+            v.classList.add("destacado");
+
+            mostrarInfoCentralDoVertice(v);
+
+            arestas.forEach(a => {
+                const origem = a.getAttribute("data-origem");
+                const destino = a.getAttribute("data-destino");
+
+                if (origem.toLowerCase() === texto || destino.toLowerCase() === texto) {
+                    a.classList.remove("dim");
+                    a.classList.add("destacado");
+
+                    vertices.forEach(v2 => {
+                        const n2 = v2.getAttribute("data-nome");
+                        if (n2 === origem || n2 === destino) {
+                            v2.classList.remove("dim");
+                            v2.classList.add("destacado");
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+    if (!encontrado) {
+        msgNaoEncontrado.textContent = "Bairro não encontrado";
+        msgNaoEncontrado.style.display = "block";
+    }
+});
+
+const btnLimpar = document.getElementById("btn-limpar-busca");
+
+btnLimpar.addEventListener("click", () => {
+
+    inputBusca.value = "";
+
+    restaurarTodos();
+
+    document.getElementById("textoNome").textContent = "";
+    document.getElementById("textoConecta").textContent = "";
+    document.getElementById("textoLista").innerHTML = "";
+    document.getElementById("textoMicrorregiao").textContent = "";
+
+    document.getElementById("fundoTextoNome").setAttribute("visibility", "hidden");
+    document.getElementById("fundoTextoConecta").setAttribute("visibility", "hidden");
+    document.getElementById("fundoTextoLista").setAttribute("visibility", "hidden");
+    document.getElementById("fundoTextoMicrorregiao").setAttribute("visibility", "hidden");
+
+    msgNaoEncontrado.style.display = "none";
+
+    percursoAtivo = false;
+
+    microrSelecionada = null;
+});
+
+    </script>
+    </svg>
+
+<!-- BARRA DE GRADIENTE DE DENSIDADE -->
+<div style="
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    z-index: 9999;
+">
+    <!-- Palavra "Densidade" ao lado -->
+    <span style="margin-right: 10px; writing-mode: vertical-lr; transform: rotate(180deg); font-size: 14px;">Densidade</span>
+    
+    <!-- Barra de gradiente -->
+    <div style="
+        width: 40px;
+        height: 300px;
+        border: 1px solid black;
+        border-radius: 8px;
+        background: linear-gradient(to top, rgba(26,188,156,0.1), rgba(26,188,156,1));
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 5px;
+        box-sizing: border-box;
+    ">
+        <span style="writing-mode: vertical-lr; transform: rotate(180deg); font-size: 14px;">Alta</span>
+        <span style="writing-mode: vertical-lr; transform: rotate(180deg); font-size: 14px;">Baixa</span>
+    </div>
+</div>
+
+</body>
+</html>
