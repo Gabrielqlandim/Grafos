@@ -59,7 +59,7 @@ def gerar_svg(posicoes, adjacencias, densidade_df, microrregioes, raio, percurso
         if max_d - min_d == 0:
             return 0.8  
         fator = (dens - min_d) / (max_d - min_d)  
-        opacidade = 1 - 0.9 * (fator ** 2)  
+        opacidade = 0.1 + 0.9 * (fator ** 2)  
         return max(0.1, opacidade)  
 
 
