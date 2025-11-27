@@ -22,10 +22,17 @@ def gerar_html_inicial():
 
     h1 {
         font-size: 2em;
-        margin-bottom: 50px;
+        margin-bottom: 10px;
         font-weight: 500;
         text-align: center;
         color: #222;
+    }
+
+    .participantes {
+        font-size: 1em;
+        margin-bottom: 50px;
+        color: #555;
+        text-align: center;
     }
 
     .container {
@@ -72,6 +79,9 @@ def gerar_html_inicial():
 </head>
 <body>
 <h1>Projeto Final: Grafos do Recife + Comparação de Algoritmos</h1>
+<div class="participantes">
+    Gabriel Landim, Maria Fernanda Ordonho, Pedro Sampaio e Rafaela Vidal
+</div>
 <div class="container">
     <button id="parte1-btn">Parte 1</button>
     <button id="parte2-btn">Parte 2</button>
@@ -93,6 +103,7 @@ document.getElementById("parte2-btn").addEventListener("click", () => {
 
 def salvar_html(nome_arquivo: str, conteudo: str):
     path = Path(nome_arquivo)
+    path.parent.mkdir(parents=True, exist_ok=True)  # garante que a pasta 'out' exista
     with open(path, 'w', encoding='utf-8') as f:
         f.write(conteudo)
     print(f"Arquivo '{nome_arquivo}' criado com sucesso!")
