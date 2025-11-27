@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from .graph import Grafo
+from .graph import Grafo, MultiGrafo
 import math
 from pathlib import Path
 import csv
@@ -16,7 +16,9 @@ def criar_grafo(caminho_csv: str | Path | None = None):
     caminho_str = str(caminho_csv)
     df = pd.read_csv(caminho_str)
 
-    g = Grafo()
+    #Cria um grafo ou multigrafo, a depender do arquivo passado
+    if 'adjacencias_bairros' in caminho_str: g = Grafo()
+    elif 'airlines' in caminho_str: g = MultiGrafo()
 
     #Para cada linha do arquivo, adicionamos uma aresta que liga o vértice de origem ao de destino
     for _, linha in df.iterrows():
