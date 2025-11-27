@@ -259,7 +259,7 @@ def gerar_html(svg_content, voos_json):
 <body>
 
 <!-- BOTÃO DE VOLTAR MINIMALISTA NO LADO DIREITO -->
-<a href="index.html" 
+<a href="grafo_interativo.html" 
    style="
        position: fixed;
        top: 20px;
@@ -690,27 +690,6 @@ btnFiltrar.addEventListener("click", () => {{
     }}
 }});
 
-function obterVoosDoCaminho(caminho) {{
-    let listaVoos = [];
-
-    for (let i = 0; i < caminho.length - 1; i++) {{
-        const origem = caminho[i];
-        const destino = caminho[i + 1];
-
-        const candidatos = voos.filter(v =>
-            v.source_city === origem &&
-            v.destination_city === destino
-        );
-
-        if (candidatos.length > 0) {{
-            candidatos.sort((a, b) => a.duration - b.duration);
-            listaVoos.push(candidatos[0]);
-        }}
-    }}
-
-    return listaVoos;
-}}
-
 
 
 btnMenorCaminho.addEventListener("click", () => {{
@@ -743,36 +722,18 @@ btnMenorCaminho.addEventListener("click", () => {{
         resultado = bellmanFordJS(voos, origem, destino);
     }}
 
-    if (resultado.caminho.length > 0) {{
-    const voosDoCaminho = obterVoosDoCaminho(resultado.caminho);
-
-    let htmlVoos = "<h4>Voos do Caminho:</h4>";
-
-    voosDoCaminho.forEach(v => {{
-        htmlVoos += `
-            <div class="voo-card">
-                <strong>${{v.flight}}</strong>
-                <span>${{v.source_city}} → ${{v.destination_city}}</span>
-                <span>Duração: ${{v.duration}}h</span>
-                <span>Preço: ₹${{v.price}}</span>
-                <span>Paradas: ${{v.stops}}</span>
-            </div>
-        `;
-    }});
-
-    resultadoCaminho.innerHTML = `
-        <p><strong>Algoritmo:</strong> ${{algoritmo.toUpperCase()}}</p>
-        <p><strong>Caminho:</strong> ${{resultado.caminho.join(" → ")}}</p>
-        <p><strong>Custo Total:</strong> ${{resultado.custo}}h</p>
-        ${{htmlVoos}}
-    `;
-
-    destacarCaminho(resultado.caminho);
-}} else {{
+    // destacar caminho no mapa e mostrar custo
+    if (resultado.caminho.length === 0) {{
         resultadoCaminho.innerHTML = "<p>Nenhum caminho encontrado</p>";
+    }} else {{
+        destacarCaminho(resultado.caminho);
+        resultadoCaminho.innerHTML = `
+            <p><strong>Algoritmo:</strong> ${{algoritmo.toUpperCase()}}</p>
+            <p><strong>Caminho:</strong> ${{resultado.caminho.join(" → ")}}</p>
+            <p><strong>Custo Total:</strong> ${{resultado.custo}}h</p>
+        `;
     }}
 }});
-
 
 
 
@@ -809,6 +770,6 @@ if __name__ == "__main__":
     voos_json = df_voos.to_dict(orient='records')
 
     html = gerar_html(svg, json.dumps(voos_json))
-    salvar_html(html, "out/grafo_interativo2.html")
+    salvar_html(html, "out/grafo_interativo_parte2.html")
 
-    print("HTML gerado com sucesso na pasta 'out': grafo_interativo2.html")
+    print("HTML gerado com sucesso na pasta 'out': grafo_interativo_parte2.html")

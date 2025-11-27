@@ -488,7 +488,7 @@ def gerar_html(svg_content):
 <body style="margin:0; padding:0;">
 
 <!-- BOTÃO DE VOLTAR MINIMALISTA NO LADO DIREITO -->
-<a href="index.html" 
+<a href="grafo_interativo.html" 
    style="
        position: fixed;
        top: 20px;
@@ -622,5 +622,5 @@ if __name__ == "__main__":
     posicoes, raio = calcular_posicoes(df)
     svg = gerar_svg(posicoes, adj, dens, micror, raio, percurso_nd_setubal)
     html = gerar_html(svg)
-    salvar_html(html, 'out/grafo_interativo.html')
-    print("HTML gerado com sucesso na pasta 'out': grafo_interativo.html")
+    salvar_html(html, 'out/grafo_interativo_parte1.html')
+    print("HTML gerado com sucesso na pasta 'out': grafo_interativo_parte1.html")
