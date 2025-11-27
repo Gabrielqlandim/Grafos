@@ -39,6 +39,29 @@
 </head>
 <body style="margin:0; padding:0;">
 
+<!-- BOTÃO DE VOLTAR MINIMALISTA NO LADO DIREITO -->
+<a href="index.html" 
+   style="
+       position: fixed;
+       top: 20px;
+       right: 20px;
+       z-index: 10000;
+       padding: 8px 16px;
+       color: #333;
+       font-weight: 600;
+       text-decoration: none;
+       border: 2px solid #333;
+       border-radius: 6px;
+       transition: all 0.2s ease-in-out;
+       background: transparent;
+   "
+   onmouseover="this.style.backgroundColor='#333'; this.style.color='white';"
+   onmouseout="this.style.backgroundColor='transparent'; this.style.color='#333';"
+>
+   ← Voltar
+</a>
+
+
 <!-- LEGENDA -->
 <div class="legenda-container">
     <h3 style="margin-top:0;">Microrregiões</h3>
@@ -765,7 +788,7 @@
         const legendas = document.querySelectorAll('.item-legenda[data-microrregiao]');
         const textoListaCentral = document.getElementById('textoLista');
         const textoMicror = document.getElementById('textoMicrorregiao');
-        const microrData = [{"microrregiao": "1", "ordem": 11, "tamanho": 30, "densidade": 0.5454545455}, {"microrregiao": "2", "ordem": 18, "tamanho": 48, "densidade": 0.3137254902}, {"microrregiao": "3", "ordem": 29, "tamanho": 84, "densidade": 0.2068965517}, {"microrregiao": "4", "ordem": 12, "tamanho": 31, "densidade": 0.4696969697}, {"microrregiao": "5", "ordem": 16, "tamanho": 46, "densidade": 0.3833333333}, {"microrregiao": "6", "ordem": 8, "tamanho": 13, "densidade": 0.4642857143}];
+        const microrData = [{"microrregiao": "1", "ordem": 11, "tamanho": 30, "densidade": 0.5454545455}, {"microrregiao": "2", "ordem": 18, "tamanho": 48, "densidade": 0.3137254902}, {"microrregiao": "3", "ordem": 29, "tamanho": 91, "densidade": 0.224137931}, {"microrregiao": "4", "ordem": 12, "tamanho": 31, "densidade": 0.4696969697}, {"microrregiao": "5", "ordem": 16, "tamanho": 46, "densidade": 0.3833333333}, {"microrregiao": "6", "ordem": 9, "tamanho": 17, "densidade": 0.4722222222}];
 
         legendas.forEach(item => {
             item.addEventListener('click', () => {
@@ -880,15 +903,10 @@
             document.getElementById("fundoTextoLista").setAttribute("visibility", "visible");
         });
 
-// ============================
-//    BUSCA POR BAIRRO
-// ============================
-
 const inputBusca = document.getElementById("busca-bairro");
 const btnBuscar = document.getElementById("btn-buscar-bairro");
 const msgNaoEncontrado = document.getElementById("msg-bairro-nao-encontrado");
 
-// Função que exibe informações centrais igual ao hover
 function mostrarInfoCentralDoVertice(v) {
     const nome = v.getAttribute("data-nome");
     const dens = v.getAttribute("data-densidade");
@@ -922,10 +940,8 @@ function mostrarInfoCentralDoVertice(v) {
     document.getElementById("fundoTextoLista").setAttribute("visibility", "visible");
 }
 
-// Evento ao clicar no botão “Pesquisar”
 btnBuscar.addEventListener("click", () => {
 
-    // Limpa qualquer pesquisa anterior
     restaurarTodos();
     document.getElementById("textoNome").textContent = "";
     document.getElementById("textoLista").innerHTML = "";
@@ -942,7 +958,6 @@ btnBuscar.addEventListener("click", () => {
     vertices.forEach(v => {
         const nome = v.getAttribute("data-nome").toLowerCase();
 
-        // 🔹 BUSCA EXATA
         if (nome === texto) {
             encontrado = true;
             v.classList.remove("dim");
@@ -950,7 +965,6 @@ btnBuscar.addEventListener("click", () => {
 
             mostrarInfoCentralDoVertice(v);
 
-            // Destaca arestas e vértices conectados
             arestas.forEach(a => {
                 const origem = a.getAttribute("data-origem");
                 const destino = a.getAttribute("data-destino");
@@ -959,7 +973,6 @@ btnBuscar.addEventListener("click", () => {
                     a.classList.remove("dim");
                     a.classList.add("destacado");
 
-                    // Destacar vértices adjacentes
                     vertices.forEach(v2 => {
                         const n2 = v2.getAttribute("data-nome");
                         if (n2 === origem || n2 === destino) {
@@ -981,31 +994,25 @@ btnBuscar.addEventListener("click", () => {
 const btnLimpar = document.getElementById("btn-limpar-busca");
 
 btnLimpar.addEventListener("click", () => {
-    // Limpa input
+
     inputBusca.value = "";
 
-    // Restaura vértices e arestas
     restaurarTodos();
 
-    // Limpa textos centrais
     document.getElementById("textoNome").textContent = "";
     document.getElementById("textoConecta").textContent = "";
     document.getElementById("textoLista").innerHTML = "";
     document.getElementById("textoMicrorregiao").textContent = "";
 
-    // Esconde os fundos
     document.getElementById("fundoTextoNome").setAttribute("visibility", "hidden");
     document.getElementById("fundoTextoConecta").setAttribute("visibility", "hidden");
     document.getElementById("fundoTextoLista").setAttribute("visibility", "hidden");
     document.getElementById("fundoTextoMicrorregiao").setAttribute("visibility", "hidden");
 
-    // Esconde mensagem de não encontrado
     msgNaoEncontrado.style.display = "none";
 
-    // Desativa o percurso caso esteja ativo
     percursoAtivo = false;
 
-    // Deseleciona microrregião
     microrSelecionada = null;
 });
 
