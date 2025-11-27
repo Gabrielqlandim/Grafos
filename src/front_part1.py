@@ -487,6 +487,29 @@ def gerar_html(svg_content):
 </head>
 <body style="margin:0; padding:0;">
 
+<!-- BOTÃO DE VOLTAR MINIMALISTA NO LADO DIREITO -->
+<a href="index.html" 
+   style="
+       position: fixed;
+       top: 20px;
+       right: 20px;
+       z-index: 10000;
+       padding: 8px 16px;
+       color: #333;
+       font-weight: 600;
+       text-decoration: none;
+       border: 2px solid #333;
+       border-radius: 6px;
+       transition: all 0.2s ease-in-out;
+       background: transparent;
+   "
+   onmouseover="this.style.backgroundColor='#333'; this.style.color='white';"
+   onmouseout="this.style.backgroundColor='transparent'; this.style.color='#333';"
+>
+   ← Voltar
+</a>
+
+
 <!-- LEGENDA -->
 <div class="legenda-container">
     <h3 style="margin-top:0;">Microrregiões</h3>
