@@ -49,7 +49,7 @@ def ler_pares_enderecos(caminho_csv: Path):
             })
     return pares
 
-def desenhar_grafo(grafo, caminho=None, pos=None, mostrar_pesos=True, titulo="Grafo com Caminho"):
+def desenhar_grafo(grafo, caminho=None, pos=None, mostrar_pesos=False, titulo="Grafo com Caminho"):
     
     #Desenha um grafo não direcionado e destaca um caminho em vermelho.
 
@@ -59,7 +59,7 @@ def desenhar_grafo(grafo, caminho=None, pos=None, mostrar_pesos=True, titulo="Gr
         angulo = 2 * math.pi / n
         pos = {v: (math.cos(i * angulo), math.sin(i * angulo)) for i, v in enumerate(grafo)}
 
-    plt.figure(figsize=(8, 8))
+    plt.figure(figsize=(10, 10))
 
     #Lista de arestas desenhadas, para evitar repetição
     desenhadas = set()
@@ -76,9 +76,9 @@ def desenhar_grafo(grafo, caminho=None, pos=None, mostrar_pesos=True, titulo="Gr
                 x2, y2 = pos[v2]
 
                 #Plota os vértices e salva na lista de arestas desenhadas
-                plt.plot([x1, x2], [y1, y2], 'k-', linewidth=1)
+                plt.plot([x1, x2], [y1, y2], 'k-', linewidth=1, color='gray')
                 desenhadas.add((v1, v2))
-
+                
                 #Desenha também o peso da aresta
                 if mostrar_pesos:
                     plt.text((x1 + x2)/2, (y1 + y2)/2, str(peso), color='blue', fontsize=9, ha='center', va='center')
@@ -100,9 +100,13 @@ def desenhar_grafo(grafo, caminho=None, pos=None, mostrar_pesos=True, titulo="Gr
     for vertice, (x, y) in pos.items():
         cor = 'lightcoral' if caminho and vertice in caminho else 'orange'
         plt.scatter(x, y, s=400, color=cor, edgecolors='black', zorder=3)
-        plt.text(x, y, vertice, fontsize=12, ha='center', va='center', weight='bold')
 
-    #Exibe o grafo
+        if caminho and vertice in caminho:
+            plt.text(x, y, vertice, fontsize=12, ha='center', va='center', weight='bold', zorder=4)
+        
+
+    #Salva a imagem e exibe o grafo
     plt.axis('off')
+    plt.savefig("out/arvore_percurso.png", format="png", dpi=300, bbox_inches="tight")
     plt.title(titulo)
     plt.show()

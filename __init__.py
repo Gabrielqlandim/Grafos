@@ -1,1 +1,0 @@
-import src.parte2.main_2
