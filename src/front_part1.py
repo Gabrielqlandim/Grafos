@@ -310,7 +310,7 @@ def gerar_svg(posicoes, adjacencias, densidade_df, microrregioes, raio, percurso
                 }
             });
             document.getElementById("textoNome").textContent =
-                `Percurso: ${origem} → ${destino} | Custo: ${custo} km`;
+                `Menor Caminho da Nova Descoberta para Setúbal | Custo: ${custo} km`;
             const textoLista = document.getElementById("textoLista");
             textoLista.innerHTML = "";
             const percursoTexto = caminho.join(' → ');
