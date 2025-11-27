@@ -143,9 +143,4 @@ O arquivo out/grafo_interativo.html funciona como menu para navegar entre:
 
 2. Clicar com o botão direito em grafo_interativo.html → Open with Live Server
 
-## Observações
-
-- Todos os grafos são não direcionados para simplificação, exceto na Parte 2, onde originalmente seriam direcionados
-
-- Pesos representam distâncias em km (bairros) ou duração do voo em horas (voos)
 
