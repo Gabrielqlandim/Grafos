@@ -2,14 +2,20 @@ import pandas as pd
 
 def distribuicao_graus(grafo):
     dados = []
-    vertices = grafo.keys()
 
-    for v in vertices:
-        dados.append([v,len(grafo[v])])
+    #percorre todos os vértices do grafo
+    for v in grafo:
+        grau = 0
 
-    df = pd.DataFrame(columns=["cidade", "grau"], data= dados)
+        #percorre o dicionário interno (conexões)
+        for vizinho, pesos in grafo[v].items():
+            #Adiciona o tamanho da lista de conexões com cada vértice na contagem do grau
+            grau += len(pesos)
 
-    df.to_csv('out/distribuicao_graus_parte2.csv', index= False)
+        dados.append([v, grau])
+
+    df = pd.DataFrame(columns=["cidade", "grau"], data=dados)
+    df.to_csv('out/distribuicao_graus_parte2.csv', index=False)
 
     
 
