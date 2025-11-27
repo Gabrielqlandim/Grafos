@@ -12,7 +12,7 @@ g = criar_grafo('data/airlines_spicejet.csv')
 # ai ele ta contando os graus das cidades indianas
 distribuicao_graus(g)
 
-
+exit()
 #Parte de BFS e DFS
 inicio_dfs = time.time()
 ordem, iteracoes = dfs(g, 'Delhi')
