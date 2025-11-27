@@ -2,10 +2,10 @@ from src.graphs.algorithms import bellman_ford
 
 def test_sem_ciclo():
     grafo_sem_ciclo = {
-        "A": {"B": 4, "C": 5},
-        "B": {"D": -2},
-        "C": {"D": 1},
-        "D": {},
+        "A": {"B": [4], "C": [5]},
+        "B": {"D": [-2], "A":[4]},   
+        "C": {"D": [1], "A": [5]},
+        "D": {"B": [5], "C": [1]},   
     }
 
     resultado = bellman_ford(grafo_sem_ciclo, "A")

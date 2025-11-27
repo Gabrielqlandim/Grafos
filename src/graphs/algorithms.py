@@ -60,8 +60,14 @@ def dijkstra(grafo, inicio, destino = None):
     #Verifica se tem alguma aresta com peso negativo 
     for u, vizinhos in grafo.items():
         for v, peso in vizinhos.items():
-            if isinstance(peso, int) and peso < 0:
-                raise ValueError("Dijkstra não aceita arestas com peso negativo")
+            if isinstance(peso, list):
+                #mexi pq como a gente mudou pra multigrafo ai agora ele recebe 
+                if any(p < 0 for p in peso):
+                    #retornar um value error
+                    raise ValueError("Não é aceito peso negativo")
+            else:
+                if peso < 0:
+                    raise ValueError("Não é aceito peso negativo")
 
     #Distâncias mínimas acumuladas
     #Inicia as distâncias como infinito
@@ -199,4 +205,68 @@ def bellman_ford(grafo, inicio, destino=None):
         "Distância": dist[destino],
         "Caminho": caminho,
         "CicloNegativo": ciclo_negativo
+    }
+
+#tive que criar isso por causa do teste
+def dfs_analise(grafo, inicio):
+    if inicio not in grafo:
+        return {
+            "ordem": [],
+            "iteracoes": 0,
+            "tem_ciclo": False,
+            "tipos_arestas": {},
+        }
+
+    
+    cor = {v: "branco" for v in grafo}  
+    descoberta = {}
+    termino = {}
+
+    tipos_arestas = {}
+
+    estado = {
+        "ordem": [],
+        "iteracoes": 0,
+        "tempo": 0,
+        "tem_ciclo": False,
+    }
+
+    def visitar(u):
+        cor[u] = "cinza"
+        estado["ordem"].append(u)
+        estado["iteracoes"] += 1
+
+        estado["tempo"] += 1
+        descoberta[u] = estado["tempo"]
+
+        for v in grafo.get(u, {}):
+            if cor[v] == "branco":
+                
+                tipos_arestas[(u, v)] = "tree"
+                visitar(v)
+            elif cor[v] == "cinza":
+                
+                tipos_arestas[(u, v)] = "back"
+                estado["tem_ciclo"] = True
+            else:  
+                
+                if descoberta[u] < descoberta[v]:
+                    tipos_arestas[(u, v)] = "forward"
+                else:
+                    tipos_arestas[(u, v)] = "cross"
+
+        cor[u] = "preto"
+        estado["tempo"] += 1
+        termino[u] = estado["tempo"]
+
+    
+    visitar(inicio)
+
+    return {
+        "ordem": estado["ordem"],
+        "iteracoes": estado["iteracoes"],
+        "tem_ciclo": estado["tem_ciclo"],
+        "tipos_arestas": tipos_arestas,
+        "descoberta": descoberta,
+        "termino": termino,
     }
