@@ -39,6 +39,7 @@ project/
 │   ├── grafo_interativo_parte2.html
 │   ├── grafo_interativo.html
 │   ├── graus.csv
+│   ├── histograma_duração.png  
 │   ├── histograma_graus.png
 │   ├── mapa_cores.png
 │   ├── microrregioes.json
@@ -63,6 +64,7 @@ project/
 │   │   ├── __init__.py
 │   │   ├── distribuicao_graus_parte2.py
 │   │   ├── filtrar_csv.py
+│   │   ├── histograma.py
 │   │   └── main_2.py
 |   |
 │   ├── cli.py
@@ -121,6 +123,16 @@ python -m src.cli --dataset data/adjacencias_bairros.csv --alg METRICAS
 # Subgrafo top 10 bairros
 python -m src.cli --alg SUBGRAFO_TOP10 --dataset data/adjacencias_bairros.csv --out out --k 10
 
+# Ego
+python -m src.cli --dataset data/adjacencias_bairros.csv --alg EGO --source "Boa Viagem"
+
+# Graus
+python -m src.cli --dataset data/adjacencias_bairros.csv --alg GRAUS
+
+# Distancias_enderecos
+python -m src.cli --alg ENDERECOS --dataset .\data\adjacencias_bairros.csv --enderecos .\data\enderecos.csv --out .\out\
+
+
 ```
 ### Parte 2 – Voos SpiceJet
 ```bash
@@ -137,7 +149,7 @@ O arquivo out/grafo_interativo.html funciona como menu para navegar entre:
 - Grafo dos bairros do Recife
 - Grafo de voos (Parte 2)
 
-## Para abrir:
+### Para abrir:
 
 1. Instalar a extensão Live Server no VS Code
 
